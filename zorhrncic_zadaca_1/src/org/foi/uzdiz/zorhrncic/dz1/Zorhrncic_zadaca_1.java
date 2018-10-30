@@ -5,6 +5,15 @@
  */
 package org.foi.uzdiz.zorhrncic.dz1;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import org.foi.uzdiz.zorhrncic.dz1.singleton.CommonDataSingleton;
+import org.foi.uzdiz.zorhrncic.dz1.streets.LoadInitData;
+
 /**
  *
  * @author Zoran
@@ -16,8 +25,33 @@ public class Zorhrncic_zadaca_1 {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        
+
         System.out.println("parametrgggggi: " + args[0]);
+        
+        CommonDataSingleton.getInstance().loadParametes(args[0]);
+        System.out.println("vozila: " + CommonDataSingleton.getInstance().getParameterByKey("vozila"));
+        System.out.println("rand INT: " + CommonDataSingleton.getInstance().getRandomInt());
+        System.out.println("rand INT: " + CommonDataSingleton.getInstance().getRandomInt());
+        System.out.println("rand INT: " + CommonDataSingleton.getInstance().getRandomInt());
+        
+        
+        System.out.println("rand LONG: " + CommonDataSingleton.getInstance().getRandomLong());
+        System.out.println("rand LONG: " + CommonDataSingleton.getInstance().getRandomLong());
+        System.out.println("rand LONG: " + CommonDataSingleton.getInstance().getRandomLong());
+        
+        
+        System.out.println("rand FLOAT: " + CommonDataSingleton.getInstance().getRandomFloat());
+        System.out.println("rand FLOAT: " + CommonDataSingleton.getInstance().getRandomFloat());
+        System.out.println("rand FLOAT: " + CommonDataSingleton.getInstance().getRandomFloat());
+        
+        
+        LoadInitData load = new LoadInitData();
+
+
+
+
+        
+
     }
-    
+
 }
