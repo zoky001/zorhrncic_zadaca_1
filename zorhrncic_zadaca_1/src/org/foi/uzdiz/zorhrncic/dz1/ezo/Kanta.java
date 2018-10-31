@@ -5,6 +5,7 @@
  */
 package org.foi.uzdiz.zorhrncic.dz1.ezo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import org.foi.uzdiz.zorhrncic.dz1.users.User;
@@ -15,19 +16,15 @@ import org.foi.uzdiz.zorhrncic.dz1.users.User;
  */
 public class Kanta extends Spremnik {
 
-    public User user;
-
     public Kanta() {
-        
+
     }
-    
-    
 
     public Kanta(Kanta target) {
 
         super(target);
         if (target != null) {
-            this.user = target.user;
+           
         }
 
     }
@@ -44,7 +41,8 @@ public class Kanta extends Spremnik {
             return false;
         }
         Kanta shape2 = (Kanta) object2;
-        return Objects.equals(shape2.user, user);
+        return Objects.equals(shape2.usersList, usersList);
     }
+
 
 }

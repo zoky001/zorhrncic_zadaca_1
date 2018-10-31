@@ -5,6 +5,7 @@
  */
 package org.foi.uzdiz.zorhrncic.dz1.ezo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfUser;
@@ -27,6 +28,7 @@ public abstract class Spremnik {
 
     TypesOfWaste kindOfWaste;
     private TypesOfUser typesOfUser;
+    public List<User> usersList = new ArrayList<>();
 
     public Spremnik() {
     }
@@ -40,6 +42,7 @@ public abstract class Spremnik {
             this.numberOfLarge = target.numberOfLarge;
             this.capacity = target.capacity;
             this.typesOfUser = target.typesOfUser;
+            usersList = new ArrayList<>();
         }
 
     }
@@ -52,7 +55,7 @@ public abstract class Spremnik {
             return false;
         }
         Spremnik spremnik = (Spremnik) object2;
-        return spremnik.id == id &&  Objects.equals(spremnik.typesOfUser, typesOfUser)&&  Objects.equals(spremnik.kindOfWaste, kindOfWaste) && spremnik.numberOfSmall == numberOfSmall && spremnik.numberOfMedium == numberOfMedium && spremnik.numberOfLarge == numberOfLarge;
+        return spremnik.id == id && Objects.equals(spremnik.typesOfUser, typesOfUser) && Objects.equals(spremnik.kindOfWaste, kindOfWaste) && spremnik.numberOfSmall == numberOfSmall && spremnik.numberOfMedium == numberOfMedium && spremnik.numberOfLarge == numberOfLarge;
 
     }
 
@@ -87,8 +90,6 @@ public abstract class Spremnik {
     public int getId() {
         return id;
     }
-    
-    
 
     public TypesOfWaste getKindOfWaste() {
         return kindOfWaste;
@@ -138,4 +139,11 @@ public abstract class Spremnik {
         this.typesOfUser = typesOfUser;
     }
 
+    public void addUser(User user) {
+        this.usersList.add(user);
+    }
+
+    public List<User> getUsersList() {
+        return usersList;
+    }
 }

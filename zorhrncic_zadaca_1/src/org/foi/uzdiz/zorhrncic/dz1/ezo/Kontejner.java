@@ -16,7 +16,7 @@ import org.foi.uzdiz.zorhrncic.dz1.users.User;
  */
 public class Kontejner extends Spremnik {
 
-    public List<User> usersList = new ArrayList<>();
+    
 
     public Kontejner() {
     }
@@ -25,7 +25,7 @@ public class Kontejner extends Spremnik {
 
         super(target);
         if (target != null) {
-            this.usersList =new ArrayList<>();// target.usersList;
+           
         }
 
     }
@@ -45,13 +45,6 @@ public class Kontejner extends Spremnik {
         return Objects.equals(shape2.usersList, usersList);
     }
 
-    public void addUser(User user) {
-        this.usersList.add(user);
-    }
-
-    public List<User> getUsersList() {
-        return usersList;
-    }
     
     
 

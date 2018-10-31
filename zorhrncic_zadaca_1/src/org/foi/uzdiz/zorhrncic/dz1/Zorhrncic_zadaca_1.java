@@ -40,9 +40,10 @@ public class Zorhrncic_zadaca_1 {
         System.out.println("rand LONG: " + CommonDataSingleton.getInstance().getRandomLong());
         
         
-        System.out.println("rand FLOAT: " + CommonDataSingleton.getInstance().getRandomFloat());
-        System.out.println("rand FLOAT: " + CommonDataSingleton.getInstance().getRandomFloat());
-        System.out.println("rand FLOAT: " + CommonDataSingleton.getInstance().getRandomFloat());
+        System.out.println("rand FLOAT: " + CommonDataSingleton.getInstance().getRandomFloat(new Float(0.00),new Float(5.00)));
+        System.out.println("rand FLOAT: " + CommonDataSingleton.getInstance().getRandomFloat(new Float(5.00),new Float(10.00)));
+        System.out.println("rand FLOAT: " + CommonDataSingleton.getInstance().getRandomFloat(new Float(10.00),new Float(15.00)));
+
         
         
         LoadInitData load = new LoadInitData();

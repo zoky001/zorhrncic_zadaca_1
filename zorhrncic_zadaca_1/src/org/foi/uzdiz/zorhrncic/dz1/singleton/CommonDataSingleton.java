@@ -74,7 +74,7 @@ public class CommonDataSingleton {
         return -1;
     }
 
-    public float getRandomFloat() {
+    public float getRandomFloat(float min, float max) {
 
         try {
 
@@ -87,7 +87,7 @@ public class CommonDataSingleton {
                 df.setMaximumFractionDigits(Integer.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.brojDecimala)));
             }
 
-            float myFloat = generator.nextFloat();
+            float myFloat = generator.nextFloat() * (max - min) + min;
             String s = df.format(myFloat).replace(",", ".");
 
             return Float.parseFloat(s);//Float.valueOf(df.format(myFloat));

@@ -48,6 +48,17 @@ public class Street {
         System.out.println("Broj malih: " + numberOfSmall);
         System.out.println("Broj srednjih: " + numberOfMedium);
         System.out.println("Broj velikih: " + numberOfLarge);
+        System.out.println("------------------------------------------------");
+        System.out.println("Količina otpada staklo: " + getTotalAmountOfGlassWaste());
+        System.out.println("------------------------------------------------");
+        System.out.println("Količina otpada papir: " + getTotalAmountOfPaperWaste());
+        System.out.println("------------------------------------------------");
+        System.out.println("Količina otpada metal: " + getTotalAmountOfMetalWaste());
+        System.out.println("------------------------------------------------");
+        System.out.println("Količina otpada bio: " + getTotalAmountOfBioWaste());
+        System.out.println("------------------------------------------------");
+        System.out.println("Količina otpada mixed: " + getTotalAmountOfMixedWaste());
+        System.out.println("------------------------------------------------");
 
         System.out.println("Korisnici broj: " + usersList.size());
 
@@ -70,20 +81,18 @@ public class Street {
                 System.out.print("      id: " + conte.getId());
                 System.out.println("      name: " + conte.getKindOfWaste().name());
                 System.out.print("      typeUser: " + conte.getTypesOfUser().name());
-                System.out.print("      broj korisnika: " + ((Kontejner)conte).getUsersList().size());
+                System.out.print("      broj korisnika: " + conte.getUsersList().size());
 
                 System.out.print("      broj malih: " + conte.getNumberOfSmall());
                 System.out.print("      broj srednjih: " + conte.getNumberOfMedium());
                 System.out.print("      broj veliki: " + conte.getNumberOfLarge());
                 System.out.print("      Dijeli s korisnicima: [ ");
-                
-                 ((Kontejner)conte).getUsersList().forEach((ids) -> {
-                 
-                 System.out.print("      ," + ids.getId());
-                 });
-                
-                
-                
+
+                conte.getUsersList().forEach((ids) -> {
+
+                    System.out.print("      ," + ids.getId());
+                });
+
                 System.out.println(" ]");
                 System.out.println("*****************************************************");
 
@@ -175,6 +184,82 @@ public class Street {
 
     public void setNumberOfLarge(int numberOfLarge) {
         this.numberOfLarge = numberOfLarge;
+    }
+
+    private float getTotalAmountOfGlassWaste() {
+
+        float sum = 0;
+
+        for (int i = 0; i < usersList.size(); i++) {
+            if (usersList.get(i).getGlassWaste() != null) {
+                sum = sum + usersList.get(i).getGlassWaste().getAmount();
+            }
+
+        }
+
+        return sum;
+
+    }
+
+    private float getTotalAmountOfMetalWaste() {
+
+        float sum = 0;
+
+        for (int i = 0; i < usersList.size(); i++) {
+            if (usersList.get(i).getMetalWaste() != null) {
+                sum = sum + usersList.get(i).getMetalWaste().getAmount();
+            }
+
+        }
+
+        return sum;
+
+    }
+
+    private float getTotalAmountOfPaperWaste() {
+
+        float sum = 0;
+
+        for (int i = 0; i < usersList.size(); i++) {
+            if (usersList.get(i).getPaperWaste() != null) {
+                sum = sum + usersList.get(i).getPaperWaste().getAmount();
+            }
+
+        }
+
+        return sum;
+
+    }
+
+    private float getTotalAmountOfBioWaste() {
+
+        float sum = 0;
+
+        for (int i = 0; i < usersList.size(); i++) {
+            if (usersList.get(i).getBioWaste() != null) {
+                sum = sum + usersList.get(i).getBioWaste().getAmount();
+            }
+
+        }
+
+        return sum;
+
+    }
+
+    private float getTotalAmountOfMixedWaste() {
+
+        float sum = 0;
+
+        for (int i = 0; i < usersList.size(); i++) {
+
+            if (usersList.get(i).getMixedWaste() != null) {
+                sum = sum + usersList.get(i).getMixedWaste().getAmount();
+            }
+
+        }
+
+        return sum;
+
     }
 
 }

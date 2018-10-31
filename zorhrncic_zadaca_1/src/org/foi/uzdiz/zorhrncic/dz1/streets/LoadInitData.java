@@ -23,6 +23,11 @@ import org.foi.uzdiz.zorhrncic.dz1.users.LargeUser;
 import org.foi.uzdiz.zorhrncic.dz1.users.MediumUser;
 import org.foi.uzdiz.zorhrncic.dz1.users.SmallUser;
 import org.foi.uzdiz.zorhrncic.dz1.users.User;
+import org.foi.uzdiz.zorhrncic.dz1.waste.BioWaste;
+import org.foi.uzdiz.zorhrncic.dz1.waste.GlassWaste;
+import org.foi.uzdiz.zorhrncic.dz1.waste.MetalWaste;
+import org.foi.uzdiz.zorhrncic.dz1.waste.MixedWaste;
+import org.foi.uzdiz.zorhrncic.dz1.waste.PaperWaste;
 
 /**
  *
@@ -42,6 +47,7 @@ public class LoadInitData {
         loadStreetsPrivate((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.ulice));
         loadUsersForStreetsPrivate();
         assignSpremnikToUsersPrivate();
+        genrateWasteForUsersPrivate();
 
         Spremnik.printArray(sviTipoviSpremnika);
         streets.forEach((k) -> {
@@ -49,6 +55,184 @@ public class LoadInitData {
             k.print();
 
         });
+    }
+
+    private void genrateWasteForUsersPrivate() {
+        try {
+
+            streets.forEach((street) -> {
+
+                generateWasteForStreet(street);
+
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void generateWasteForStreet(Street street) {
+
+        for (int j = 0; j < street.getUsersList().size(); j++) {
+
+            assignWasteToUser(street.getUsersList().get(j));
+
+        }
+
+    }
+
+    private void assignWasteToUser(User user) {
+        float min = 0;
+
+        float amount = 0;
+
+        float minPercentage = 0;
+        float maxGlass = 0;
+        float maxPaper = 0;
+        float maxMetel = 0;
+        float maxBio = 0;
+        float maxMixed = 0;
+
+        try {
+            if (user instanceof SmallUser) {
+                System.out.println("      Mali korisnik");
+                minPercentage = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.maliMin));
+
+                // glass
+                maxGlass = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.maliStaklo));
+                min = (minPercentage * maxGlass) / 100;
+
+                amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxGlass);
+
+                user.setGlassWaste(new GlassWaste(amount));
+
+                //paper
+                maxPaper = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.maliPapir));
+                min = (minPercentage * maxPaper) / 100;
+
+                amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxPaper);
+
+                user.setPaperWaste(new PaperWaste(amount));
+
+                //metal
+                maxMetel = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.maliMetal));
+                min = (minPercentage * maxMetel) / 100;
+
+                amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxMetel);
+
+                user.setMetalWaste(new MetalWaste(amount));
+
+                //bio
+                maxBio = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.maliBio));
+                min = (minPercentage * maxBio) / 100;
+
+                amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxBio);
+
+                user.setBioWaste(new BioWaste(amount));
+
+                //mixed
+                maxMixed = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.maliMješano));
+                min = (minPercentage * maxMixed) / 100;
+
+                amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxMixed);
+
+                user.setMixedWaste(new MixedWaste(amount));
+
+            } else if (user instanceof MediumUser) {
+                System.out.println("      Srednji korisnik");
+                minPercentage = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.srednjiMin));
+
+                // glass
+                maxGlass = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.srednjiStaklo));
+                min = (minPercentage * maxGlass) / 100;
+
+                amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxGlass);
+
+                user.setGlassWaste(new GlassWaste(amount));
+
+                //paper
+                maxPaper = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.srednjiPapir));
+                min = (minPercentage * maxPaper) / 100;
+
+                amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxPaper);
+
+                user.setPaperWaste(new PaperWaste(amount));
+
+                //metal
+                maxMetel = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.srednjiMetal));
+                min = (minPercentage * maxMetel) / 100;
+
+                amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxMetel);
+
+                user.setMetalWaste(new MetalWaste(amount));
+
+                //bio
+                maxBio = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.srednjiBio));
+                min = (minPercentage * maxBio) / 100;
+
+                amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxBio);
+
+                user.setBioWaste(new BioWaste(amount));
+
+                //mixed
+                maxMixed = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.srednjiMješano));
+                min = (minPercentage * maxMixed) / 100;
+
+                amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxMixed);
+
+                user.setMixedWaste(new MixedWaste(amount));
+
+            } else if (user instanceof LargeUser) {
+                System.out.println("      Veliki korisnik");
+                minPercentage = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.velikiMin));
+
+                // glass
+                maxGlass = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.velikiStaklo));
+                min = (minPercentage * maxGlass) / 100;
+
+                amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxGlass);
+
+                user.setGlassWaste(new GlassWaste(amount));
+
+                //paper
+                maxPaper = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.velikiPapir));
+                min = (minPercentage * maxPaper) / 100;
+
+                amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxPaper);
+
+                user.setPaperWaste(new PaperWaste(amount));
+
+                //metal
+                maxMetel = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.velikiMetal));
+                min = (minPercentage * maxMetel) / 100;
+
+                amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxMetel);
+
+                user.setMetalWaste(new MetalWaste(amount));
+
+                //bio
+                maxBio = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.velikiBio));
+                min = (minPercentage * maxBio) / 100;
+
+                amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxBio);
+
+                user.setBioWaste(new BioWaste(amount));
+
+                //mixed
+                maxMixed = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.velikiMješano));
+                min = (minPercentage * maxMixed) / 100;
+
+                amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxMixed);
+
+                user.setMixedWaste(new MixedWaste(amount));
+
+            }
+        } catch (Exception e) {
+
+            System.out.println("Error assignWasteToUser" + e);
+
+        }
+
     }
 
     private void assignSpremnikToUsersPrivate() {
@@ -67,7 +251,7 @@ public class LoadInitData {
     }
 
     private void assignSpremnikToStreet(Street street) {
-        List<Kontejner> nepopunjeniKontejneri = new ArrayList<Kontejner>();
+        List<Spremnik> nepopunjeniKontejneri = new ArrayList<Spremnik>();
 
         System.out.println("Pridruživanje spremnika u ulici : " + street.getName());
 
@@ -93,7 +277,7 @@ public class LoadInitData {
                             typesOfUser = TypesOfUser.LARGE;
                         }
 
-                        Kontejner kontejnerZaDodjeljivanje = checkIfExistNepopunjenKontejner((Kontejner) sviTipoviSpremnika.get(i), nepopunjeniKontejneri, typesOfUser);
+                        Kontejner kontejnerZaDodjeljivanje = (Kontejner) checkIfExistNepopunjenKontejner(sviTipoviSpremnika.get(i), nepopunjeniKontejneri, typesOfUser);
                         kontejnerZaDodjeljivanje.addUser(street.getUsersList().get(j));
                         kontejnerZaDodjeljivanje.setTypesOfUser(typesOfUser);
 
@@ -108,21 +292,43 @@ public class LoadInitData {
 
         }
 
-        // kante
-        sviTipoviSpremnika.forEach((spremnik) -> {
-            if (spremnik instanceof Kanta) {
-                // user.addSpremnik(spremnik.clone());
+        for (int i = 0; i < sviTipoviSpremnika.size(); i++) {
+            if (sviTipoviSpremnika.get(i) instanceof Kanta) {
+                System.out.println("Pridruživanje Kante: " + sviTipoviSpremnika.get(i).getKindOfWaste().name());
+
+                for (int j = 0; j < street.getUsersList().size(); j++) {
+
+                    if (checkIfUserCanHaveThisContainer(street.getUsersList().get(j), sviTipoviSpremnika.get(i)) && !checkIfUserHaveThisContainer(street.getUsersList().get(j), sviTipoviSpremnika.get(i))) {
+
+                        TypesOfUser typesOfUser = null;
+                        if (street.getUsersList().get(j) instanceof SmallUser) {
+                            System.out.println("      Mali korisnik");
+                            typesOfUser = TypesOfUser.SMALL;
+                        } else if (street.getUsersList().get(j) instanceof MediumUser) {
+                            System.out.println("      Srednji korisnik");
+                            typesOfUser = TypesOfUser.MEDIUM;
+                        } else if (street.getUsersList().get(j) instanceof LargeUser) {
+                            System.out.println("      Veliki korisnik");
+                            typesOfUser = TypesOfUser.LARGE;
+                        }
+
+                        Kanta kontejnerZaDodjeljivanje = (Kanta) checkIfExistNepopunjenKontejner(sviTipoviSpremnika.get(i), nepopunjeniKontejneri, typesOfUser);
+                        kontejnerZaDodjeljivanje.addUser(street.getUsersList().get(j));
+                        kontejnerZaDodjeljivanje.setTypesOfUser(typesOfUser);
+
+                        street.getUsersList().get(j).addSpremnik(kontejnerZaDodjeljivanje);
+
+                        addOrDeleteSpremnikInnepopunjeniKontejneri(kontejnerZaDodjeljivanje, nepopunjeniKontejneri);
+                    }
+
+                }
 
             }
+        }
 
-        });
-
-        street.getUsersList().forEach((user) -> {
-
-        });
     }
 
-    private void addOrDeleteSpremnikInnepopunjeniKontejneri(Kontejner kontejnerZaDodjeljivanje, List<Kontejner> nepopunjeniKontejneri) {
+    private void addOrDeleteSpremnikInnepopunjeniKontejneri(Spremnik kontejnerZaDodjeljivanje, List<Spremnik> nepopunjeniKontejneri) {
         for (int i = 0; i < nepopunjeniKontejneri.size(); i++) {
 
             if (nepopunjeniKontejneri.get(i).getId() == kontejnerZaDodjeljivanje.getId()) {
@@ -176,7 +382,7 @@ public class LoadInitData {
 
     }
 
-    private Kontejner checkIfExistNepopunjenKontejner(Kontejner spremnik, List<Kontejner> nepopunjeniKontejneri, TypesOfUser typesOfUser) {
+    private Spremnik checkIfExistNepopunjenKontejner(Spremnik spremnik, List<Spremnik> nepopunjeniKontejneri, TypesOfUser typesOfUser) {
 
         for (int i = 0; i < nepopunjeniKontejneri.size(); i++) {
 
@@ -199,7 +405,7 @@ public class LoadInitData {
             }
         }
 
-        return (Kontejner) spremnik.clone();
+        return spremnik.clone();
 
     }
 
