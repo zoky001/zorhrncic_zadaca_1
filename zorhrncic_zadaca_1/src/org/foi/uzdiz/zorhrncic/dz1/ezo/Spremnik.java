@@ -6,6 +6,9 @@
 package org.foi.uzdiz.zorhrncic.dz1.ezo;
 
 import java.util.List;
+import java.util.Objects;
+import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfUser;
+import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfWaste;
 import org.foi.uzdiz.zorhrncic.dz1.users.User;
 
 /**
@@ -16,11 +19,14 @@ public abstract class Spremnik {
 
     private static int idIncrement = 0;
     int id;
-    String kindOfWaste;
+    // String kindOfWaste;
     int numberOfSmall;
     int numberOfMedium;
     int numberOfLarge;
     int capacity;
+
+    TypesOfWaste kindOfWaste;
+    private TypesOfUser typesOfUser;
 
     public Spremnik() {
     }
@@ -33,6 +39,7 @@ public abstract class Spremnik {
             this.numberOfMedium = target.numberOfMedium;
             this.numberOfLarge = target.numberOfLarge;
             this.capacity = target.capacity;
+            this.typesOfUser = target.typesOfUser;
         }
 
     }
@@ -45,7 +52,7 @@ public abstract class Spremnik {
             return false;
         }
         Spremnik spremnik = (Spremnik) object2;
-        return spremnik.id == id && spremnik.kindOfWaste.equalsIgnoreCase(kindOfWaste) && spremnik.numberOfSmall == numberOfSmall && spremnik.numberOfMedium == numberOfMedium && spremnik.numberOfLarge == numberOfLarge;
+        return spremnik.id == id &&  Objects.equals(spremnik.typesOfUser, typesOfUser)&&  Objects.equals(spremnik.kindOfWaste, kindOfWaste) && spremnik.numberOfSmall == numberOfSmall && spremnik.numberOfMedium == numberOfMedium && spremnik.numberOfLarge == numberOfLarge;
 
     }
 
@@ -77,11 +84,17 @@ public abstract class Spremnik {
         Spremnik.idIncrement = idIncrement;
     }
 
-    public String getKindOfWaste() {
+    public int getId() {
+        return id;
+    }
+    
+    
+
+    public TypesOfWaste getKindOfWaste() {
         return kindOfWaste;
     }
 
-    public void setKindOfWaste(String kindOfWaste) {
+    public void setKindOfWaste(TypesOfWaste kindOfWaste) {
         this.kindOfWaste = kindOfWaste;
     }
 
@@ -115,6 +128,14 @@ public abstract class Spremnik {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
+    }
+
+    public TypesOfUser getTypesOfUser() {
+        return typesOfUser;
+    }
+
+    public void setTypesOfUser(TypesOfUser typesOfUser) {
+        this.typesOfUser = typesOfUser;
     }
 
 }

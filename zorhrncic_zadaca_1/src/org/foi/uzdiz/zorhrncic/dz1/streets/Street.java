@@ -7,6 +7,7 @@ package org.foi.uzdiz.zorhrncic.dz1.streets;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.foi.uzdiz.zorhrncic.dz1.ezo.Kontejner;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Spremnik;
 import org.foi.uzdiz.zorhrncic.dz1.users.LargeUser;
 import org.foi.uzdiz.zorhrncic.dz1.users.MediumUser;
@@ -62,6 +63,32 @@ public class Street {
                 System.out.println("      Veliki korisnik");
             }
 
+            System.out.println("      KONTEJNERI: ");
+
+            u.getSpremnikList().forEach((conte) -> {
+
+                System.out.print("      id: " + conte.getId());
+                System.out.println("      name: " + conte.getKindOfWaste().name());
+                System.out.print("      typeUser: " + conte.getTypesOfUser().name());
+                System.out.print("      broj korisnika: " + ((Kontejner)conte).getUsersList().size());
+
+                System.out.print("      broj malih: " + conte.getNumberOfSmall());
+                System.out.print("      broj srednjih: " + conte.getNumberOfMedium());
+                System.out.print("      broj veliki: " + conte.getNumberOfLarge());
+                System.out.print("      Dijeli s korisnicima: [ ");
+                
+                 ((Kontejner)conte).getUsersList().forEach((ids) -> {
+                 
+                 System.out.print("      ," + ids.getId());
+                 });
+                
+                
+                
+                System.out.println(" ]");
+                System.out.println("*****************************************************");
+
+            });
+
         });
         System.out.println("------------------------------------------------------------------------------------------------------------");
     }
@@ -88,6 +115,22 @@ public class Street {
 
     public int getShareOfSmall() {
         return shareOfSmall;
+    }
+
+    public List<User> getUsersList() {
+        return usersList;
+    }
+
+    public void setUsersList(List<User> usersList) {
+        this.usersList = usersList;
+    }
+
+    public List<Spremnik> getSpremnikList() {
+        return spremnikList;
+    }
+
+    public void setSpremnikList(List<Spremnik> spremnikList) {
+        this.spremnikList = spremnikList;
     }
 
     public void setShareOfSmall(int shareOfSmall) {

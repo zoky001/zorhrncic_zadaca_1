@@ -16,6 +16,8 @@ import org.foi.uzdiz.zorhrncic.dz1.ezo.Kanta;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Kontejner;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Spremnik;
 import org.foi.uzdiz.zorhrncic.dz1.shared.Constants;
+import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfUser;
+import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfWaste;
 import org.foi.uzdiz.zorhrncic.dz1.singleton.CommonDataSingleton;
 import org.foi.uzdiz.zorhrncic.dz1.users.LargeUser;
 import org.foi.uzdiz.zorhrncic.dz1.users.MediumUser;
@@ -39,6 +41,7 @@ public class LoadInitData {
         ucitajSpremnikePrivate((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.spremnici));
         loadStreetsPrivate((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.ulice));
         loadUsersForStreetsPrivate();
+        assignSpremnikToUsersPrivate();
 
         Spremnik.printArray(sviTipoviSpremnika);
         streets.forEach((k) -> {
@@ -46,6 +49,168 @@ public class LoadInitData {
             k.print();
 
         });
+    }
+
+    private void assignSpremnikToUsersPrivate() {
+
+        try {
+
+            streets.forEach((street) -> {
+
+                assignSpremnikToStreet(street);
+
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void assignSpremnikToStreet(Street street) {
+        List<Kontejner> nepopunjeniKontejneri = new ArrayList<Kontejner>();
+
+        System.out.println("Pridruživanje spremnika u ulici : " + street.getName());
+
+        // kontejneri
+        for (int i = 0; i < sviTipoviSpremnika.size(); i++) {
+
+            if (sviTipoviSpremnika.get(i) instanceof Kontejner) {
+                System.out.println("Pridruživanje kontejnera: " + sviTipoviSpremnika.get(i).getKindOfWaste().name());
+
+                for (int j = 0; j < street.getUsersList().size(); j++) {
+
+                    if (checkIfUserCanHaveThisContainer(street.getUsersList().get(j), sviTipoviSpremnika.get(i)) && !checkIfUserHaveThisContainer(street.getUsersList().get(j), sviTipoviSpremnika.get(i))) {
+
+                        TypesOfUser typesOfUser = null;
+                        if (street.getUsersList().get(j) instanceof SmallUser) {
+                            System.out.println("      Mali korisnik");
+                            typesOfUser = TypesOfUser.SMALL;
+                        } else if (street.getUsersList().get(j) instanceof MediumUser) {
+                            System.out.println("      Srednji korisnik");
+                            typesOfUser = TypesOfUser.MEDIUM;
+                        } else if (street.getUsersList().get(j) instanceof LargeUser) {
+                            System.out.println("      Veliki korisnik");
+                            typesOfUser = TypesOfUser.LARGE;
+                        }
+
+                        Kontejner kontejnerZaDodjeljivanje = checkIfExistNepopunjenKontejner((Kontejner) sviTipoviSpremnika.get(i), nepopunjeniKontejneri, typesOfUser);
+                        kontejnerZaDodjeljivanje.addUser(street.getUsersList().get(j));
+                        kontejnerZaDodjeljivanje.setTypesOfUser(typesOfUser);
+
+                        street.getUsersList().get(j).addSpremnik(kontejnerZaDodjeljivanje);
+
+                        addOrDeleteSpremnikInnepopunjeniKontejneri(kontejnerZaDodjeljivanje, nepopunjeniKontejneri);
+                    }
+
+                }
+
+            }
+
+        }
+
+        // kante
+        sviTipoviSpremnika.forEach((spremnik) -> {
+            if (spremnik instanceof Kanta) {
+                // user.addSpremnik(spremnik.clone());
+
+            }
+
+        });
+
+        street.getUsersList().forEach((user) -> {
+
+        });
+    }
+
+    private void addOrDeleteSpremnikInnepopunjeniKontejneri(Kontejner kontejnerZaDodjeljivanje, List<Kontejner> nepopunjeniKontejneri) {
+        for (int i = 0; i < nepopunjeniKontejneri.size(); i++) {
+
+            if (nepopunjeniKontejneri.get(i).getId() == kontejnerZaDodjeljivanje.getId()) {
+
+                if (kontejnerZaDodjeljivanje.getTypesOfUser() == TypesOfUser.SMALL) {
+                    if (kontejnerZaDodjeljivanje.getNumberOfSmall() == kontejnerZaDodjeljivanje.getUsersList().size()) {
+                        nepopunjeniKontejneri.remove(i);
+                        return;
+                    } else {
+                        return;
+                    }
+
+                }
+
+                if (kontejnerZaDodjeljivanje.getTypesOfUser() == TypesOfUser.MEDIUM) {
+                    if (kontejnerZaDodjeljivanje.getNumberOfMedium() == kontejnerZaDodjeljivanje.getUsersList().size()) {
+                        nepopunjeniKontejneri.remove(i);
+                        return;
+                    } else {
+                        return;
+                    }
+
+                }
+
+                if (kontejnerZaDodjeljivanje.getTypesOfUser() == TypesOfUser.LARGE) {
+                    if (kontejnerZaDodjeljivanje.getNumberOfLarge() == kontejnerZaDodjeljivanje.getUsersList().size()) {
+                        nepopunjeniKontejneri.remove(i);
+                        return;
+                    } else {
+                        return;
+                    }
+
+                }
+
+            }
+        }
+
+        if (kontejnerZaDodjeljivanje.getTypesOfUser().equals(TypesOfUser.SMALL)) {
+            if (kontejnerZaDodjeljivanje.getNumberOfSmall() > kontejnerZaDodjeljivanje.getUsersList().size()) {
+                nepopunjeniKontejneri.add(kontejnerZaDodjeljivanje);
+            }
+        } else if (kontejnerZaDodjeljivanje.getTypesOfUser().equals(TypesOfUser.MEDIUM)) {
+            if (kontejnerZaDodjeljivanje.getNumberOfMedium() > kontejnerZaDodjeljivanje.getUsersList().size()) {
+                nepopunjeniKontejneri.add(kontejnerZaDodjeljivanje);
+            }
+        } else if (kontejnerZaDodjeljivanje.getTypesOfUser().equals(TypesOfUser.LARGE)) {
+            if (kontejnerZaDodjeljivanje.getNumberOfLarge() > kontejnerZaDodjeljivanje.getUsersList().size()) {
+                nepopunjeniKontejneri.add(kontejnerZaDodjeljivanje);
+            }
+        }
+
+    }
+
+    private Kontejner checkIfExistNepopunjenKontejner(Kontejner spremnik, List<Kontejner> nepopunjeniKontejneri, TypesOfUser typesOfUser) {
+
+        for (int i = 0; i < nepopunjeniKontejneri.size(); i++) {
+
+            if (nepopunjeniKontejneri.get(i).getKindOfWaste().equals(spremnik.getKindOfWaste()) && nepopunjeniKontejneri.get(i).getTypesOfUser().equals(typesOfUser)) {
+
+                if (typesOfUser.equals(TypesOfUser.SMALL)) {
+                    if (spremnik.getNumberOfSmall() > spremnik.getUsersList().size()) {
+                        return nepopunjeniKontejneri.get(i);
+                    }
+                } else if (typesOfUser.equals(TypesOfUser.MEDIUM)) {
+                    if (spremnik.getNumberOfMedium() > spremnik.getUsersList().size()) {
+                        return nepopunjeniKontejneri.get(i);
+                    }
+                } else if (typesOfUser.equals(TypesOfUser.LARGE)) {
+                    if (spremnik.getNumberOfLarge() > spremnik.getUsersList().size()) {
+                        return nepopunjeniKontejneri.get(i);
+                    }
+                }
+
+            }
+        }
+
+        return (Kontejner) spremnik.clone();
+
+    }
+
+    private boolean checkIfUserHaveThisContainer(User user, Spremnik spremnik) {
+
+        for (int i = 0; i < user.getSpremnikList().size(); i++) {
+            if (user.getSpremnikList().get(i).getKindOfWaste().equals(spremnik.getKindOfWaste())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void ucitajSpremnikePrivate(String path) {
@@ -72,7 +237,7 @@ public class LoadInitData {
                     System.out.println(data.length);
                     if (((String) data[1]).equalsIgnoreCase(Constants.KANTA)) {
                         spremnik = new Kanta();
-                        spremnik.setKindOfWaste(data[0]);
+                        spremnik.setKindOfWaste(convertKindOfWaste(data[0]));
                         spremnik.setNumberOfSmall(Integer.valueOf(data[2]));
                         spremnik.setNumberOfMedium(Integer.valueOf(data[3]));
                         spremnik.setNumberOfLarge(Integer.valueOf(data[4]));
@@ -82,7 +247,7 @@ public class LoadInitData {
 
                     } else if (((String) data[1]).equalsIgnoreCase(Constants.KONTEJNER)) {
                         spremnik = new Kontejner();
-                        spremnik.setKindOfWaste(data[0]);
+                        spremnik.setKindOfWaste(convertKindOfWaste(data[0]));
                         spremnik.setNumberOfSmall(Integer.valueOf(data[2]));
                         spremnik.setNumberOfMedium(Integer.valueOf(data[3]));
                         spremnik.setNumberOfLarge(Integer.valueOf(data[4]));
@@ -236,6 +401,54 @@ public class LoadInitData {
             }
         }
 
+    }
+
+    private TypesOfWaste convertKindOfWaste(String string) {
+        TypesOfWaste typesOfWaste = null;
+        switch (string) {
+            case Constants.BIO:
+                typesOfWaste = TypesOfWaste.BIO;
+                break;
+            case Constants.METAL:
+                typesOfWaste = TypesOfWaste.METAL;
+                break;
+            case Constants.MJEŠANO:
+                typesOfWaste = TypesOfWaste.MJEŠANO;
+                break;
+            case Constants.PAPIR:
+                typesOfWaste = TypesOfWaste.PAPIR;
+                break;
+            case Constants.STAKLO:
+                typesOfWaste = TypesOfWaste.STAKLO;
+                break;
+
+        }
+
+        return typesOfWaste;
+
+    }
+
+    private boolean checkIfUserCanHaveThisContainer(User user, Spremnik spremnik) {
+
+        TypesOfUser typesOfUser = null;
+
+        boolean canHave = false;
+
+        if (user instanceof SmallUser) {
+            if (spremnik.getNumberOfSmall() > 0) {
+                canHave = true;
+            }
+        } else if (user instanceof MediumUser) {
+            if (spremnik.getNumberOfMedium() > 0) {
+                canHave = true;
+            }
+        } else if (user instanceof LargeUser) {
+            if (spremnik.getNumberOfLarge() > 0) {
+                canHave = true;
+            }
+        }
+
+        return canHave;
     }
 
 }

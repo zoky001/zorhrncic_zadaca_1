@@ -5,16 +5,26 @@
  */
 package org.foi.uzdiz.zorhrncic.dz1.users;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.foi.uzdiz.zorhrncic.dz1.ezo.Spremnik;
+
 /**
  *
  * @author Zoran
  */
 public abstract class User {
+
     private static int idIncrement = 0;
     private int id;
+    private List<Spremnik> spremnikList = new ArrayList<Spremnik>();
 
     public User() {
         this.id = idIncrement++;
+    }
+
+    public void addSpremnik(Spremnik spremnik) {
+        this.spremnikList.add(spremnik);
     }
 
     public int getId() {
@@ -25,8 +35,12 @@ public abstract class User {
         this.id = id;
     }
 
+    public List<Spremnik> getSpremnikList() {
+        return spremnikList;
+    }
 
-    
-   
-    
+    public void setSpremnikList(List<Spremnik> spremnikList) {
+        this.spremnikList = spremnikList;
+    }
+
 }
