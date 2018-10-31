@@ -24,7 +24,8 @@ public abstract class Spremnik {
     int numberOfSmall;
     int numberOfMedium;
     int numberOfLarge;
-    int capacity;
+    float capacity;
+    private float filled;
 
     TypesOfWaste kindOfWaste;
     private TypesOfUser typesOfUser;
@@ -43,6 +44,7 @@ public abstract class Spremnik {
             this.capacity = target.capacity;
             this.typesOfUser = target.typesOfUser;
             usersList = new ArrayList<>();
+            this.filled = 0;
         }
 
     }
@@ -61,6 +63,12 @@ public abstract class Spremnik {
 
     public static void printArray(List<Spremnik> sviTipoviSpremnika) {
         sviTipoviSpremnika.forEach((k) -> {
+            
+            if (k.getCapacity()< k.filled) {
+                System.out.println("Višak");
+            }
+
+            System.out.println("ID: " + k.getId());
 
             System.out.print("TIP: ");
 
@@ -70,13 +78,21 @@ public abstract class Spremnik {
                 System.out.println(" Kontejner");
             }
             System.out.println("Name: " + k.getKindOfWaste());
-            System.out.println("Broj kila: " + k.getCapacity());
+            System.out.println("Vrsta korisnika: " + k.getTypesOfUser().name());
+            System.out.println("Broj korisnika: " + k.getUsersList().size());
+
+            System.out.println("Broj kapacitet: " + k.getCapacity());
+            System.out.println("Broj popunjen: " + k.getFilled());
             System.out.println("Broj malih: " + k.getNumberOfSmall());
             System.out.println("Broj srednjih: " + k.getNumberOfMedium());
             System.out.println("Broj velikih: " + k.getNumberOfLarge());
             System.out.println("------------------------------------------------------------------------------------------------------------");
 
         });
+    }
+
+    public void addWaste(float amount) {
+        this.filled = this.filled + amount;
     }
 
     public static int getIdIncrement() {
@@ -123,11 +139,11 @@ public abstract class Spremnik {
         this.numberOfLarge = numberOfLarge;
     }
 
-    public int getCapacity() {
+    public float getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(int capacity) {
+    public void setCapacity(float capacity) {
         this.capacity = capacity;
     }
 
@@ -145,5 +161,13 @@ public abstract class Spremnik {
 
     public List<User> getUsersList() {
         return usersList;
+    }
+
+    public float getFilled() {
+        return filled;
+    }
+
+    public void setFilled(float filled) {
+        this.filled = filled;
     }
 }

@@ -67,11 +67,11 @@ public class Street {
             System.out.print("ID: " + u.getId());
 
             if (u instanceof SmallUser) {
-                System.out.println("      Mali korisnik");
+              //  System.out.println("      Mali korisnik");
             } else if (u instanceof MediumUser) {
-                System.out.println("      Srednji korisnik");
+              //  System.out.println("      Srednji korisnik");
             } else if (u instanceof LargeUser) {
-                System.out.println("      Veliki korisnik");
+             //   System.out.println("      Veliki korisnik");
             }
 
             System.out.println("      KONTEJNERI: ");

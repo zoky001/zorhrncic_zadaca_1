@@ -26,10 +26,10 @@ public class Zorhrncic_zadaca_1 {
     public static void main(String[] args) {
         // TODO code application logic here
 
-        System.out.println("parametrgggggi: " + args[0]);
+     //   System.out.println("parametrgggggi: " + args[0]);
         
         CommonDataSingleton.getInstance().loadParametes(args[0]);
-        System.out.println("vozila: " + CommonDataSingleton.getInstance().getParameterByKey("vozila"));
+      /*  System.out.println("vozila: " + CommonDataSingleton.getInstance().getParameterByKey("vozila"));
         System.out.println("rand INT: " + CommonDataSingleton.getInstance().getRandomInt());
         System.out.println("rand INT: " + CommonDataSingleton.getInstance().getRandomInt());
         System.out.println("rand INT: " + CommonDataSingleton.getInstance().getRandomInt());
@@ -44,7 +44,7 @@ public class Zorhrncic_zadaca_1 {
         System.out.println("rand FLOAT: " + CommonDataSingleton.getInstance().getRandomFloat(new Float(5.00),new Float(10.00)));
         System.out.println("rand FLOAT: " + CommonDataSingleton.getInstance().getRandomFloat(new Float(10.00),new Float(15.00)));
 
-        
+        */
         
         LoadInitData load = new LoadInitData();
 

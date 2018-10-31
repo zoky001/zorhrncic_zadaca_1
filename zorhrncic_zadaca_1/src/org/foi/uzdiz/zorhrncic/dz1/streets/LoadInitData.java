@@ -11,12 +11,20 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Kanta;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Kontejner;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Spremnik;
+import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.Vehicle;
+import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.VehicleBio;
+import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.VehicleGlass;
+import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.VehicleMetal;
+import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.VehicleMixed;
+import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.VehiclePaper;
 import org.foi.uzdiz.zorhrncic.dz1.shared.Constants;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfUser;
+import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfVehicleEngine;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfWaste;
 import org.foi.uzdiz.zorhrncic.dz1.singleton.CommonDataSingleton;
 import org.foi.uzdiz.zorhrncic.dz1.users.LargeUser;
@@ -37,24 +45,192 @@ public class LoadInitData {
 
     private List<Street> streets;
     private List<Spremnik> sviTipoviSpremnika;
+    private List<Vehicle> allVehicles;
 
     public LoadInitData() {
         streets = new ArrayList<Street>();
         sviTipoviSpremnika = new ArrayList<Spremnik>();
+        allVehicles = new ArrayList<>();
 
         // loadVehiclesPrivate((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.vozila));
         ucitajSpremnikePrivate((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.spremnici));
+        ucitajVehiclePrivate((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.vozila));
         loadStreetsPrivate((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.ulice));
         loadUsersForStreetsPrivate();
         assignSpremnikToUsersPrivate();
         genrateWasteForUsersPrivate();
+        popuniSpremnikeOtpadom();
 
-        Spremnik.printArray(sviTipoviSpremnika);
+       // Spremnik.printArray(sviTipoviSpremnika);
+
         streets.forEach((k) -> {
 
-            k.print();
+            //     k.print();
+            Spremnik.printArray(k.getSpremnikList());
+            
+        });
+    }
+
+    private void popuniSpremnikeOtpadom() {
+
+        streets.forEach(street -> {
+            street.getUsersList().forEach(user -> {
+                user.getSpremnikList().forEach(spremnik -> {
+
+                    if (spremnik.getKindOfWaste().equals(TypesOfWaste.STAKLO)) {
+                        spremnik.addWaste(user.getGlassWaste().getAmount());
+                    } else if (spremnik.getKindOfWaste().equals(TypesOfWaste.PAPIR)) {
+                        spremnik.addWaste(user.getPaperWaste().getAmount());
+                    } else if (spremnik.getKindOfWaste().equals(TypesOfWaste.MJEŠANO)) {
+                        spremnik.addWaste(user.getMixedWaste().getAmount());
+                    } else if (spremnik.getKindOfWaste().equals(TypesOfWaste.METAL)) {
+                        spremnik.addWaste(user.getMetalWaste().getAmount());
+                    } else if (spremnik.getKindOfWaste().equals(TypesOfWaste.BIO)) {
+                        spremnik.addWaste(user.getBioWaste().getAmount());
+                    }
+
+                });
+
+            });
 
         });
+
+    }
+
+    private void ucitajVehiclePrivate(String path) {
+//TODO treba validirati
+        BufferedReader br = null;
+        String line = " ";
+        String cvsSplitBy = ";";
+        File file = new File(path);
+        Vehicle vehicle;
+
+        try {
+
+            br = new BufferedReader(new FileReader(file));
+            int lineNo = 0;
+            while ((line = br.readLine()) != null) {
+                if (lineNo++ != 0) {
+                    // use comma as separator
+                    String[] data = line.split(cvsSplitBy);
+
+                    if (data.length != 5) {
+
+                        System.out.println("Greška kod učitavanja vozila!!");
+
+                        continue;
+                    }
+
+                    //  System.out.println(line);
+                    //   System.out.println(data.length);
+                    if (((String) data[2]).equalsIgnoreCase(Constants.VOZILO_STAKLO)) {
+                        vehicle = new VehicleGlass();
+                        vehicle.setName(data[0]);
+                        if (((String) data[1]).equalsIgnoreCase(Constants.DIZEL)) {
+                            vehicle.setTypesOfVehicleEngine(TypesOfVehicleEngine.DIESEL);
+                        } else if (((String) data[1]).equalsIgnoreCase(Constants.ELEKTRICNI)) {
+                            vehicle.setTypesOfVehicleEngine(TypesOfVehicleEngine.ELECTRIC);
+                        } else {
+                            System.out.println("Nepostojeća vrsta tipa vozila!");
+                            continue;
+                        }
+
+                        vehicle.setCapacity(Integer.valueOf(data[3]));
+                        List<String> drivers = Arrays.asList(data[4].split(","));
+                        vehicle.setDrivers(drivers);
+                        allVehicles.add(vehicle);
+
+                    } else if (((String) data[2]).equalsIgnoreCase(Constants.VOZILO_PAPIR)) {
+                        vehicle = new VehiclePaper();
+                        vehicle.setName(data[0]);
+                        if (((String) data[1]).equalsIgnoreCase(Constants.DIZEL)) {
+                            vehicle.setTypesOfVehicleEngine(TypesOfVehicleEngine.DIESEL);
+                        } else if (((String) data[1]).equalsIgnoreCase(Constants.ELEKTRICNI)) {
+                            vehicle.setTypesOfVehicleEngine(TypesOfVehicleEngine.ELECTRIC);
+                        } else {
+                            System.out.println("Nepostojeća vrsta tipa vozila!");
+                            continue;
+                        }
+
+                        vehicle.setCapacity(Integer.valueOf(data[3]));
+                        List<String> drivers = Arrays.asList(data[4].split(","));
+                        vehicle.setDrivers(drivers);
+                        allVehicles.add(vehicle);
+
+                    } else if (((String) data[2]).equalsIgnoreCase(Constants.VOZILO_METAL)) {
+                        vehicle = new VehicleMetal();
+                        vehicle.setName(data[0]);
+                        if (((String) data[1]).equalsIgnoreCase(Constants.DIZEL)) {
+                            vehicle.setTypesOfVehicleEngine(TypesOfVehicleEngine.DIESEL);
+                        } else if (((String) data[1]).equalsIgnoreCase(Constants.ELEKTRICNI)) {
+                            vehicle.setTypesOfVehicleEngine(TypesOfVehicleEngine.ELECTRIC);
+                        } else {
+                            System.out.println("Nepostojeća vrsta tipa vozila!");
+                            continue;
+                        }
+
+                        vehicle.setCapacity(Integer.valueOf(data[3]));
+                        List<String> drivers = Arrays.asList(data[4].split(","));
+                        vehicle.setDrivers(drivers);
+                        allVehicles.add(vehicle);
+
+                    } else if (((String) data[2]).equalsIgnoreCase(Constants.VOZILO_BIO)) {
+                        vehicle = new VehicleBio();
+                        vehicle.setName(data[0]);
+                        if (((String) data[1]).equalsIgnoreCase(Constants.DIZEL)) {
+                            vehicle.setTypesOfVehicleEngine(TypesOfVehicleEngine.DIESEL);
+                        } else if (((String) data[1]).equalsIgnoreCase(Constants.ELEKTRICNI)) {
+                            vehicle.setTypesOfVehicleEngine(TypesOfVehicleEngine.ELECTRIC);
+                        } else {
+                            System.out.println("Nepostojeća vrsta tipa vozila!");
+                            continue;
+                        }
+
+                        vehicle.setCapacity(Integer.valueOf(data[3]));
+                        List<String> drivers = Arrays.asList(data[4].split(","));
+                        vehicle.setDrivers(drivers);
+                        allVehicles.add(vehicle);
+
+                    } else if (((String) data[2]).equalsIgnoreCase(Constants.VOZILO_MIJESANO)) {
+                        vehicle = new VehicleMixed();
+                        vehicle.setName(data[0]);
+                        if (((String) data[1]).equalsIgnoreCase(Constants.DIZEL)) {
+                            vehicle.setTypesOfVehicleEngine(TypesOfVehicleEngine.DIESEL);
+                        } else if (((String) data[1]).equalsIgnoreCase(Constants.ELEKTRICNI)) {
+                            vehicle.setTypesOfVehicleEngine(TypesOfVehicleEngine.ELECTRIC);
+                        } else {
+                            System.out.println("Nepostojeća vrsta tipa vozila!");
+                            continue;
+                        }
+
+                        vehicle.setCapacity(Integer.valueOf(data[3]));
+                        List<String> drivers = Arrays.asList(data[4].split(","));
+                        vehicle.setDrivers(drivers);
+                        allVehicles.add(vehicle);
+
+                    }
+
+                }
+
+            }
+
+            //        streets.forEach((k)
+            //                 -> System.out.println("Key : " + k.getName() + " Value : ")
+            //        );
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
     private void genrateWasteForUsersPrivate() {
@@ -95,7 +271,7 @@ public class LoadInitData {
 
         try {
             if (user instanceof SmallUser) {
-                System.out.println("      Mali korisnik");
+                //  System.out.println("      Mali korisnik");
                 minPercentage = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.maliMin));
 
                 // glass
@@ -139,7 +315,7 @@ public class LoadInitData {
                 user.setMixedWaste(new MixedWaste(amount));
 
             } else if (user instanceof MediumUser) {
-                System.out.println("      Srednji korisnik");
+                //   System.out.println("      Srednji korisnik");
                 minPercentage = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.srednjiMin));
 
                 // glass
@@ -183,7 +359,7 @@ public class LoadInitData {
                 user.setMixedWaste(new MixedWaste(amount));
 
             } else if (user instanceof LargeUser) {
-                System.out.println("      Veliki korisnik");
+                //    System.out.println("      Veliki korisnik");
                 minPercentage = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.velikiMin));
 
                 // glass
@@ -253,13 +429,12 @@ public class LoadInitData {
     private void assignSpremnikToStreet(Street street) {
         List<Spremnik> nepopunjeniKontejneri = new ArrayList<Spremnik>();
 
-        System.out.println("Pridruživanje spremnika u ulici : " + street.getName());
-
+        //   System.out.println("Pridruživanje spremnika u ulici : " + street.getName());
         // kontejneri
         for (int i = 0; i < sviTipoviSpremnika.size(); i++) {
 
             if (sviTipoviSpremnika.get(i) instanceof Kontejner) {
-                System.out.println("Pridruživanje kontejnera: " + sviTipoviSpremnika.get(i).getKindOfWaste().name());
+                // System.out.println("Pridruživanje kontejnera: " + sviTipoviSpremnika.get(i).getKindOfWaste().name());
 
                 for (int j = 0; j < street.getUsersList().size(); j++) {
 
@@ -267,22 +442,22 @@ public class LoadInitData {
 
                         TypesOfUser typesOfUser = null;
                         if (street.getUsersList().get(j) instanceof SmallUser) {
-                            System.out.println("      Mali korisnik");
+                            //System.out.println("      Mali korisnik");
                             typesOfUser = TypesOfUser.SMALL;
                         } else if (street.getUsersList().get(j) instanceof MediumUser) {
-                            System.out.println("      Srednji korisnik");
+                            //  System.out.println("      Srednji korisnik");
                             typesOfUser = TypesOfUser.MEDIUM;
                         } else if (street.getUsersList().get(j) instanceof LargeUser) {
-                            System.out.println("      Veliki korisnik");
+                            //  System.out.println("      Veliki korisnik");
                             typesOfUser = TypesOfUser.LARGE;
                         }
 
-                        Kontejner kontejnerZaDodjeljivanje = (Kontejner) checkIfExistNepopunjenKontejner(sviTipoviSpremnika.get(i), nepopunjeniKontejneri, typesOfUser);
+                        Kontejner kontejnerZaDodjeljivanje = (Kontejner) checkIfExistNepopunjenKontejner(sviTipoviSpremnika.get(i), nepopunjeniKontejneri, typesOfUser, street);
                         kontejnerZaDodjeljivanje.addUser(street.getUsersList().get(j));
                         kontejnerZaDodjeljivanje.setTypesOfUser(typesOfUser);
 
                         street.getUsersList().get(j).addSpremnik(kontejnerZaDodjeljivanje);
-
+                        // street.getSpremnikList().add(kontejnerZaDodjeljivanje);
                         addOrDeleteSpremnikInnepopunjeniKontejneri(kontejnerZaDodjeljivanje, nepopunjeniKontejneri);
                     }
 
@@ -294,7 +469,7 @@ public class LoadInitData {
 
         for (int i = 0; i < sviTipoviSpremnika.size(); i++) {
             if (sviTipoviSpremnika.get(i) instanceof Kanta) {
-                System.out.println("Pridruživanje Kante: " + sviTipoviSpremnika.get(i).getKindOfWaste().name());
+                //   System.out.println("Pridruživanje Kante: " + sviTipoviSpremnika.get(i).getKindOfWaste().name());
 
                 for (int j = 0; j < street.getUsersList().size(); j++) {
 
@@ -302,17 +477,17 @@ public class LoadInitData {
 
                         TypesOfUser typesOfUser = null;
                         if (street.getUsersList().get(j) instanceof SmallUser) {
-                            System.out.println("      Mali korisnik");
+                            //   System.out.println("      Mali korisnik");
                             typesOfUser = TypesOfUser.SMALL;
                         } else if (street.getUsersList().get(j) instanceof MediumUser) {
-                            System.out.println("      Srednji korisnik");
+                            // System.out.println("      Srednji korisnik");
                             typesOfUser = TypesOfUser.MEDIUM;
                         } else if (street.getUsersList().get(j) instanceof LargeUser) {
-                            System.out.println("      Veliki korisnik");
+                            //  System.out.println("      Veliki korisnik");
                             typesOfUser = TypesOfUser.LARGE;
                         }
 
-                        Kanta kontejnerZaDodjeljivanje = (Kanta) checkIfExistNepopunjenKontejner(sviTipoviSpremnika.get(i), nepopunjeniKontejneri, typesOfUser);
+                        Kanta kontejnerZaDodjeljivanje = (Kanta) checkIfExistNepopunjenKontejner(sviTipoviSpremnika.get(i), nepopunjeniKontejneri, typesOfUser,street);
                         kontejnerZaDodjeljivanje.addUser(street.getUsersList().get(j));
                         kontejnerZaDodjeljivanje.setTypesOfUser(typesOfUser);
 
@@ -382,7 +557,7 @@ public class LoadInitData {
 
     }
 
-    private Spremnik checkIfExistNepopunjenKontejner(Spremnik spremnik, List<Spremnik> nepopunjeniKontejneri, TypesOfUser typesOfUser) {
+    private Spremnik checkIfExistNepopunjenKontejner(Spremnik spremnik, List<Spremnik> nepopunjeniKontejneri, TypesOfUser typesOfUser, Street street) {
 
         for (int i = 0; i < nepopunjeniKontejneri.size(); i++) {
 
@@ -404,8 +579,9 @@ public class LoadInitData {
 
             }
         }
-
-        return spremnik.clone();
+        Spremnik spremnik1 = spremnik.clone();
+        street.getSpremnikList().add(spremnik1);
+        return spremnik1;
 
     }
 
@@ -439,15 +615,15 @@ public class LoadInitData {
                     if (data.length != 6) {
                         continue;
                     }
-                    System.out.println(line);
-                    System.out.println(data.length);
+                    //   System.out.println(line);
+                    //   System.out.println(data.length);
                     if (((String) data[1]).equalsIgnoreCase(Constants.KANTA)) {
                         spremnik = new Kanta();
                         spremnik.setKindOfWaste(convertKindOfWaste(data[0]));
                         spremnik.setNumberOfSmall(Integer.valueOf(data[2]));
                         spremnik.setNumberOfMedium(Integer.valueOf(data[3]));
                         spremnik.setNumberOfLarge(Integer.valueOf(data[4]));
-                        spremnik.setCapacity(Integer.valueOf(data[5]));
+                        spremnik.setCapacity(Float.valueOf(data[5]));
 
                         sviTipoviSpremnika.add(spremnik);
 
@@ -457,7 +633,7 @@ public class LoadInitData {
                         spremnik.setNumberOfSmall(Integer.valueOf(data[2]));
                         spremnik.setNumberOfMedium(Integer.valueOf(data[3]));
                         spremnik.setNumberOfLarge(Integer.valueOf(data[4]));
-                        spremnik.setCapacity(Integer.valueOf(data[5]));
+                        spremnik.setCapacity(Float.valueOf(data[5]));
 
                         sviTipoviSpremnika.add(spremnik);
                     }
@@ -491,7 +667,7 @@ public class LoadInitData {
 
             streets.forEach((k) -> {
 
-                System.out.println("Key : " + k.getName() + " Value : ");
+                //   System.out.println("Key : " + k.getName() + " Value : ");
                 setNumberOfUsersInStreet(k);
                 setUsersInStreet(k);
 
@@ -580,7 +756,7 @@ public class LoadInitData {
                 if (lineNo++ != 0) {
                     // use comma as separator
                     String[] data = line.split(cvsSplitBy);
-                    System.out.println(line);
+                    //  System.out.println(line);
                     street = new Street(data[0], Integer.valueOf(data[1]), Integer.valueOf(data[2]), Integer.valueOf(data[3]), Integer.valueOf(data[4]));
                     streets.add(street);
 

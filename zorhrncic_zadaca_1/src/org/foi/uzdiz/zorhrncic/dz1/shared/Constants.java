@@ -44,6 +44,18 @@ public class Constants {
 
     public final static String KANTA = "0";
     public final static String KONTEJNER = "1";
+    
+    
+    public final static String DIZEL = "0";
+    public final static String ELEKTRICNI = "1";
+    
+    
+    public final static String VOZILO_STAKLO = "0";
+    public final static String VOZILO_PAPIR = "1";
+    public final static String VOZILO_METAL = "2";
+    public final static String VOZILO_BIO = "3";
+    public final static String VOZILO_MIJESANO= "4";
+
 
     // vrsta: 0 - staklo, 1 - papir, 2 - metal, 3 - bio, 4 - mješano;
     public final static String STAKLO = "staklo";

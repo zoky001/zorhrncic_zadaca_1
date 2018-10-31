@@ -128,12 +128,12 @@ public class CommonDataSingleton {
                 confData.put(data[0], data[1]);
 
                 //        System.out.println("Country [code= " + country[4] + " , name=" + country[5] + "]");
-                System.out.println(line);
+              //  System.out.println(line);
             }
 
             confData.forEach((k, v)
                     -> {
-                System.out.println("Key : _" + k + "_ Value : _" + v + "_");
+            //    System.out.println("Key : _" + k + "_ Value : _" + v + "_");
             }
             );
 
