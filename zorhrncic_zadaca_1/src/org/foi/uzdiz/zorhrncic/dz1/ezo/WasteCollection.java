@@ -35,6 +35,8 @@ public class WasteCollection {
     private boolean isVehicleSelectsStreet = false;
     private ArrayList<Integer> randomStreetArray;
     private int numberOfCyclesAtLandfill;
+    private Street selectedStreet;
+    private int selectedStreetIndex;
 
     public WasteCollection(List<Vehicle> allVehicles, List<Street> streets) {
         this.allVehiclesInProcess = allVehicles;
@@ -93,9 +95,8 @@ public class WasteCollection {
                 int index = allVehiclesInProcess.indexOf(vehicle);
                 allVehiclesInProcess.remove(vehicle);
                 allVehiclesInProcess.add(vehicle);
-                
-             //   System.out.println("");
 
+                //   System.out.println("");
                 // add at the end
                 return false;
             } else {
@@ -117,10 +118,15 @@ public class WasteCollection {
             streetArray = vehicle.getRandomStreetArray();
         }
 
-        Street street;
         for (int i = 0; i < streetArray.size(); i++) {
-            street = streets.get(streetArray.get(i));
-            if (pickUpWasteInStreet(vehicle, street)) {
+            selectedStreetIndex = i;
+            selectedStreet = streets.get(streetArray.get(i));
+            if (vehicle.getLastStreet() > -1 && vehicle.getLastStreet() > i) {
+                continue;
+            } else if (vehicle.getLastStreet() > -1 && vehicle.getLastStreet() == i) {
+                vehicle.resetLastStreet();
+            }
+            if (pickUpWasteInStreet(vehicle, selectedStreet)) {
                 return;
             }
 
@@ -190,6 +196,7 @@ public class WasteCollection {
 
     private void driveToLandfill(Vehicle vehicle) {
         vehicle.resetNumberOfCyclesAtLandfill();
+        vehicle.setLastStreet(selectedStreetIndex);
         allVehiclesAtLandfill.add(vehicle);
     }
 

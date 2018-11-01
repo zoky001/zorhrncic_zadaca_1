@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfVehicleEngine;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfWaste;
+import org.foi.uzdiz.zorhrncic.dz1.streets.Street;
 
 /**
  *
@@ -24,12 +25,15 @@ public abstract class Vehicle {
     private ArrayList<Integer> randomStreetArray;
     private float filled;
 
+    private int lastStreet;
+
     private int numberOfCyclesAtLandfill;
 
     public Vehicle() {
         filled = 0;
         capacity = 0;
         numberOfCyclesAtLandfill = 0;
+        lastStreet = -1;
     }
 
     public String getName() {
@@ -103,6 +107,18 @@ public abstract class Vehicle {
             return true;
         }
         return false;
+    }
+
+    public int getLastStreet() {
+        return lastStreet;
+    }
+
+    public void setLastStreet(int lastStreet) {
+        this.lastStreet = lastStreet;
+    }
+
+    public void resetLastStreet() {
+        this.lastStreet = -1;
     }
 
 }
