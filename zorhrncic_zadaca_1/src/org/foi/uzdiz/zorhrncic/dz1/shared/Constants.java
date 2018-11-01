@@ -16,6 +16,8 @@ public class Constants {
     public final static String ulice = "﻿ulice";
     public final static String vozila = "vozila";
     public final static String spremnici = "spremnici";
+    public final static String preuzimanje = "preuzimanje";
+    public final static String brojRadnihCiklusaZaOdvoz = "brojRadnihCiklusaZaOdvoz";
     
     public final static String maliMin = "maliMin";
     public final static String srednjiMin = "srednjiMin";
@@ -63,5 +65,10 @@ public class Constants {
     public final static String METAL = "metal";
     public final static String BIO = "bio";
     public final static String MJEŠANO = "mješano";
+    
+    
+    
+    public final static String VOZILO_ODREDJUJE = "1";
+    public final static String VOZILA_NE_ODREDJUJE = "0";
 
 }

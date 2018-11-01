@@ -11,7 +11,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 import org.foi.uzdiz.zorhrncic.dz1.shared.Constants;
 
@@ -38,7 +40,7 @@ public class CommonDataSingleton {
         return instance;
     }
 
-    public int getRandomInt() {
+    public int getRandomInt(int min, int max) {
 
         try {
 
@@ -46,7 +48,7 @@ public class CommonDataSingleton {
                 createGenerator(Long.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.sjemeGeneratora)));
             }
 
-            return generator.nextInt();
+            return generator.nextInt((max - min) + 1) + min;
 
         } catch (Exception e) {
 
@@ -54,6 +56,19 @@ public class CommonDataSingleton {
 
         }
         return -1;
+    }
+
+    public ArrayList<Integer> getRandomArray(int size) {
+        ArrayList<Integer> numbers = new ArrayList<Integer>();
+
+        while (numbers.size() < size) {
+
+            int random = getRandomInt(0, size-1);
+            if (!numbers.contains(random)) {
+                numbers.add(random);
+            }
+        }
+        return numbers;
     }
 
     public long getRandomLong() {
@@ -128,12 +143,12 @@ public class CommonDataSingleton {
                 confData.put(data[0], data[1]);
 
                 //        System.out.println("Country [code= " + country[4] + " , name=" + country[5] + "]");
-              //  System.out.println(line);
+                //  System.out.println(line);
             }
 
             confData.forEach((k, v)
                     -> {
-            //    System.out.println("Key : _" + k + "_ Value : _" + v + "_");
+                //    System.out.println("Key : _" + k + "_ Value : _" + v + "_");
             }
             );
 

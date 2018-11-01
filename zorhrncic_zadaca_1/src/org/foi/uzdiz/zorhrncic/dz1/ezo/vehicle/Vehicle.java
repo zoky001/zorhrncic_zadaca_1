@@ -5,6 +5,7 @@
  */
 package org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfVehicleEngine;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfWaste;
@@ -17,8 +18,19 @@ public abstract class Vehicle {
 
     private String name;
     private TypesOfVehicleEngine typesOfVehicleEngine;
-    private int capacity;
+    private float capacity;
     private List<String> drivers;
+
+    private ArrayList<Integer> randomStreetArray;
+    private float filled;
+
+    private int numberOfCyclesAtLandfill;
+
+    public Vehicle() {
+        filled = 0;
+        capacity = 0;
+        numberOfCyclesAtLandfill = 0;
+    }
 
     public String getName() {
         return name;
@@ -36,11 +48,11 @@ public abstract class Vehicle {
         this.typesOfVehicleEngine = typesOfVehicleEngine;
     }
 
-    public int getCapacity() {
+    public float getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(int capacity) {
+    public void setCapacity(float capacity) {
         this.capacity = capacity;
     }
 
@@ -51,5 +63,46 @@ public abstract class Vehicle {
     public void setDrivers(List<String> drivers) {
         this.drivers = drivers;
     }
-    
+
+    public ArrayList<Integer> getRandomStreetArray() {
+        return randomStreetArray;
+    }
+
+    public void setRandomStreetArray(ArrayList<Integer> randomStreetArray) {
+        this.randomStreetArray = randomStreetArray;
+    }
+
+    public float getFilled() {
+        return filled;
+    }
+
+    public void setFilled(float filled) {
+        this.filled = filled;
+    }
+
+    public void addWaste(float filled) {
+        this.filled = this.filled + filled;
+    }
+
+    public int getNumberOfCyclesAtLandfill() {
+        return numberOfCyclesAtLandfill;
+    }
+
+    public void setNumberOfCyclesAtLandfill(int numberOfCyclesAtLandfill) {
+        this.numberOfCyclesAtLandfill = numberOfCyclesAtLandfill;
+    }
+
+    public void resetNumberOfCyclesAtLandfill() {
+        this.numberOfCyclesAtLandfill = 0;
+        this.filled = 0;
+    }
+
+    public boolean increaseAndCheckNumberOfCyclesAtLandfill(int needs) {
+        this.numberOfCyclesAtLandfill = this.numberOfCyclesAtLandfill + 1;
+        if (this.numberOfCyclesAtLandfill > needs) {
+            return true;
+        }
+        return false;
+    }
+
 }

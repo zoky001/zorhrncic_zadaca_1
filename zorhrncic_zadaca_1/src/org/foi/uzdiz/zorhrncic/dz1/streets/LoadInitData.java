@@ -51,7 +51,9 @@ public class LoadInitData {
         streets = new ArrayList<Street>();
         sviTipoviSpremnika = new ArrayList<Spremnik>();
         allVehicles = new ArrayList<>();
+    }
 
+    public void loadData() {
         // loadVehiclesPrivate((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.vozila));
         ucitajSpremnikePrivate((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.spremnici));
         ucitajVehiclePrivate((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.vozila));
@@ -61,14 +63,14 @@ public class LoadInitData {
         genrateWasteForUsersPrivate();
         popuniSpremnikeOtpadom();
 
-       // Spremnik.printArray(sviTipoviSpremnika);
-
+        // Spremnik.printArray(sviTipoviSpremnika);
         streets.forEach((k) -> {
 
             //     k.print();
             Spremnik.printArray(k.getSpremnikList());
-            
+
         });
+
     }
 
     private void popuniSpremnikeOtpadom() {
@@ -135,7 +137,7 @@ public class LoadInitData {
                             continue;
                         }
 
-                        vehicle.setCapacity(Integer.valueOf(data[3]));
+                        vehicle.setCapacity(Float.valueOf(data[3]));
                         List<String> drivers = Arrays.asList(data[4].split(","));
                         vehicle.setDrivers(drivers);
                         allVehicles.add(vehicle);
@@ -487,7 +489,7 @@ public class LoadInitData {
                             typesOfUser = TypesOfUser.LARGE;
                         }
 
-                        Kanta kontejnerZaDodjeljivanje = (Kanta) checkIfExistNepopunjenKontejner(sviTipoviSpremnika.get(i), nepopunjeniKontejneri, typesOfUser,street);
+                        Kanta kontejnerZaDodjeljivanje = (Kanta) checkIfExistNepopunjenKontejner(sviTipoviSpremnika.get(i), nepopunjeniKontejneri, typesOfUser, street);
                         kontejnerZaDodjeljivanje.addUser(street.getUsersList().get(j));
                         kontejnerZaDodjeljivanje.setTypesOfUser(typesOfUser);
 
@@ -831,6 +833,14 @@ public class LoadInitData {
         }
 
         return canHave;
+    }
+
+    public List<Street> getStreets() {
+        return streets;
+    }
+
+    public List<Vehicle> getAllVehicles() {
+        return allVehicles;
     }
 
 }

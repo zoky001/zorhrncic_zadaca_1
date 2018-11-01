@@ -63,8 +63,8 @@ public abstract class Spremnik {
 
     public static void printArray(List<Spremnik> sviTipoviSpremnika) {
         sviTipoviSpremnika.forEach((k) -> {
-            
-            if (k.getCapacity()< k.filled) {
+
+            if (k.getCapacity() < k.filled) {
                 System.out.println("Višak");
             }
 
@@ -169,5 +169,9 @@ public abstract class Spremnik {
 
     public void setFilled(float filled) {
         this.filled = filled;
+    }
+
+    public void empty(float filled) {
+        this.filled = this.filled - filled;
     }
 }
