@@ -7,9 +7,11 @@ package org.foi.uzdiz.zorhrncic.dz1.streets;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -59,7 +61,8 @@ public class LoadInitData {
     }
 
     public void loadData() {
-        // loadVehiclesPrivate((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.vozila));
+
+
         ucitajSpremnikePrivate((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.spremnici));
         ucitajVehiclePrivate((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.vozila));
         loadStreetsPrivate((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.ulice));
@@ -71,11 +74,11 @@ public class LoadInitData {
         popuniSpremnikeOtpadom();
         calculateTotalAmountOfWasteInEveryStreet();
         //  report.print();
-        // Spremnik.printArray(sviTipoviSpremnika);
+
         streets.forEach((k) -> {
 
             //     k.print();
-            Spremnik.printArray(k.getSpremnikList());
+         //   Spremnik.printArray(k.getSpremnikList());
 
         });
 
@@ -99,6 +102,8 @@ public class LoadInitData {
         float totalAmounMixedAll = 0;
 
         this.builderDirector.addTitleInReport("Popis ukupne količine otpada koji generiraju korisnici po ulicama", false);
+
+
         for (int i = 0; i < streets.size(); i++) {
 
             totalAmountGlass = 0;
@@ -106,11 +111,13 @@ public class LoadInitData {
             totalAmounMetal = 0;
             totalAmounBio = 0;
             totalAmounMixed = 0;
+
             for (int j = 0; j < streets.get(i).getUsersList().size(); j++) {
                 user = streets.get(i).getUsersList().get(j);
                 totalAmountGlass = totalAmountGlass + user.getGlassWaste().getAmount();
                 totalAmounPaper = totalAmounPaper + user.getPaperWaste().getAmount();
                 totalAmounMetal = totalAmounMetal + user.getMetalWaste().getAmount();
+
                 totalAmounBio = totalAmounBio + user.getBioWaste().getAmount();
                 totalAmounMixed = totalAmounMixed + user.getMixedWaste().getAmount();
             }
@@ -195,7 +202,7 @@ public class LoadInitData {
                     case BIO:
                         totalAmounBio = totalAmounBio + spremnik.getFilled();
                         break;
-                    case MJEŠANO:
+                    case MJESANO:
                         totalAmounMixed = totalAmounMixed + spremnik.getFilled();
                         break;
 
@@ -233,9 +240,9 @@ public class LoadInitData {
         this.builderDirector.addTextLineInReport("Bio:              " + totalAmounBioAll, false);
         this.builderDirector.addTextLineInReport("Mješano:          " + totalAmounMixedAll, false);
         this.builderDirector.addDividerLineInReport();
-        this.builderDirector.addTextLineInReport("UKUPNO:           " +
-                (totalAmountGlassAll + totalAmounPaperAll + totalAmounMetalAll + totalAmounBioAll + totalAmounMixedAll)
-                , false);
+        this.builderDirector.addTextLineInReport("UKUPNO:           "
+                + (totalAmountGlassAll + totalAmounPaperAll + totalAmounMetalAll + totalAmounBioAll + totalAmounMixedAll),
+                false);
         this.builderDirector.addDividerLineInReport();
 
         this.builderDirector.addTitleInReport("Popis ukupne količine otpada u spremnicima po ulicama", false);
@@ -259,7 +266,7 @@ public class LoadInitData {
 
                         popuniSpremnik(spremnik, user.getPaperWaste().getAmount());
 
-                    } else if (spremnik.getKindOfWaste().equals(TypesOfWaste.MJEŠANO)) {
+                    } else if (spremnik.getKindOfWaste().equals(TypesOfWaste.MJESANO)) {
 
                         popuniSpremnik(spremnik, user.getMixedWaste().getAmount());
 
@@ -302,8 +309,11 @@ public class LoadInitData {
         Vehicle vehicle;
 
         try {
+            br = new BufferedReader(
+                    new InputStreamReader(
+                            new FileInputStream(file), "UTF8"));
 
-            br = new BufferedReader(new FileReader(file));
+         
             int lineNo = 0;
             while ((line = br.readLine()) != null) {
                 if (lineNo++ != 0) {
@@ -317,8 +327,7 @@ public class LoadInitData {
                         continue;
                     }
 
-                    //  System.out.println(line);
-                    //   System.out.println(data.length);
+                
                     if (((String) data[2]).equalsIgnoreCase(Constants.VOZILO_STAKLO)) {
                         vehicle = new VehicleGlass();
                         vehicle.setName(data[0]);
@@ -410,9 +419,7 @@ public class LoadInitData {
 
             }
 
-            //        streets.forEach((k)
-            //                 -> System.out.println("Key : " + k.getName() + " Value : ")
-            //        );
+        
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -436,12 +443,15 @@ public class LoadInitData {
         builderDirector.addTitleInReport("Pridružene količine otpada po korisnicima", false);
 
         try {
-
-            streets.forEach((street) -> {
+            for (int i = 0; i < streets.size(); i++) {
+                builderDirector.addTitleInReport(streets.get(i).getName(), false);
+                generateWasteForStreet(streets.get(i));
+            }
+            /*   streets.forEach((street) -> {
                 builderDirector.addTitleInReport(street.getName(), false);
                 generateWasteForStreet(street);
 
-            });
+            });*/
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -474,7 +484,6 @@ public class LoadInitData {
 
         try {
             if (user instanceof SmallUser) {
-                //  System.out.println("      Mali korisnik");
 
                 this.builderDirector.addTextLineInReport("Kategorija korisnika:      " + "mali korisnik", false);
                 this.builderDirector.addDividerLineInReport();
@@ -519,7 +528,7 @@ public class LoadInitData {
                 this.builderDirector.addTextLineInReport("Bio:              " + amount, false);
 
                 //mixed
-                maxMixed = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.maliMješano));
+                maxMixed = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.maliMjesano));
                 min = (minPercentage * maxMixed) / 100;
 
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxMixed);
@@ -528,7 +537,6 @@ public class LoadInitData {
                 this.builderDirector.addTextLineInReport("Mješano:          " + amount, false);
 
             } else if (user instanceof MediumUser) {
-                //   System.out.println("      Srednji korisnik");
 
                 this.builderDirector.addTextLineInReport("Kategorija korisnika:      " + "srednji korisnik", false);
                 this.builderDirector.addDividerLineInReport();
@@ -571,7 +579,7 @@ public class LoadInitData {
                 this.builderDirector.addTextLineInReport("Bio:              " + amount, false);
 
                 //mixed
-                maxMixed = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.srednjiMješano));
+                maxMixed = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.srednjiMjesano));
                 min = (minPercentage * maxMixed) / 100;
 
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxMixed);
@@ -580,7 +588,6 @@ public class LoadInitData {
                 this.builderDirector.addTextLineInReport("Mješano:          " + amount, false);
 
             } else if (user instanceof LargeUser) {
-                //    System.out.println("      Veliki korisnik");
 
                 this.builderDirector.addTextLineInReport("Kategorija korisnika:      " + "veliki korisnik", false);
                 this.builderDirector.addDividerLineInReport();
@@ -623,7 +630,7 @@ public class LoadInitData {
                 this.builderDirector.addTextLineInReport("Bio:              " + amount, false);
 
                 //mixed
-                maxMixed = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.velikiMješano));
+                maxMixed = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.velikiMjesano));
                 min = (minPercentage * maxMixed) / 100;
 
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxMixed);
@@ -648,12 +655,10 @@ public class LoadInitData {
     private void assignSpremnikToUsersPrivate() {
 
         try {
+            for (int i = 0; i < streets.size(); i++) {
+                assignSpremnikToStreet(streets.get(i));
+            }
 
-            streets.forEach((street) -> {
-
-                assignSpremnikToStreet(street);
-
-            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -663,12 +668,10 @@ public class LoadInitData {
     private void assignSpremnikToStreet(Street street) {
         List<Spremnik> nepopunjeniKontejneri = new ArrayList<Spremnik>();
 
-        //   System.out.println("Pridruživanje spremnika u ulici : " + street.getName());
         // kontejneri
         for (int i = 0; i < sviTipoviSpremnika.size(); i++) {
 
             if (sviTipoviSpremnika.get(i) instanceof Kontejner) {
-                // System.out.println("Pridruživanje kontejnera: " + sviTipoviSpremnika.get(i).getKindOfWaste().name());
 
                 for (int j = 0; j < street.getUsersList().size(); j++) {
 
@@ -676,13 +679,10 @@ public class LoadInitData {
 
                         TypesOfUser typesOfUser = null;
                         if (street.getUsersList().get(j) instanceof SmallUser) {
-                            //System.out.println("      Mali korisnik");
                             typesOfUser = TypesOfUser.SMALL;
                         } else if (street.getUsersList().get(j) instanceof MediumUser) {
-                            //  System.out.println("      Srednji korisnik");
                             typesOfUser = TypesOfUser.MEDIUM;
                         } else if (street.getUsersList().get(j) instanceof LargeUser) {
-                            //  System.out.println("      Veliki korisnik");
                             typesOfUser = TypesOfUser.LARGE;
                         }
 
@@ -703,7 +703,6 @@ public class LoadInitData {
 
         for (int i = 0; i < sviTipoviSpremnika.size(); i++) {
             if (sviTipoviSpremnika.get(i) instanceof Kanta) {
-                //   System.out.println("Pridruživanje Kante: " + sviTipoviSpremnika.get(i).getKindOfWaste().name());
 
                 for (int j = 0; j < street.getUsersList().size(); j++) {
 
@@ -711,13 +710,10 @@ public class LoadInitData {
 
                         TypesOfUser typesOfUser = null;
                         if (street.getUsersList().get(j) instanceof SmallUser) {
-                            //   System.out.println("      Mali korisnik");
                             typesOfUser = TypesOfUser.SMALL;
                         } else if (street.getUsersList().get(j) instanceof MediumUser) {
-                            // System.out.println("      Srednji korisnik");
                             typesOfUser = TypesOfUser.MEDIUM;
                         } else if (street.getUsersList().get(j) instanceof LargeUser) {
-                            //  System.out.println("      Veliki korisnik");
                             typesOfUser = TypesOfUser.LARGE;
                         }
 
@@ -792,7 +788,6 @@ public class LoadInitData {
     }
 
     private Spremnik checkIfExistNepopunjenKontejner(Spremnik spremnik, List<Spremnik> nepopunjeniKontejneri, TypesOfUser typesOfUser, Street street) {
-
         for (int i = 0; i < nepopunjeniKontejneri.size(); i++) {
 
             if (nepopunjeniKontejneri.get(i).getKindOfWaste().equals(spremnik.getKindOfWaste()) && nepopunjeniKontejneri.get(i).getTypesOfUser().equals(typesOfUser)) {
@@ -838,8 +833,10 @@ public class LoadInitData {
         Spremnik spremnik;
 
         try {
+            br = new BufferedReader(
+                    new InputStreamReader(
+                            new FileInputStream(file), "UTF8"));
 
-            br = new BufferedReader(new FileReader(file));
             int lineNo = 0;
             while ((line = br.readLine()) != null) {
                 if (lineNo++ != 0) {
@@ -849,8 +846,6 @@ public class LoadInitData {
                     if (data.length != 6) {
                         continue;
                     }
-                    //   System.out.println(line);
-                    //   System.out.println(data.length);
                     if (((String) data[1]).equalsIgnoreCase(Constants.KANTA)) {
                         spremnik = new Kanta();
                         spremnik.setKindOfWaste(convertKindOfWaste(data[0]));
@@ -876,9 +871,7 @@ public class LoadInitData {
 
             }
 
-            //        streets.forEach((k)
-            //                 -> System.out.println("Key : " + k.getName() + " Value : ")
-            //        );
+       
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -901,7 +894,6 @@ public class LoadInitData {
 
             streets.forEach((k) -> {
 
-                //   System.out.println("Key : " + k.getName() + " Value : ");
                 setNumberOfUsersInStreet(k);
                 setUsersInStreet(k);
 
@@ -937,7 +929,6 @@ public class LoadInitData {
 
             }
 
-            //System.out.println("UKUPNO: " + street.getNumberOfPlaces() + " veliki: " + numberOfLarge + " srednji: " + numberOfMedium + " mali: " + numberOfSmall);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -967,7 +958,6 @@ public class LoadInitData {
             street.setNumberOfMedium(numberOfMedium);
             street.setNumberOfLarge(numberOfLarge);
 
-            //System.out.println("UKUPNO: " + street.getNumberOfPlaces() + " veliki: " + numberOfLarge + " srednji: " + numberOfMedium + " mali: " + numberOfSmall);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -984,25 +974,23 @@ public class LoadInitData {
 
         try {
 
-            br = new BufferedReader(new FileReader(file));
+            // br = new BufferedReader(new FileReader(file));
+            br = new BufferedReader(
+                    new InputStreamReader(
+                            new FileInputStream(file), "UTF8"));
+
             int lineNo = 0;
             while ((line = br.readLine()) != null) {
                 if (lineNo++ != 0) {
                     // use comma as separator
                     String[] data = line.split(cvsSplitBy);
-                    //  System.out.println(line);
                     street = new Street(data[0], Integer.valueOf(data[1]), Integer.valueOf(data[2]), Integer.valueOf(data[3]), Integer.valueOf(data[4]));
                     streets.add(street);
 
-                    //        System.out.println("Country [code= " + country[4] + " , name=" + country[5] + "]");
-                    //    System.out.println(line);
                 }
 
             }
 
-            //        streets.forEach((k)
-            //                 -> System.out.println("Key : " + k.getName() + " Value : ")
-            //        );
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -1028,8 +1016,8 @@ public class LoadInitData {
             case Constants.METAL:
                 typesOfWaste = TypesOfWaste.METAL;
                 break;
-            case Constants.MJEŠANO:
-                typesOfWaste = TypesOfWaste.MJEŠANO;
+            case Constants.MJESANO:
+                typesOfWaste = TypesOfWaste.MJESANO;
                 break;
             case Constants.PAPIR:
                 typesOfWaste = TypesOfWaste.PAPIR;

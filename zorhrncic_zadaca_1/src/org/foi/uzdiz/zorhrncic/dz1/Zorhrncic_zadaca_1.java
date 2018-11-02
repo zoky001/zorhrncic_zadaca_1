@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.WasteCollection;
+import org.foi.uzdiz.zorhrncic.dz1.shared.Constants;
 import org.foi.uzdiz.zorhrncic.dz1.singleton.CommonDataSingleton;
 import org.foi.uzdiz.zorhrncic.dz1.streets.LoadInitData;
 
@@ -30,9 +31,16 @@ public class Zorhrncic_zadaca_1 {
     public static void main(String[] args) {
         // TODO code application logic here
 
-        System.out.println(ANSI_RED + "This text is red!" + ANSI_RESET);
+    //    System.out.println(ANSI_RED + "This text is red!" + ANSI_RESET);
         //   System.out.println("parametrgggggi: " + args[0]);
+
         CommonDataSingleton.getInstance().loadParametes(args[0]);
+/*
+        System.out.println("KEY: " + Constants.vozila + " Value: " + (String) CommonDataSingleton.getInstance().getParameterByKey(Constants.vozila));
+        System.out.println("KEY: " + Constants.ulice + " Value: " + (String) CommonDataSingleton.getInstance().getParameterByKey(Constants.ulice));
+        System.out.println("KEY: " + Constants.spremnici + " Value: " + (String) CommonDataSingleton.getInstance().getParameterByKey(Constants.spremnici));
+
+*/
         /*   System.out.println("vozila: " + CommonDataSingleton.getInstance().getParameterByKey("vozila"));
         System.out.println("rand INT: " + CommonDataSingleton.getInstance().getRandomInt(8, 10));
         System.out.println("rand INT: " + CommonDataSingleton.getInstance().getRandomInt(12, 25));

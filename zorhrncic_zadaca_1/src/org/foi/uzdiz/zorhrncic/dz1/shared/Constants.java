@@ -13,8 +13,12 @@ public class Constants {
 
     public final static String sjemeGeneratora = "sjemeGeneratora";
     public final static String brojDecimala = "brojDecimala";
-    public final static String ulice = "﻿ulice";
+    // public final static String ulice = "﻿ulice";
+   // public final static String ulice = "﻿ulice"; // for netbean
+   public final static String ulice = "ulice"; // za dist
+    //public final static String vozila = "vozila";
     public final static String vozila = "vozila";
+    // public final static String spremnici = "spremnici";
     public final static String spremnici = "spremnici";
     public final static String preuzimanje = "preuzimanje";
     public final static String brojRadnihCiklusaZaOdvoz = "brojRadnihCiklusaZaOdvoz";
@@ -27,19 +31,19 @@ public class Constants {
     public final static String maliPapir = "maliPapir";
     public final static String maliMetal = "maliMetal";
     public final static String maliBio = "maliBio";
-    public final static String maliMješano = "maliMješano";
+    public final static String maliMjesano = "maliMješano";
 
     public final static String srednjiStaklo = "srednjiStaklo";
     public final static String srednjiPapir = "srednjiPapir";
     public final static String srednjiMetal = "srednjiMetal";
     public final static String srednjiBio = "srednjiBio";
-    public final static String srednjiMješano = "srednjiMješano";
+    public final static String srednjiMjesano = "srednjiMješano";
 
     public final static String velikiStaklo = "velikiStaklo";
     public final static String velikiPapir = "velikiPapir";
     public final static String velikiMetal = "velikiMetal";
     public final static String velikiBio = "velikiBio";
-    public final static String velikiMješano = "velikiMješano";
+    public final static String velikiMjesano = "velikiMješano";
 
     public final static String KANTA = "0";
     public final static String KONTEJNER = "1";
@@ -58,11 +62,21 @@ public class Constants {
     public final static String PAPIR = "papir";
     public final static String METAL = "metal";
     public final static String BIO = "bio";
-    public final static String MJEŠANO = "mješano";
+    public final static String MJESANO = "mješano";
 
     public final static String VOZILO_ODREDJUJE = "1";
     public final static String VOZILA_NE_ODREDJUJE = "0";
 
+    public static final String ANSI_RESET = "";
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_WHITE = "\u001B[37m";
+/*
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -72,5 +86,5 @@ public class Constants {
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
-
+*/
 }

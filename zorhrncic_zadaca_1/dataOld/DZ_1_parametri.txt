@@ -1,4 +1,4 @@
-ulice:DZ_1_ulice.txt
+﻿ulice:DZ_1_ulice.txt
 spremnici:DZ_1_spremnici.txt
 vozila:DZ_1_vozila.txt
 izlaz:DZ1_ldapKorisnika.txt

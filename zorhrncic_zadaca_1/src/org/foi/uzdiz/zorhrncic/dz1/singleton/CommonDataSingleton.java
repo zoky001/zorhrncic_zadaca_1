@@ -7,13 +7,16 @@ package org.foi.uzdiz.zorhrncic.dz1.singleton;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
 import org.foi.uzdiz.zorhrncic.dz1.log.Report;
 import org.foi.uzdiz.zorhrncic.dz1.log.ReportBuilder;
@@ -30,7 +33,7 @@ public class CommonDataSingleton {
     private static CommonDataSingleton instance;
 
     private HashMap<String, Object> confData = new HashMap<String, Object>();
-
+    Properties prop = new Properties();
     private Random generator;
     DecimalFormat df;
 
@@ -148,8 +151,16 @@ public class CommonDataSingleton {
         File file = new File(path);
 
         try {
+            FileInputStream input = new FileInputStream(file);
 
+            // load a properties file
+            // prop.load(input);
             br = new BufferedReader(new FileReader(file));
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(
+                            new FileInputStream(file), "UTF8"));
+
+            prop.load(in);
             while ((line = br.readLine()) != null) {
 
                 // use comma as separator
@@ -157,15 +168,10 @@ public class CommonDataSingleton {
 
                 confData.put(data[0], data[1]);
 
-                //        System.out.println("Country [code= " + country[4] + " , name=" + country[5] + "]");
-                //  System.out.println(line);
+               
             }
 
-            confData.forEach((k, v)
-                    -> {
-                //    System.out.println("Key : _" + k + "_ Value : _" + v + "_");
-            }
-            );
+          
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -190,7 +196,8 @@ public class CommonDataSingleton {
     private Object getParameterByKeyPrivate(String path) {
 
         try {
-            return confData.get(path);
+            // return confData.get(path);
+            return prop.get(path);
 
         } catch (Exception e) {
 

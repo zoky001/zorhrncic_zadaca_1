@@ -15,6 +15,6 @@ public enum TypesOfWaste {
     PAPIR,
     METAL,
     BIO,
-    MJEŠANO
+    MJESANO
 }
 

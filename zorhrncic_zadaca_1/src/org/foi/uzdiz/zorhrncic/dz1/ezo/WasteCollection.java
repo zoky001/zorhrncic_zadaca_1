@@ -89,10 +89,12 @@ public class WasteCollection {
 
         driveAllVehiclesToTheLandfill();
         landfill.creteReport();
+        
+        
         streets.forEach((k) -> {
 
             //     k.print();
-            Spremnik.printArray(k.getSpremnikList());
+           // Spremnik.printArray(k.getSpremnikList());
 
         });
 
@@ -122,8 +124,7 @@ public class WasteCollection {
                 allVehiclesInProcess.remove(vehicle);
                 allVehiclesInProcess.add(vehicle);
 
-                //   System.out.println("");
-                // add at the end
+            
                 return false;
             } else {
                 return true;
@@ -170,7 +171,7 @@ public class WasteCollection {
         } else if (vehicle instanceof VehicleMetal) {
             typesOfWaste = TypesOfWaste.METAL;
         } else if (vehicle instanceof VehicleMixed) {
-            typesOfWaste = TypesOfWaste.MJEŠANO;
+            typesOfWaste = TypesOfWaste.MJESANO;
         } else if (vehicle instanceof VehiclePaper) {
             typesOfWaste = TypesOfWaste.PAPIR;
         }
