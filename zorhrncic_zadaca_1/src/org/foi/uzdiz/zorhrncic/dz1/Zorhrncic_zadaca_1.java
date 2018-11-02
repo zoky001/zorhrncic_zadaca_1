@@ -29,7 +29,7 @@ public class Zorhrncic_zadaca_1 {
 
         //   System.out.println("parametrgggggi: " + args[0]);
         CommonDataSingleton.getInstance().loadParametes(args[0]);
-     /*   System.out.println("vozila: " + CommonDataSingleton.getInstance().getParameterByKey("vozila"));
+        /*   System.out.println("vozila: " + CommonDataSingleton.getInstance().getParameterByKey("vozila"));
         System.out.println("rand INT: " + CommonDataSingleton.getInstance().getRandomInt(8, 10));
         System.out.println("rand INT: " + CommonDataSingleton.getInstance().getRandomInt(12, 25));
         System.out.println("rand INT: " + CommonDataSingleton.getInstance().getRandomInt(5, 50));
@@ -51,6 +51,7 @@ public class Zorhrncic_zadaca_1 {
         WasteCollection wasteCollection = new WasteCollection(load.getAllVehicles(), load.getStreets());
         wasteCollection.startCollecting();;
 
+        CommonDataSingleton.getInstance().getReportBuilderDirector().addEmptyLineInReport().print();
     }
 
 }

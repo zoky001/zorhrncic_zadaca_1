@@ -14,6 +14,7 @@ import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.VehicleGlass;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.VehicleMetal;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.VehicleMixed;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.VehiclePaper;
+import org.foi.uzdiz.zorhrncic.dz1.log.ReportBuilderDirector;
 import org.foi.uzdiz.zorhrncic.dz1.shared.Constants;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfWaste;
 import org.foi.uzdiz.zorhrncic.dz1.singleton.CommonDataSingleton;
@@ -37,11 +38,13 @@ public class WasteCollection {
     private int numberOfCyclesAtLandfill;
     private Street selectedStreet;
     private int selectedStreetIndex;
+    private final ReportBuilderDirector builderDirector;
 
     public WasteCollection(List<Vehicle> allVehicles, List<Street> streets) {
         this.allVehiclesInProcess = allVehicles;
         this.streets = streets;
         this.allVehiclesAtLandfill = new ArrayList<Vehicle>();
+        builderDirector = CommonDataSingleton.getInstance().getReportBuilderDirector();
         try {
             this.numberOfCyclesAtLandfill = Integer.parseInt((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.brojRadnihCiklusaZaOdvoz));
         } catch (Exception e) {
@@ -51,6 +54,8 @@ public class WasteCollection {
     }
 
     public void startCollecting() {
+
+        this.builderDirector.addTitleInReport("Početak sakupljanja otpada po ulicama", false);
 
         if (((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.preuzimanje)).equalsIgnoreCase(Constants.VOZILA_NE_ODREDJUJE)) {
             randomStreetArray = CommonDataSingleton.getInstance().getRandomArray(streets.size());
@@ -173,6 +178,18 @@ public class WasteCollection {
                 vehicle.addWaste(spremnik.getFilled());
                 spremnik.empty(spremnik.getFilled());
                 success = true;
+
+                this.builderDirector.addDividerLineInReport();
+                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                        " + vehicle.getName(), false);
+                this.builderDirector.addDividerLineInReport();
+
+                this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), false);
+                this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), false);
+                this.builderDirector.addTextLineInReport("Kapacitet:                    " + vehicle.getCapacity(), false);
+
+                this.builderDirector.addDividerLineInReport();
+                this.builderDirector.addEmptyLineInReport();
+
                 isAllWasteCollected = false; //todo check if filled
                 if (vehicle.getCapacity() == vehicle.getFilled()) {
                     driveToLandfill(vehicle);
@@ -181,6 +198,18 @@ public class WasteCollection {
                 vehicle.addWaste(mjestaUVozilu);
                 spremnik.empty(mjestaUVozilu);
                 success = true;
+
+                this.builderDirector.addDividerLineInReport();
+                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                        " + vehicle.getName(), false);
+                this.builderDirector.addDividerLineInReport();
+
+                this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), false);
+                this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), false);
+                this.builderDirector.addTextLineInReport("Kapacitet:                    " + vehicle.getCapacity(), false);
+
+                this.builderDirector.addDividerLineInReport();
+                this.builderDirector.addEmptyLineInReport();
+
                 driveToLandfill(vehicle);
                 isAllWasteCollected = false;
 
@@ -195,6 +224,29 @@ public class WasteCollection {
     }
 
     private void driveToLandfill(Vehicle vehicle) {
+
+        this.builderDirector.addEmptyLineInReport();
+        this.builderDirector.addEmptyLineInReport();
+        this.builderDirector.addEmptyLineInReport();
+        this.builderDirector.addTitleInReport("Vožnja kamiona na odlagalište", false);
+
+        this.builderDirector.addDividerLineInReport();
+        this.builderDirector.addTextLineInReport("Na odlagalište ide vozilo:                    " + vehicle.getName(), false);
+        this.builderDirector.addDividerLineInReport();
+
+        this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), false);
+        this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), false);
+        this.builderDirector.addTextLineInReport("Kapacitet:                    " + vehicle.getCapacity(), false);
+
+        this.builderDirector.addDividerLineInReport();
+
+        this.builderDirector.addTextLineInReport("Broj vozila na odlagalištu:   " + allVehiclesAtLandfill.size(), false);
+
+        this.builderDirector.addTitleInReport("Vožnja kamiona na odlagalište", false);
+        this.builderDirector.addEmptyLineInReport();
+        this.builderDirector.addEmptyLineInReport();
+        this.builderDirector.addEmptyLineInReport();
+
         vehicle.resetNumberOfCyclesAtLandfill();
         vehicle.setLastStreet(selectedStreetIndex);
         allVehiclesAtLandfill.add(vehicle);

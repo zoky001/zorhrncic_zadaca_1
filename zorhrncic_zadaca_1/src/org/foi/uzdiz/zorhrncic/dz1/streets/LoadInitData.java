@@ -22,6 +22,8 @@ import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.VehicleGlass;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.VehicleMetal;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.VehicleMixed;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.VehiclePaper;
+import org.foi.uzdiz.zorhrncic.dz1.log.Report;
+import org.foi.uzdiz.zorhrncic.dz1.log.ReportBuilderDirector;
 import org.foi.uzdiz.zorhrncic.dz1.shared.Constants;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfUser;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfVehicleEngine;
@@ -46,11 +48,14 @@ public class LoadInitData {
     private List<Street> streets;
     private List<Spremnik> sviTipoviSpremnika;
     private List<Vehicle> allVehicles;
+    private final ReportBuilderDirector builderDirector;
+    private Report report;
 
     public LoadInitData() {
         streets = new ArrayList<Street>();
         sviTipoviSpremnika = new ArrayList<Spremnik>();
         allVehicles = new ArrayList<>();
+        builderDirector = CommonDataSingleton.getInstance().getReportBuilderDirector();
     }
 
     public void loadData() {
@@ -61,8 +66,11 @@ public class LoadInitData {
         loadUsersForStreetsPrivate();
         assignSpremnikToUsersPrivate();
         genrateWasteForUsersPrivate();
+        calculateTotalAmountOfUsersWasteInEveryStreet();
+        //  report.print();
         popuniSpremnikeOtpadom();
-
+        calculateTotalAmountOfWasteInEveryStreet();
+        //  report.print();
         // Spremnik.printArray(sviTipoviSpremnika);
         streets.forEach((k) -> {
 
@@ -73,6 +81,101 @@ public class LoadInitData {
 
     }
 
+    private void calculateTotalAmountOfUsersWasteInEveryStreet() {
+        Spremnik spremnik;
+        User user;
+        float totalAmountGlass;
+        float totalAmounPaper;
+        float totalAmounMetal;
+        float totalAmounBio;
+        float totalAmounMixed;
+        this.builderDirector.addTitleInReport("Popis ukupne količine otpada koji generiraju korisnici po ulicama", false);
+        for (int i = 0; i < streets.size(); i++) {
+
+            totalAmountGlass = 0;
+            totalAmounPaper = 0;
+            totalAmounMetal = 0;
+            totalAmounBio = 0;
+            totalAmounMixed = 0;
+            for (int j = 0; j < streets.get(i).getUsersList().size(); j++) {
+                user = streets.get(i).getUsersList().get(j);
+                totalAmountGlass = totalAmountGlass + user.getGlassWaste().getAmount();
+                totalAmounPaper = totalAmounPaper + user.getPaperWaste().getAmount();
+                totalAmounMetal = totalAmounMetal + user.getMetalWaste().getAmount();
+                totalAmounBio = totalAmounBio + user.getBioWaste().getAmount();
+                totalAmounMixed = totalAmounMixed + user.getMixedWaste().getAmount();
+            }
+
+            this.builderDirector.addDividerLineInReport();
+            this.builderDirector.addTextLineInReport("Naziv ulice:      " + streets.get(i).getName(), false);
+            this.builderDirector.addDividerLineInReport();
+            this.builderDirector.addTextLineInReport("Staklo:           " + totalAmountGlass, false);
+            this.builderDirector.addTextLineInReport("Papir:            " + totalAmounPaper, false);
+            this.builderDirector.addTextLineInReport("Metal:            " + totalAmounMetal, false);
+            this.builderDirector.addTextLineInReport("Bio:              " + totalAmounBio, false);
+            this.builderDirector.addTextLineInReport("Mješano:          " + totalAmounMixed, false);
+            this.builderDirector.addDividerLineInReport();
+            report = this.builderDirector.addEmptyLineInReport();
+
+        }
+
+    }
+
+    private void calculateTotalAmountOfWasteInEveryStreet() {
+        Spremnik spremnik;
+
+        float totalAmountGlass;
+        float totalAmounPaper;
+        float totalAmounMetal;
+        float totalAmounBio;
+        float totalAmounMixed;
+        this.builderDirector.addTitleInReport("Popis ukupne količine otpada u kantama po ulicama", false);
+        for (int i = 0; i < streets.size(); i++) {
+
+            totalAmountGlass = 0;
+            totalAmounPaper = 0;
+            totalAmounMetal = 0;
+            totalAmounBio = 0;
+            totalAmounMixed = 0;
+            for (int j = 0; j < streets.get(i).getSpremnikList().size(); j++) {
+                spremnik = streets.get(i).getSpremnikList().get(j);
+
+                switch (spremnik.getKindOfWaste()) {
+                    case STAKLO:
+                        totalAmountGlass = totalAmountGlass + spremnik.getFilled();
+                        break;
+                    case PAPIR:
+                        totalAmounPaper = totalAmounPaper + spremnik.getFilled();
+                        break;
+                    case METAL:
+                        totalAmounMetal = totalAmounMetal + spremnik.getFilled();
+                        break;
+                    case BIO:
+                        totalAmounBio = totalAmounBio + spremnik.getFilled();
+                        break;
+                    case MJEŠANO:
+                        totalAmounMixed = totalAmounMixed + spremnik.getFilled();
+                        break;
+
+                }
+
+            }
+
+            this.builderDirector.addDividerLineInReport();
+            this.builderDirector.addTextLineInReport("Naziv ulice:      " + streets.get(i).getName(), false);
+            this.builderDirector.addDividerLineInReport();
+            this.builderDirector.addTextLineInReport("Staklo:           " + totalAmountGlass, false);
+            this.builderDirector.addTextLineInReport("Papir:            " + totalAmounPaper, false);
+            this.builderDirector.addTextLineInReport("Metal:            " + totalAmounMetal, false);
+            this.builderDirector.addTextLineInReport("Bio:              " + totalAmounBio, false);
+            this.builderDirector.addTextLineInReport("Mješano:          " + totalAmounMixed, false);
+            this.builderDirector.addDividerLineInReport();
+            report = this.builderDirector.addEmptyLineInReport();
+
+        }
+
+    }
+
     private void popuniSpremnikeOtpadom() {
 
         streets.forEach(street -> {
@@ -80,15 +183,25 @@ public class LoadInitData {
                 user.getSpremnikList().forEach(spremnik -> {
 
                     if (spremnik.getKindOfWaste().equals(TypesOfWaste.STAKLO)) {
-                        spremnik.addWaste(user.getGlassWaste().getAmount());
+
+                        popuniSpremnik(spremnik, user.getGlassWaste().getAmount());
+
                     } else if (spremnik.getKindOfWaste().equals(TypesOfWaste.PAPIR)) {
-                        spremnik.addWaste(user.getPaperWaste().getAmount());
+
+                        popuniSpremnik(spremnik, user.getPaperWaste().getAmount());
+
                     } else if (spremnik.getKindOfWaste().equals(TypesOfWaste.MJEŠANO)) {
-                        spremnik.addWaste(user.getMixedWaste().getAmount());
+
+                        popuniSpremnik(spremnik, user.getMixedWaste().getAmount());
+
                     } else if (spremnik.getKindOfWaste().equals(TypesOfWaste.METAL)) {
-                        spremnik.addWaste(user.getMetalWaste().getAmount());
+
+                        popuniSpremnik(spremnik, user.getMetalWaste().getAmount());
+
                     } else if (spremnik.getKindOfWaste().equals(TypesOfWaste.BIO)) {
-                        spremnik.addWaste(user.getBioWaste().getAmount());
+
+                        popuniSpremnik(spremnik, user.getBioWaste().getAmount());
+
                     }
 
                 });
@@ -96,6 +209,18 @@ public class LoadInitData {
             });
 
         });
+
+    }
+
+    private void popuniSpremnik(Spremnik spremnik, float amount) {
+        if (amount > spremnik.getCapacity()) {
+            //todo 
+            System.out.println("Nema mjesta u kanti.");
+            spremnik.addWaste(spremnik.getCapacity());
+        } else {
+            spremnik.addWaste(amount);
+
+        }
 
     }
 
@@ -236,10 +361,15 @@ public class LoadInitData {
     }
 
     private void genrateWasteForUsersPrivate() {
+
+        builderDirector.addEmptyLineInReport();
+        builderDirector.addEmptyLineInReport();
+        builderDirector.addTitleInReport("Pridružene količine otpada po korisnicima", false);
+
         try {
 
             streets.forEach((street) -> {
-
+                builderDirector.addTitleInReport(street.getName(), false);
                 generateWasteForStreet(street);
 
             });
@@ -270,10 +400,16 @@ public class LoadInitData {
         float maxMetel = 0;
         float maxBio = 0;
         float maxMixed = 0;
+        this.builderDirector.addDividerLineInReport();
+        this.builderDirector.addTextLineInReport("ID korisnika:      " + user.getId(), false);
 
         try {
             if (user instanceof SmallUser) {
                 //  System.out.println("      Mali korisnik");
+
+                this.builderDirector.addTextLineInReport("Kategorija korisnika:      " + "mali korisnik", false);
+                this.builderDirector.addDividerLineInReport();
+
                 minPercentage = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.maliMin));
 
                 // glass
@@ -284,6 +420,8 @@ public class LoadInitData {
 
                 user.setGlassWaste(new GlassWaste(amount));
 
+                this.builderDirector.addTextLineInReport("Staklo:           " + amount, false);
+
                 //paper
                 maxPaper = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.maliPapir));
                 min = (minPercentage * maxPaper) / 100;
@@ -291,6 +429,7 @@ public class LoadInitData {
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxPaper);
 
                 user.setPaperWaste(new PaperWaste(amount));
+                this.builderDirector.addTextLineInReport("Papir:            " + amount, false);
 
                 //metal
                 maxMetel = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.maliMetal));
@@ -299,6 +438,7 @@ public class LoadInitData {
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxMetel);
 
                 user.setMetalWaste(new MetalWaste(amount));
+                this.builderDirector.addTextLineInReport("Metal:            " + amount, false);
 
                 //bio
                 maxBio = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.maliBio));
@@ -307,6 +447,7 @@ public class LoadInitData {
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxBio);
 
                 user.setBioWaste(new BioWaste(amount));
+                this.builderDirector.addTextLineInReport("Bio:              " + amount, false);
 
                 //mixed
                 maxMixed = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.maliMješano));
@@ -315,9 +456,13 @@ public class LoadInitData {
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxMixed);
 
                 user.setMixedWaste(new MixedWaste(amount));
+                this.builderDirector.addTextLineInReport("Mješano:          " + amount, false);
 
             } else if (user instanceof MediumUser) {
                 //   System.out.println("      Srednji korisnik");
+
+                this.builderDirector.addTextLineInReport("Kategorija korisnika:      " + "srednji korisnik", false);
+                this.builderDirector.addDividerLineInReport();
                 minPercentage = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.srednjiMin));
 
                 // glass
@@ -327,6 +472,7 @@ public class LoadInitData {
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxGlass);
 
                 user.setGlassWaste(new GlassWaste(amount));
+                this.builderDirector.addTextLineInReport("Staklo:           " + amount, false);
 
                 //paper
                 maxPaper = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.srednjiPapir));
@@ -335,6 +481,7 @@ public class LoadInitData {
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxPaper);
 
                 user.setPaperWaste(new PaperWaste(amount));
+                this.builderDirector.addTextLineInReport("Papir:            " + amount, false);
 
                 //metal
                 maxMetel = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.srednjiMetal));
@@ -343,6 +490,7 @@ public class LoadInitData {
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxMetel);
 
                 user.setMetalWaste(new MetalWaste(amount));
+                this.builderDirector.addTextLineInReport("Metal:            " + amount, false);
 
                 //bio
                 maxBio = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.srednjiBio));
@@ -351,6 +499,7 @@ public class LoadInitData {
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxBio);
 
                 user.setBioWaste(new BioWaste(amount));
+                this.builderDirector.addTextLineInReport("Bio:              " + amount, false);
 
                 //mixed
                 maxMixed = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.srednjiMješano));
@@ -359,9 +508,14 @@ public class LoadInitData {
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxMixed);
 
                 user.setMixedWaste(new MixedWaste(amount));
+                this.builderDirector.addTextLineInReport("Mješano:          " + amount, false);
 
             } else if (user instanceof LargeUser) {
                 //    System.out.println("      Veliki korisnik");
+
+                this.builderDirector.addTextLineInReport("Kategorija korisnika:      " + "veliki korisnik", false);
+                this.builderDirector.addDividerLineInReport();
+
                 minPercentage = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.velikiMin));
 
                 // glass
@@ -371,6 +525,7 @@ public class LoadInitData {
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxGlass);
 
                 user.setGlassWaste(new GlassWaste(amount));
+                this.builderDirector.addTextLineInReport("Staklo:           " + amount, false);
 
                 //paper
                 maxPaper = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.velikiPapir));
@@ -379,7 +534,7 @@ public class LoadInitData {
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxPaper);
 
                 user.setPaperWaste(new PaperWaste(amount));
-
+                this.builderDirector.addTextLineInReport("Papir:            " + amount, false);
                 //metal
                 maxMetel = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.velikiMetal));
                 min = (minPercentage * maxMetel) / 100;
@@ -387,6 +542,7 @@ public class LoadInitData {
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxMetel);
 
                 user.setMetalWaste(new MetalWaste(amount));
+                this.builderDirector.addTextLineInReport("Metal:            " + amount, false);
 
                 //bio
                 maxBio = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.velikiBio));
@@ -395,6 +551,7 @@ public class LoadInitData {
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxBio);
 
                 user.setBioWaste(new BioWaste(amount));
+                this.builderDirector.addTextLineInReport("Bio:              " + amount, false);
 
                 //mixed
                 maxMixed = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.velikiMješano));
@@ -403,8 +560,14 @@ public class LoadInitData {
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxMixed);
 
                 user.setMixedWaste(new MixedWaste(amount));
+                this.builderDirector.addTextLineInReport("Mješano:          " + amount, false);
 
             }
+
+            this.builderDirector.addDividerLineInReport();
+
+            this.builderDirector.addEmptyLineInReport();
+
         } catch (Exception e) {
 
             System.out.println("Error assignWasteToUser" + e);

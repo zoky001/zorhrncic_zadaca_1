@@ -15,6 +15,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import org.foi.uzdiz.zorhrncic.dz1.log.Report;
+import org.foi.uzdiz.zorhrncic.dz1.log.ReportBuilder;
+import org.foi.uzdiz.zorhrncic.dz1.log.ReportBuilderDirector;
+import org.foi.uzdiz.zorhrncic.dz1.log.ReportBuilderImpl;
 import org.foi.uzdiz.zorhrncic.dz1.shared.Constants;
 
 /**
@@ -30,7 +34,12 @@ public class CommonDataSingleton {
     private Random generator;
     DecimalFormat df;
 
+    private final ReportBuilder builder;
+    private final ReportBuilderDirector builderDirector;
+
     private CommonDataSingleton() {
+        this.builder = new ReportBuilderImpl();
+        this.builderDirector = new ReportBuilderDirector(builder);
     }
 
     public static synchronized CommonDataSingleton getInstance() {
@@ -38,6 +47,12 @@ public class CommonDataSingleton {
             instance = new CommonDataSingleton();
         }
         return instance;
+    }
+
+    public ReportBuilderDirector getReportBuilderDirector() {
+
+        return builderDirector;
+
     }
 
     public int getRandomInt(int min, int max) {
@@ -63,7 +78,7 @@ public class CommonDataSingleton {
 
         while (numbers.size() < size) {
 
-            int random = getRandomInt(0, size-1);
+            int random = getRandomInt(0, size - 1);
             if (!numbers.contains(random)) {
                 numbers.add(random);
             }

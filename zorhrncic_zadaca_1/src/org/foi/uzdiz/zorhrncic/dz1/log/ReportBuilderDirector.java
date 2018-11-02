@@ -1,0 +1,60 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.foi.uzdiz.zorhrncic.dz1.log;
+
+import java.util.Date;
+
+/**
+ *
+ * @author Zoran
+ */
+public class ReportBuilderDirector {
+
+    private ReportBuilder builder;
+
+    private long id;
+
+    public ReportBuilderDirector(ReportBuilder builder) {
+        this.builder = builder;
+        this.id = 0;
+    }
+
+    public Report addTitleInReport(String line, boolean isStatistic) {
+        addEmptyLineInReport();
+        String divider = "*****************************************************************************************";
+        addTextLineInReport(divider, isStatistic);
+        divider = "                    " + line.toUpperCase();
+        OneLine oneLine = new OneLine(new Date(), divider, id++, isStatistic);
+        builder.addLine(oneLine).build();
+
+        divider = "*****************************************************************************************";
+        return addTextLineInReport(divider, isStatistic);
+        //  addDividerLineInReport();
+
+    }
+
+    public Report addTextLineInReport(String line, boolean isStatistic) {
+
+        OneLine oneLine = new OneLine(new Date(), line, id++, isStatistic);
+        return builder.addLine(oneLine).build();
+
+    }
+
+    public Report addEmptyLineInReport() {
+
+        OneLine oneLine = new OneLine(new Date(), " ", id++, true);
+        return builder.addLine(oneLine).build();
+
+    }
+
+    public Report addDividerLineInReport() {
+        String divider = "-----------------------------------------------------------------------------------------";
+        OneLine oneLine = new OneLine(new Date(), divider, id++, true);
+        return builder.addLine(oneLine).build();
+
+    }
+
+}
