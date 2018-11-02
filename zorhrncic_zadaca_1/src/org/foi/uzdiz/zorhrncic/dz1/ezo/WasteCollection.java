@@ -28,7 +28,7 @@ import org.foi.uzdiz.zorhrncic.dz1.waste.BioWaste;
 public class WasteCollection {
 
     private List<Vehicle> allVehiclesInProcess;
-    private List<Vehicle> allVehiclesAtLandfill;
+    ///private List<Vehicle> allVehiclesAtLandfill;
     private List<Street> streets;
     private Vehicle vehicleInProcess;
     private int cycleNumber = 0;
@@ -39,11 +39,15 @@ public class WasteCollection {
     private Street selectedStreet;
     private int selectedStreetIndex;
     private final ReportBuilderDirector builderDirector;
+    private final Landfill landfill;
 
     public WasteCollection(List<Vehicle> allVehicles, List<Street> streets) {
         this.allVehiclesInProcess = allVehicles;
         this.streets = streets;
-        this.allVehiclesAtLandfill = new ArrayList<Vehicle>();
+
+//        this.allVehiclesAtLandfill = new ArrayList<Vehicle>();
+        this.landfill = new Landfill();
+
         builderDirector = CommonDataSingleton.getInstance().getReportBuilderDirector();
         try {
             this.numberOfCyclesAtLandfill = Integer.parseInt((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.brojRadnihCiklusaZaOdvoz));
@@ -68,7 +72,7 @@ public class WasteCollection {
         }
 
         ArrayList<Integer> randomArray = CommonDataSingleton.getInstance().getRandomArray(allVehiclesInProcess.size());
-        while (!isAllWasteCollected || allVehiclesAtLandfill.size() > 0) {
+        while (!isAllWasteCollected || landfill.getAllVehiclesAtLandfill().size() > 0) {
             isAllWasteCollected = true;
             for (int i = 0; i < randomArray.size(); i++) {
 
@@ -83,6 +87,8 @@ public class WasteCollection {
             cycleNumber++;
         }
 
+        driveAllVehiclesToTheLandfill();
+        landfill.creteReport();
         streets.forEach((k) -> {
 
             //     k.print();
@@ -92,11 +98,26 @@ public class WasteCollection {
 
     }
 
+    private void driveAllVehiclesToTheLandfill() {
+        try {
+            for (int i = 0; i < allVehiclesInProcess.size(); i++) {
+                if (!landfill.getAllVehiclesAtLandfill().contains(allVehiclesInProcess.get(i))) {
+                    landfill.vehicleComesToLandfill(allVehiclesInProcess.get(i));
+                }
+            }
+
+        } catch (Exception e) {
+
+            System.out.println("driveAllVehiclesToTheLandfill error " + e);
+        }
+
+    }
+
     private boolean checkIsVehicleAtLandfill(Vehicle vehicle) {
-        if (allVehiclesAtLandfill.contains(vehicle)) {
+        if (landfill.getAllVehiclesAtLandfill().contains(vehicle)) {
 
             if (vehicle.increaseAndCheckNumberOfCyclesAtLandfill(numberOfCyclesAtLandfill)) {
-                allVehiclesAtLandfill.remove(vehicle);
+                landfill.vehicleLeavesLandfill(vehicle);//getAllVehiclesAtLandfill().remove(vehicle);
                 int index = allVehiclesInProcess.indexOf(vehicle);
                 allVehiclesInProcess.remove(vehicle);
                 allVehiclesInProcess.add(vehicle);
@@ -178,6 +199,8 @@ public class WasteCollection {
                 vehicle.addWaste(spremnik.getFilled());
                 spremnik.empty(spremnik.getFilled());
                 success = true;
+                vehicle.increaseNumberOfProcessedContainers();
+                vehicle.addProcessedContainers(spremnik);
 
                 this.builderDirector.addDividerLineInReport();
                 this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                        " + vehicle.getName(), false);
@@ -198,7 +221,7 @@ public class WasteCollection {
                 vehicle.addWaste(mjestaUVozilu);
                 spremnik.empty(mjestaUVozilu);
                 success = true;
-
+                //vehicle.increaseNumberOfProcessedContainers();
                 this.builderDirector.addDividerLineInReport();
                 this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                        " + vehicle.getName(), false);
                 this.builderDirector.addDividerLineInReport();
@@ -240,16 +263,16 @@ public class WasteCollection {
 
         this.builderDirector.addDividerLineInReport();
 
-        this.builderDirector.addTextLineInReport("Broj vozila na odlagalištu:   " + allVehiclesAtLandfill.size(), false);
+        this.builderDirector.addTextLineInReport("Broj vozila na odlagalištu:   " + landfill.getAllVehiclesAtLandfill().size() + 1, false);
 
         this.builderDirector.addTitleInReport("Vožnja kamiona na odlagalište", false);
         this.builderDirector.addEmptyLineInReport();
         this.builderDirector.addEmptyLineInReport();
         this.builderDirector.addEmptyLineInReport();
 
-        vehicle.resetNumberOfCyclesAtLandfill();
         vehicle.setLastStreet(selectedStreetIndex);
-        allVehiclesAtLandfill.add(vehicle);
+
+        landfill.vehicleComesToLandfill(vehicle);//getAllVehiclesAtLandfill().add(vehicle);
     }
 
     private Vehicle chooseVehicle(int chosenIndex) {

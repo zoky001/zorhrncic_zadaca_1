@@ -6,6 +6,7 @@
 package org.foi.uzdiz.zorhrncic.dz1.log;
 
 import java.util.Date;
+import org.foi.uzdiz.zorhrncic.dz1.shared.Constants;
 
 /**
  *
@@ -24,13 +25,13 @@ public class ReportBuilderDirector {
 
     public Report addTitleInReport(String line, boolean isStatistic) {
         addEmptyLineInReport();
-        String divider = "*****************************************************************************************";
+        String divider = Constants.ANSI_BLUE + "*****************************************************************************************" + Constants.ANSI_RESET;
         addTextLineInReport(divider, isStatistic);
-        divider = "                    " + line.toUpperCase();
+        divider = Constants.ANSI_BLUE + "                    " + line.toUpperCase() + Constants.ANSI_RESET;
         OneLine oneLine = new OneLine(new Date(), divider, id++, isStatistic);
         builder.addLine(oneLine).build();
 
-        divider = "*****************************************************************************************";
+        divider = Constants.ANSI_BLUE + "*****************************************************************************************" + Constants.ANSI_RESET;
         return addTextLineInReport(divider, isStatistic);
         //  addDividerLineInReport();
 

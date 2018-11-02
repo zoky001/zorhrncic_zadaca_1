@@ -89,6 +89,15 @@ public class LoadInitData {
         float totalAmounMetal;
         float totalAmounBio;
         float totalAmounMixed;
+
+        float totalAmounAll = 0;
+
+        float totalAmountGlassAll = 0;
+        float totalAmounPaperAll = 0;
+        float totalAmounMetalAll = 0;
+        float totalAmounBioAll = 0;
+        float totalAmounMixedAll = 0;
+
         this.builderDirector.addTitleInReport("Popis ukupne količine otpada koji generiraju korisnici po ulicama", false);
         for (int i = 0; i < streets.size(); i++) {
 
@@ -105,6 +114,13 @@ public class LoadInitData {
                 totalAmounBio = totalAmounBio + user.getBioWaste().getAmount();
                 totalAmounMixed = totalAmounMixed + user.getMixedWaste().getAmount();
             }
+            totalAmountGlassAll = totalAmountGlassAll + totalAmountGlass;
+            totalAmounPaperAll = totalAmounPaperAll + totalAmounPaper;
+            totalAmounMetalAll = totalAmounMetalAll + totalAmounMetal;
+            totalAmounBioAll = totalAmounBioAll + totalAmounBio;
+            totalAmounMixedAll = totalAmounMixedAll + totalAmounMixed;
+
+            totalAmounAll = totalAmounAll + totalAmountGlass + totalAmounPaper + totalAmounMetal + totalAmounBio + totalAmounMixed;
 
             this.builderDirector.addDividerLineInReport();
             this.builderDirector.addTextLineInReport("Naziv ulice:      " + streets.get(i).getName(), false);
@@ -119,6 +135,26 @@ public class LoadInitData {
 
         }
 
+        this.builderDirector.addEmptyLineInReport();
+        this.builderDirector.addEmptyLineInReport();
+        this.builderDirector.addEmptyLineInReport();
+        this.builderDirector.addTitleInReport("Popis ukupne količine otpada koji generiraju korisnici po ulicama", false);
+
+        this.builderDirector.addDividerLineInReport();
+        this.builderDirector.addTextLineInReport("Staklo:           " + totalAmountGlassAll, false);
+        this.builderDirector.addTextLineInReport("Papir:            " + totalAmounPaperAll, false);
+        this.builderDirector.addTextLineInReport("Metal:            " + totalAmounMetalAll, false);
+        this.builderDirector.addTextLineInReport("Bio:              " + totalAmounBioAll, false);
+        this.builderDirector.addTextLineInReport("Mješano:          " + totalAmounMixedAll, false);
+        this.builderDirector.addDividerLineInReport();
+        this.builderDirector.addTextLineInReport("UKUPNO:           " + totalAmounAll, false);
+        this.builderDirector.addDividerLineInReport();
+
+        this.builderDirector.addTitleInReport("Popis ukupne količine otpada koji generiraju korisnici po ulicama", false);
+        this.builderDirector.addEmptyLineInReport();
+        this.builderDirector.addEmptyLineInReport();
+        this.builderDirector.addEmptyLineInReport();
+
     }
 
     private void calculateTotalAmountOfWasteInEveryStreet() {
@@ -129,7 +165,13 @@ public class LoadInitData {
         float totalAmounMetal;
         float totalAmounBio;
         float totalAmounMixed;
-        this.builderDirector.addTitleInReport("Popis ukupne količine otpada u kantama po ulicama", false);
+
+        float totalAmountGlassAll = 0;
+        float totalAmounPaperAll = 0;
+        float totalAmounMetalAll = 0;
+        float totalAmounBioAll = 0;
+        float totalAmounMixedAll = 0;
+        //   this.builderDirector.addTitleInReport("Popis ukupne količine otpada u kantama po ulicama", false);
         for (int i = 0; i < streets.size(); i++) {
 
             totalAmountGlass = 0;
@@ -160,8 +202,14 @@ public class LoadInitData {
                 }
 
             }
+            totalAmountGlassAll = totalAmountGlassAll + totalAmountGlass;
+            totalAmounPaperAll = totalAmounPaperAll + totalAmounPaper;
+            totalAmounMetalAll = totalAmounMetalAll + totalAmounMetal;
+            totalAmounBioAll = totalAmounBioAll + totalAmounBio;
+            totalAmounMixedAll = totalAmounMixedAll + totalAmounMixed;
 
-            this.builderDirector.addDividerLineInReport();
+
+            /*    this.builderDirector.addDividerLineInReport();
             this.builderDirector.addTextLineInReport("Naziv ulice:      " + streets.get(i).getName(), false);
             this.builderDirector.addDividerLineInReport();
             this.builderDirector.addTextLineInReport("Staklo:           " + totalAmountGlass, false);
@@ -170,9 +218,30 @@ public class LoadInitData {
             this.builderDirector.addTextLineInReport("Bio:              " + totalAmounBio, false);
             this.builderDirector.addTextLineInReport("Mješano:          " + totalAmounMixed, false);
             this.builderDirector.addDividerLineInReport();
-            report = this.builderDirector.addEmptyLineInReport();
-
+            report = this.builderDirector.addEmptyLineInReport();*/
         }
+
+        this.builderDirector.addEmptyLineInReport();
+        this.builderDirector.addEmptyLineInReport();
+        this.builderDirector.addEmptyLineInReport();
+        this.builderDirector.addTitleInReport("Popis ukupne količine otpada u spremnicima po ulicama", false);
+
+        this.builderDirector.addDividerLineInReport();
+        this.builderDirector.addTextLineInReport("Staklo:           " + totalAmountGlassAll, false);
+        this.builderDirector.addTextLineInReport("Papir:            " + totalAmounPaperAll, false);
+        this.builderDirector.addTextLineInReport("Metal:            " + totalAmounMetalAll, false);
+        this.builderDirector.addTextLineInReport("Bio:              " + totalAmounBioAll, false);
+        this.builderDirector.addTextLineInReport("Mješano:          " + totalAmounMixedAll, false);
+        this.builderDirector.addDividerLineInReport();
+        this.builderDirector.addTextLineInReport("UKUPNO:           " +
+                (totalAmountGlassAll + totalAmounPaperAll + totalAmounMetalAll + totalAmounBioAll + totalAmounMixedAll)
+                , false);
+        this.builderDirector.addDividerLineInReport();
+
+        this.builderDirector.addTitleInReport("Popis ukupne količine otpada u spremnicima po ulicama", false);
+        this.builderDirector.addEmptyLineInReport();
+        this.builderDirector.addEmptyLineInReport();
+        this.builderDirector.addEmptyLineInReport();
 
     }
 

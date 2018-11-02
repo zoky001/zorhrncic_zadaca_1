@@ -21,12 +21,16 @@ import org.foi.uzdiz.zorhrncic.dz1.streets.LoadInitData;
  */
 public class Zorhrncic_zadaca_1 {
 
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_RESET = "\u001B[0m";
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
 
+        System.out.println(ANSI_RED + "This text is red!" + ANSI_RESET);
         //   System.out.println("parametrgggggi: " + args[0]);
         CommonDataSingleton.getInstance().loadParametes(args[0]);
         /*   System.out.println("vozila: " + CommonDataSingleton.getInstance().getParameterByKey("vozila"));

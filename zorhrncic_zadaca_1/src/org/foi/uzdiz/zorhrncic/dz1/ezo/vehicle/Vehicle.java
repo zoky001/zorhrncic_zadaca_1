@@ -7,6 +7,7 @@ package org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.foi.uzdiz.zorhrncic.dz1.ezo.Spremnik;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfVehicleEngine;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfWaste;
 import org.foi.uzdiz.zorhrncic.dz1.streets.Street;
@@ -29,11 +30,17 @@ public abstract class Vehicle {
 
     private int numberOfCyclesAtLandfill;
 
+    private int numberOfProcessedContainers;
+
+    private List<Spremnik> spremnikList;// = new ArrayList<Spremnik>();
+
     public Vehicle() {
         filled = 0;
         capacity = 0;
         numberOfCyclesAtLandfill = 0;
         lastStreet = -1;
+        numberOfProcessedContainers = 0;
+        spremnikList = new ArrayList<Spremnik>();
     }
 
     public String getName() {
@@ -98,7 +105,7 @@ public abstract class Vehicle {
 
     public void resetNumberOfCyclesAtLandfill() {
         this.numberOfCyclesAtLandfill = 0;
-        this.filled = 0;
+        // this.filled = 0;
     }
 
     public boolean increaseAndCheckNumberOfCyclesAtLandfill(int needs) {
@@ -119,6 +126,24 @@ public abstract class Vehicle {
 
     public void resetLastStreet() {
         this.lastStreet = -1;
+    }
+
+    public int getNumberOfProcessedContainers() {
+        return numberOfProcessedContainers;
+    }
+
+    public void increaseNumberOfProcessedContainers() {
+        this.numberOfProcessedContainers = this.numberOfProcessedContainers + 1;
+    }
+    
+    
+
+    public void addProcessedContainers(Spremnik spremnik) {
+        this.spremnikList.add(spremnik);
+    }
+
+    public List<Spremnik> getSpremnikList() {
+        return spremnikList;
     }
 
 }
