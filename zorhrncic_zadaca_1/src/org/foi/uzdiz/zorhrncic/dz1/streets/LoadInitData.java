@@ -335,7 +335,7 @@ public class LoadInitData {
                     }
 
                     if (((String) data[2]).equalsIgnoreCase(Constants.VOZILO_STAKLO)) {
-                        vehicle = vehicleFactory.getVehicle(TypesOfWaste.STAKLO);//new VehicleGlass();
+                        vehicle = vehicleFactory.getVehicle(TypesOfWaste.STAKLO,Float.valueOf(data[3]));//new VehicleGlass();
                         vehicle.setName(data[0]);
                         if (((String) data[1]).equalsIgnoreCase(Constants.DIZEL)) {
                             vehicle.setTypesOfVehicleEngine(TypesOfVehicleEngine.DIESEL);
@@ -346,13 +346,13 @@ public class LoadInitData {
                             continue;
                         }
 
-                        vehicle.setCapacity(Float.valueOf(data[3]));
+                   //     vehicle.setCapacity(Float.valueOf(data[3]));
                         List<String> drivers = Arrays.asList(data[4].split(","));
                         vehicle.setDrivers(drivers);
                         allVehicles.add(vehicle);
 
                     } else if (((String) data[2]).equalsIgnoreCase(Constants.VOZILO_PAPIR)) {
-                        vehicle = vehicleFactory.getVehicle(TypesOfWaste.PAPIR);//new VehiclePaper();
+                        vehicle = vehicleFactory.getVehicle(TypesOfWaste.PAPIR, Float.valueOf(data[3]));//new VehiclePaper();
                         vehicle.setName(data[0]);
                         if (((String) data[1]).equalsIgnoreCase(Constants.DIZEL)) {
                             vehicle.setTypesOfVehicleEngine(TypesOfVehicleEngine.DIESEL);
@@ -363,13 +363,13 @@ public class LoadInitData {
                             continue;
                         }
 
-                        vehicle.setCapacity(Integer.valueOf(data[3]));
+                      //  vehicle.setCapacity(Integer.valueOf(data[3]));
                         List<String> drivers = Arrays.asList(data[4].split(","));
                         vehicle.setDrivers(drivers);
                         allVehicles.add(vehicle);
 
                     } else if (((String) data[2]).equalsIgnoreCase(Constants.VOZILO_METAL)) {
-                        vehicle = vehicleFactory.getVehicle(TypesOfWaste.METAL);//new VehicleMetal();
+                        vehicle = vehicleFactory.getVehicle(TypesOfWaste.METAL, Float.valueOf(data[3]));//new VehicleMetal();
                         vehicle.setName(data[0]);
                         if (((String) data[1]).equalsIgnoreCase(Constants.DIZEL)) {
                             vehicle.setTypesOfVehicleEngine(TypesOfVehicleEngine.DIESEL);
@@ -380,13 +380,13 @@ public class LoadInitData {
                             continue;
                         }
 
-                        vehicle.setCapacity(Integer.valueOf(data[3]));
+                        //vehicle.setCapacity(Integer.valueOf(data[3]));
                         List<String> drivers = Arrays.asList(data[4].split(","));
                         vehicle.setDrivers(drivers);
                         allVehicles.add(vehicle);
 
                     } else if (((String) data[2]).equalsIgnoreCase(Constants.VOZILO_BIO)) {
-                        vehicle = vehicleFactory.getVehicle(TypesOfWaste.BIO);//new VehicleBio();
+                        vehicle = vehicleFactory.getVehicle(TypesOfWaste.BIO, Float.valueOf(data[3]));//new VehicleBio();
                         vehicle.setName(data[0]);
                         if (((String) data[1]).equalsIgnoreCase(Constants.DIZEL)) {
                             vehicle.setTypesOfVehicleEngine(TypesOfVehicleEngine.DIESEL);
@@ -397,13 +397,13 @@ public class LoadInitData {
                             continue;
                         }
 
-                        vehicle.setCapacity(Integer.valueOf(data[3]));
+                      //  vehicle.setCapacity(Integer.valueOf(data[3]));
                         List<String> drivers = Arrays.asList(data[4].split(","));
                         vehicle.setDrivers(drivers);
                         allVehicles.add(vehicle);
 
                     } else if (((String) data[2]).equalsIgnoreCase(Constants.VOZILO_MIJESANO)) {
-                        vehicle =vehicleFactory.getVehicle(TypesOfWaste.MJESANO);// new VehicleMixed();
+                        vehicle =vehicleFactory.getVehicle(TypesOfWaste.MJESANO, Float.valueOf(data[3]));// new VehicleMixed();
                         vehicle.setName(data[0]);
                         if (((String) data[1]).equalsIgnoreCase(Constants.DIZEL)) {
                             vehicle.setTypesOfVehicleEngine(TypesOfVehicleEngine.DIESEL);
@@ -414,7 +414,7 @@ public class LoadInitData {
                             continue;
                         }
 
-                        vehicle.setCapacity(Integer.valueOf(data[3]));
+                     //   vehicle.setCapacity(Integer.valueOf(data[3]));
                         List<String> drivers = Arrays.asList(data[4].split(","));
                         vehicle.setDrivers(drivers);
                         allVehicles.add(vehicle);

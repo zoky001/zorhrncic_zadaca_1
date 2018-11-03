@@ -49,7 +49,7 @@ public class SpremnikFactory extends AbstarctFactory {
     }
 
     @Override
-    public Vehicle getVehicle(TypesOfWaste waste) {
+    public Vehicle getVehicle(TypesOfWaste waste, float capacity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -25,6 +25,6 @@ public abstract class AbstarctFactory {
 
     public abstract Waste getWaste(TypesOfWaste waste, float amount);
 
-    public abstract Vehicle getVehicle(TypesOfWaste waste);
+    public abstract Vehicle getVehicle(TypesOfWaste waste, float capacity);
 
 }

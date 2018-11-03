@@ -65,27 +65,28 @@ public class Landfill {
             amount = this.bioWaste.getAmount();
             amount = amount + vehicle.getFilled();
             this.bioWaste.setAmount(amount);
-            vehicle.setFilled(0);
+            // vehicle.setFilled(0);
+            vehicle.emptyVehicle();
         } else if (vehicle instanceof VehicleGlass) {
             amount = this.glassWaste.getAmount();
             amount = amount + vehicle.getFilled();
             this.glassWaste.setAmount(amount);
-            vehicle.setFilled(0);
+            vehicle.emptyVehicle();
         } else if (vehicle instanceof VehicleMetal) {
             amount = this.metalWaste.getAmount();
             amount = amount + vehicle.getFilled();
             this.metalWaste.setAmount(amount);
-            vehicle.setFilled(0);
+            vehicle.emptyVehicle();
         } else if (vehicle instanceof VehicleMixed) {
             amount = this.mixedWaste.getAmount();
             amount = amount + vehicle.getFilled();
             this.mixedWaste.setAmount(amount);
-            vehicle.setFilled(0);
+            vehicle.emptyVehicle();
         } else if (vehicle instanceof VehiclePaper) {
             amount = this.paperWaste.getAmount();
             amount = amount + vehicle.getFilled();
             this.paperWaste.setAmount(amount);
-            vehicle.setFilled(0);
+            vehicle.emptyVehicle();
         }
 
         getAllVehiclesAtLandfill().add(vehicle);
@@ -108,7 +109,7 @@ public class Landfill {
 
         this.builderDirector.addDividerLineInReport();
         float suma = glassWaste.getAmount() + paperWaste.getAmount() + metalWaste.getAmount() + bioWaste.getAmount() + mixedWaste.getAmount();
-        this.builderDirector.addTextLineInReport("Ukupno:                           " +  suma, true);
+        this.builderDirector.addTextLineInReport("Ukupno:                           " + suma, true);
 
         this.builderDirector.addDividerLineInReport();
 

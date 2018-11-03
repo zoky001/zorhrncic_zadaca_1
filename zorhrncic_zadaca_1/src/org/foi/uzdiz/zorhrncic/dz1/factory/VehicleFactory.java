@@ -5,6 +5,11 @@
  */
 package org.foi.uzdiz.zorhrncic.dz1.factory;
 
+import org.foi.uzdiz.zorhrncic.dz1.bridge.BioTank;
+import org.foi.uzdiz.zorhrncic.dz1.bridge.GlassTank;
+import org.foi.uzdiz.zorhrncic.dz1.bridge.MetalTank;
+import org.foi.uzdiz.zorhrncic.dz1.bridge.MixedTank;
+import org.foi.uzdiz.zorhrncic.dz1.bridge.PaperTank;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Spremnik;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.Vehicle;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.VehicleBio;
@@ -30,22 +35,22 @@ import org.foi.uzdiz.zorhrncic.dz1.waste.Waste;
 public class VehicleFactory extends AbstarctFactory {
 
     @Override
-    public Vehicle getVehicle(TypesOfWaste waste) {
+    public Vehicle getVehicle(TypesOfWaste waste, float capacity) {
         if (waste == null) {
             return null;
         }
 
         switch (waste) {
             case BIO:
-                return new VehicleBio();
+                return new VehicleBio(new BioTank(capacity));
             case METAL:
-                return new VehicleMetal();
+                return new VehicleMetal(new MetalTank(capacity));
             case MJESANO:
-                return new VehicleMixed();
+                return new VehicleMixed(new MixedTank(capacity));
             case PAPIR:
-                return new VehiclePaper();
+                return new VehiclePaper(new PaperTank(capacity));
             case STAKLO:
-                return new VehicleGlass();
+                return new VehicleGlass(new GlassTank(capacity));
             default:
                 return null;
 

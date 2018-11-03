@@ -5,10 +5,16 @@
  */
 package org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle;
 
+import org.foi.uzdiz.zorhrncic.dz1.bridge.Tank;
+
 /**
  *
  * @author Zoran
  */
 public class VehiclePaper extends Vehicle{
+
+    public VehiclePaper(Tank tank) {
+        this.setTank(tank);
+    }
     
 }

@@ -7,6 +7,7 @@ package org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.foi.uzdiz.zorhrncic.dz1.bridge.Tank;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Spremnik;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfVehicleEngine;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfWaste;
@@ -18,13 +19,15 @@ import org.foi.uzdiz.zorhrncic.dz1.streets.Street;
  */
 public abstract class Vehicle {
 
+    private Tank tank;
+
     private String name;
     private TypesOfVehicleEngine typesOfVehicleEngine;
-    private float capacity;
+    // private float capacity;
     private List<String> drivers;
 
     private ArrayList<Integer> randomStreetArray;
-    private float filled;
+    // private float filled;
 
     private int lastStreet;
 
@@ -35,8 +38,8 @@ public abstract class Vehicle {
     private List<Spremnik> spremnikList;// = new ArrayList<Spremnik>();
 
     public Vehicle() {
-        filled = 0;
-        capacity = 0;
+        //  filled = 0;
+        // capacity = 0;
         numberOfCyclesAtLandfill = 0;
         lastStreet = -1;
         numberOfProcessedContainers = 0;
@@ -60,11 +63,7 @@ public abstract class Vehicle {
     }
 
     public float getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(float capacity) {
-        this.capacity = capacity;
+        return this.tank.getCapacity();
     }
 
     public List<String> getDrivers() {
@@ -84,15 +83,19 @@ public abstract class Vehicle {
     }
 
     public float getFilled() {
-        return filled;
+        // return filled;
+        return this.tank.getFilled();
     }
 
-    public void setFilled(float filled) {
-        this.filled = filled;
+    public void emptyVehicle() {
+        // this.filled = filled;
+        this.tank.emptyToTheEnd();
     }
 
     public void addWaste(float filled) {
-        this.filled = this.filled + filled;
+        //  this.filled = this.filled + filled;
+
+        this.tank.fill(filled);
     }
 
     public int getNumberOfCyclesAtLandfill() {
@@ -143,5 +146,11 @@ public abstract class Vehicle {
     public List<Spremnik> getSpremnikList() {
         return spremnikList;
     }
+
+    public void setTank(Tank tank) {
+        this.tank = tank;
+    }
+    
+    
 
 }
