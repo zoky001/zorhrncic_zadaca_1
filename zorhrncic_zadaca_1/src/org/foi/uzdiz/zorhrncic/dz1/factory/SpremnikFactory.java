@@ -8,6 +8,7 @@ package org.foi.uzdiz.zorhrncic.dz1.factory;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Kanta;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Kontejner;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Spremnik;
+import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.Vehicle;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfSpremnik;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfUser;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfWaste;
@@ -46,4 +47,10 @@ public class SpremnikFactory extends AbstarctFactory {
     public User getUser(TypesOfUser type) {
         return null;
     }
+
+    @Override
+    public Vehicle getVehicle(TypesOfWaste waste) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

@@ -6,6 +6,7 @@
 package org.foi.uzdiz.zorhrncic.dz1.factory;
 
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Spremnik;
+import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.Vehicle;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfSpremnik;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfUser;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfWaste;
@@ -47,6 +48,11 @@ public class UserFactory extends AbstarctFactory {
     @Override
     public Waste getWaste(TypesOfWaste waste, float amount) {
         return null;
+    }
+
+    @Override
+    public Vehicle getVehicle(TypesOfWaste waste) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

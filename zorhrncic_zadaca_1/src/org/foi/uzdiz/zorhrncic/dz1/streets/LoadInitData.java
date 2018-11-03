@@ -58,6 +58,7 @@ public class LoadInitData {
     private AbstarctFactory userFactory;
     private AbstarctFactory spremnikFactory;
     private final AbstarctFactory wasteFactory;
+    private final AbstarctFactory vehicleFactory;
 
     public LoadInitData() {
         streets = new ArrayList<Street>();
@@ -67,6 +68,7 @@ public class LoadInitData {
         userFactory = CommonDataSingleton.getInstance().getFactory(TypesOfFactories.USER_FACTORY);
         spremnikFactory = CommonDataSingleton.getInstance().getFactory(TypesOfFactories.SPREMNIK_FACTORY);
         wasteFactory = CommonDataSingleton.getInstance().getFactory(TypesOfFactories.WASTE_FACTORY);
+        vehicleFactory = CommonDataSingleton.getInstance().getFactory(TypesOfFactories.VEHICLE_FACTORY);
     }
 
     public void loadData() {
@@ -333,7 +335,7 @@ public class LoadInitData {
                     }
 
                     if (((String) data[2]).equalsIgnoreCase(Constants.VOZILO_STAKLO)) {
-                        vehicle = new VehicleGlass();
+                        vehicle = vehicleFactory.getVehicle(TypesOfWaste.STAKLO);//new VehicleGlass();
                         vehicle.setName(data[0]);
                         if (((String) data[1]).equalsIgnoreCase(Constants.DIZEL)) {
                             vehicle.setTypesOfVehicleEngine(TypesOfVehicleEngine.DIESEL);
@@ -350,7 +352,7 @@ public class LoadInitData {
                         allVehicles.add(vehicle);
 
                     } else if (((String) data[2]).equalsIgnoreCase(Constants.VOZILO_PAPIR)) {
-                        vehicle = new VehiclePaper();
+                        vehicle = vehicleFactory.getVehicle(TypesOfWaste.PAPIR);//new VehiclePaper();
                         vehicle.setName(data[0]);
                         if (((String) data[1]).equalsIgnoreCase(Constants.DIZEL)) {
                             vehicle.setTypesOfVehicleEngine(TypesOfVehicleEngine.DIESEL);
@@ -367,7 +369,7 @@ public class LoadInitData {
                         allVehicles.add(vehicle);
 
                     } else if (((String) data[2]).equalsIgnoreCase(Constants.VOZILO_METAL)) {
-                        vehicle = new VehicleMetal();
+                        vehicle = vehicleFactory.getVehicle(TypesOfWaste.METAL);//new VehicleMetal();
                         vehicle.setName(data[0]);
                         if (((String) data[1]).equalsIgnoreCase(Constants.DIZEL)) {
                             vehicle.setTypesOfVehicleEngine(TypesOfVehicleEngine.DIESEL);
@@ -384,7 +386,7 @@ public class LoadInitData {
                         allVehicles.add(vehicle);
 
                     } else if (((String) data[2]).equalsIgnoreCase(Constants.VOZILO_BIO)) {
-                        vehicle = new VehicleBio();
+                        vehicle = vehicleFactory.getVehicle(TypesOfWaste.BIO);//new VehicleBio();
                         vehicle.setName(data[0]);
                         if (((String) data[1]).equalsIgnoreCase(Constants.DIZEL)) {
                             vehicle.setTypesOfVehicleEngine(TypesOfVehicleEngine.DIESEL);
@@ -401,7 +403,7 @@ public class LoadInitData {
                         allVehicles.add(vehicle);
 
                     } else if (((String) data[2]).equalsIgnoreCase(Constants.VOZILO_MIJESANO)) {
-                        vehicle = new VehicleMixed();
+                        vehicle =vehicleFactory.getVehicle(TypesOfWaste.MJESANO);// new VehicleMixed();
                         vehicle.setName(data[0]);
                         if (((String) data[1]).equalsIgnoreCase(Constants.DIZEL)) {
                             vehicle.setTypesOfVehicleEngine(TypesOfVehicleEngine.DIESEL);

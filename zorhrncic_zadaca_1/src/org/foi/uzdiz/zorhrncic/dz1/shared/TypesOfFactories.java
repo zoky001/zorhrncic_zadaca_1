@@ -12,6 +12,7 @@ package org.foi.uzdiz.zorhrncic.dz1.shared;
 public enum TypesOfFactories {
     USER_FACTORY,
     SPREMNIK_FACTORY,
-    WASTE_FACTORY
+    WASTE_FACTORY,
+    VEHICLE_FACTORY
 
 }

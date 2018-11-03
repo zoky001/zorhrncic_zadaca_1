@@ -22,6 +22,8 @@ public class FactoryProducer {
                 return new SpremnikFactory();
             case WASTE_FACTORY:
                 return new WasteFactory();
+            case VEHICLE_FACTORY:
+                return new VehicleFactory();
 
             default:
                 return null;

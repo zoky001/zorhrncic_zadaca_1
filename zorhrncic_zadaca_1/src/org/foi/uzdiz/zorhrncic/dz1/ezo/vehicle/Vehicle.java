@@ -135,8 +135,6 @@ public abstract class Vehicle {
     public void increaseNumberOfProcessedContainers() {
         this.numberOfProcessedContainers = this.numberOfProcessedContainers + 1;
     }
-    
-    
 
     public void addProcessedContainers(Spremnik spremnik) {
         this.spremnikList.add(spremnik);

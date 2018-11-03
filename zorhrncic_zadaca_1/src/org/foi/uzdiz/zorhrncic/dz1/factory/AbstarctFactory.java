@@ -6,6 +6,7 @@
 package org.foi.uzdiz.zorhrncic.dz1.factory;
 
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Spremnik;
+import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.Vehicle;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfSpremnik;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfUser;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfWaste;
@@ -20,8 +21,10 @@ public abstract class AbstarctFactory {
 
     public abstract User getUser(TypesOfUser type);
 
-   public abstract Spremnik getSpremnik(TypesOfSpremnik spremnikType, TypesOfWaste waste);
-   
-   public abstract Waste getWaste(TypesOfWaste waste,float amount);
+    public abstract Spremnik getSpremnik(TypesOfSpremnik spremnikType, TypesOfWaste waste);
+
+    public abstract Waste getWaste(TypesOfWaste waste, float amount);
+
+    public abstract Vehicle getVehicle(TypesOfWaste waste);
 
 }
