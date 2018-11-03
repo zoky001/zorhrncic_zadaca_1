@@ -63,7 +63,8 @@ public class Zorhrncic_zadaca_1 {
         WasteCollection wasteCollection = new WasteCollection(load.getAllVehicles(), load.getStreets());
         wasteCollection.startCollecting();;
 
-        CommonDataSingleton.getInstance().getReportBuilderDirector().addEmptyLineInReport().print();
+        CommonDataSingleton.getInstance().getReportBuilderDirector().addEmptyLineInReport(false).print();
+        CommonDataSingleton.getInstance().getReportBuilderDirector().addEmptyLineInReport(false).generateFile();
     }
 
 }

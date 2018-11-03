@@ -5,11 +5,15 @@
  */
 package org.foi.uzdiz.zorhrncic.dz1.log;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.foi.uzdiz.zorhrncic.dz1.shared.Constants;
+import org.foi.uzdiz.zorhrncic.dz1.singleton.CommonDataSingleton;
 
 /**
  *
@@ -32,6 +36,15 @@ public class Report {
     }
 
     public void print() {
+
+        boolean isStatistic = false;
+
+        if (((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.ispis)).equalsIgnoreCase(Constants.ISPIS_SVE)) {
+            isStatistic = false;
+        } else {
+            isStatistic = true;
+        }
+
         try {
             final String os = System.getProperty("os.name");
 
@@ -44,11 +57,62 @@ public class Report {
             //  Handle any exceptions.
         }
 
-        arrayList.forEach(line -> {
+        OneLine line;
+        for (int i = 0; i < arrayList.size(); i++) {
+            line = arrayList.get(i);
+            if (isStatistic) {
 
-            System.out.println(line.toString());
+                if (line.isIsStatistic()) {
+                    System.out.println(line.toString());
+                }
 
-        });
+            } else {
+                System.out.println(line.toString());
+            }
+
+        }
+
+    }
+
+    public void generateFile() {
+        String filename = (String) CommonDataSingleton.getInstance().getParameterByKey(Constants.izlaz);
+        boolean isStatistic = false;
+
+        if (((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.ispis)).equalsIgnoreCase(Constants.ISPIS_SVE)) {
+            isStatistic = false;
+        } else {
+            isStatistic = true;
+        }
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename))) {
+
+            StringBuilder builder = new StringBuilder();
+
+            OneLine line;
+            for (int i = 0; i < arrayList.size(); i++) {
+                if (isStatistic) {
+                    line = arrayList.get(i);
+                    if (line.isIsStatistic()) {
+                        builder.append(line.toString() + "\n");
+                        bw.write(line.toString());
+                        bw.newLine();
+                    }
+
+                } else {
+                    line = arrayList.get(i);
+                    builder.append(line.toString() + "\n");
+                    bw.write(line.toString());
+                    bw.newLine();
+                }
+
+            }
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+
+        }
+
     }
 
 }

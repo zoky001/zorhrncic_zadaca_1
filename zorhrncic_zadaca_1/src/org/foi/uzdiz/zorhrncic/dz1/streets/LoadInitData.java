@@ -137,38 +137,38 @@ public class LoadInitData {
 
             totalAmounAll = totalAmounAll + totalAmountGlass + totalAmounPaper + totalAmounMetal + totalAmounBio + totalAmounMixed;
 
-            this.builderDirector.addDividerLineInReport();
+            this.builderDirector.addDividerLineInReport(false);
             this.builderDirector.addTextLineInReport("Naziv ulice:      " + streets.get(i).getName(), false);
-            this.builderDirector.addDividerLineInReport();
+            this.builderDirector.addDividerLineInReport(false);
             this.builderDirector.addTextLineInReport("Staklo:           " + totalAmountGlass, false);
             this.builderDirector.addTextLineInReport("Papir:            " + totalAmounPaper, false);
             this.builderDirector.addTextLineInReport("Metal:            " + totalAmounMetal, false);
             this.builderDirector.addTextLineInReport("Bio:              " + totalAmounBio, false);
             this.builderDirector.addTextLineInReport("Mješano:          " + totalAmounMixed, false);
-            this.builderDirector.addDividerLineInReport();
-            report = this.builderDirector.addEmptyLineInReport();
+            this.builderDirector.addDividerLineInReport(false);
+            report = this.builderDirector.addEmptyLineInReport(false);
 
         }
 
-        this.builderDirector.addEmptyLineInReport();
-        this.builderDirector.addEmptyLineInReport();
-        this.builderDirector.addEmptyLineInReport();
+        this.builderDirector.addEmptyLineInReport(false);
+        this.builderDirector.addEmptyLineInReport(false);
+        this.builderDirector.addEmptyLineInReport(false);
         this.builderDirector.addTitleInReport("Popis ukupne količine otpada koji generiraju korisnici po ulicama", false);
 
-        this.builderDirector.addDividerLineInReport();
+        this.builderDirector.addDividerLineInReport(false);
         this.builderDirector.addTextLineInReport("Staklo:           " + totalAmountGlassAll, false);
         this.builderDirector.addTextLineInReport("Papir:            " + totalAmounPaperAll, false);
         this.builderDirector.addTextLineInReport("Metal:            " + totalAmounMetalAll, false);
         this.builderDirector.addTextLineInReport("Bio:              " + totalAmounBioAll, false);
         this.builderDirector.addTextLineInReport("Mješano:          " + totalAmounMixedAll, false);
-        this.builderDirector.addDividerLineInReport();
+        this.builderDirector.addDividerLineInReport(false);
         this.builderDirector.addTextLineInReport("UKUPNO:           " + totalAmounAll, false);
-        this.builderDirector.addDividerLineInReport();
+        this.builderDirector.addDividerLineInReport(false);
 
         this.builderDirector.addTitleInReport("Popis ukupne količine otpada koji generiraju korisnici po ulicama", false);
-        this.builderDirector.addEmptyLineInReport();
-        this.builderDirector.addEmptyLineInReport();
-        this.builderDirector.addEmptyLineInReport();
+        this.builderDirector.addEmptyLineInReport(false);
+        this.builderDirector.addEmptyLineInReport(false);
+        this.builderDirector.addEmptyLineInReport(false);
 
     }
 
@@ -236,27 +236,27 @@ public class LoadInitData {
             report = this.builderDirector.addEmptyLineInReport();*/
         }
 
-        this.builderDirector.addEmptyLineInReport();
-        this.builderDirector.addEmptyLineInReport();
-        this.builderDirector.addEmptyLineInReport();
+        this.builderDirector.addEmptyLineInReport(false);
+        this.builderDirector.addEmptyLineInReport(false);
+        this.builderDirector.addEmptyLineInReport(false);
         this.builderDirector.addTitleInReport("Popis ukupne količine otpada u spremnicima po ulicama", false);
 
-        this.builderDirector.addDividerLineInReport();
+        this.builderDirector.addDividerLineInReport(false);
         this.builderDirector.addTextLineInReport("Staklo:           " + totalAmountGlassAll, false);
         this.builderDirector.addTextLineInReport("Papir:            " + totalAmounPaperAll, false);
         this.builderDirector.addTextLineInReport("Metal:            " + totalAmounMetalAll, false);
         this.builderDirector.addTextLineInReport("Bio:              " + totalAmounBioAll, false);
         this.builderDirector.addTextLineInReport("Mješano:          " + totalAmounMixedAll, false);
-        this.builderDirector.addDividerLineInReport();
+        this.builderDirector.addDividerLineInReport(false);
         this.builderDirector.addTextLineInReport("UKUPNO:           "
                 + (totalAmountGlassAll + totalAmounPaperAll + totalAmounMetalAll + totalAmounBioAll + totalAmounMixedAll),
                 false);
-        this.builderDirector.addDividerLineInReport();
+        this.builderDirector.addDividerLineInReport(false);
 
         this.builderDirector.addTitleInReport("Popis ukupne količine otpada u spremnicima po ulicama", false);
-        this.builderDirector.addEmptyLineInReport();
-        this.builderDirector.addEmptyLineInReport();
-        this.builderDirector.addEmptyLineInReport();
+        this.builderDirector.addEmptyLineInReport(false);
+        this.builderDirector.addEmptyLineInReport(false);
+        this.builderDirector.addEmptyLineInReport(false);
 
     }
 
@@ -443,8 +443,8 @@ public class LoadInitData {
 
     private void genrateWasteForUsersPrivate() {
 
-        builderDirector.addEmptyLineInReport();
-        builderDirector.addEmptyLineInReport();
+        builderDirector.addEmptyLineInReport(false);
+        builderDirector.addEmptyLineInReport(false);
         builderDirector.addTitleInReport("Pridružene količine otpada po korisnicima", false);
 
         try {
@@ -484,14 +484,14 @@ public class LoadInitData {
         float maxMetel = 0;
         float maxBio = 0;
         float maxMixed = 0;
-        this.builderDirector.addDividerLineInReport();
+        this.builderDirector.addDividerLineInReport(false);
         this.builderDirector.addTextLineInReport("ID korisnika:      " + user.getId(), false);
 
         try {
             if (user instanceof SmallUser) {
 
                 this.builderDirector.addTextLineInReport("Kategorija korisnika:      " + "mali korisnik", false);
-                this.builderDirector.addDividerLineInReport();
+                this.builderDirector.addDividerLineInReport(false);
 
                 minPercentage = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.maliMin));
 
@@ -550,7 +550,7 @@ public class LoadInitData {
             } else if (user instanceof MediumUser) {
 
                 this.builderDirector.addTextLineInReport("Kategorija korisnika:      " + "srednji korisnik", false);
-                this.builderDirector.addDividerLineInReport();
+                this.builderDirector.addDividerLineInReport(false);
                 minPercentage = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.srednjiMin));
 
                 // glass
@@ -608,7 +608,7 @@ public class LoadInitData {
             } else if (user instanceof BigUser) {
 
                 this.builderDirector.addTextLineInReport("Kategorija korisnika:      " + "veliki korisnik", false);
-                this.builderDirector.addDividerLineInReport();
+                this.builderDirector.addDividerLineInReport(false);
 
                 minPercentage = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.velikiMin));
 
@@ -664,9 +664,9 @@ public class LoadInitData {
 
             }
 
-            this.builderDirector.addDividerLineInReport();
+            this.builderDirector.addDividerLineInReport(false);
 
-            this.builderDirector.addEmptyLineInReport();
+            this.builderDirector.addEmptyLineInReport(false);
 
         } catch (Exception e) {
 

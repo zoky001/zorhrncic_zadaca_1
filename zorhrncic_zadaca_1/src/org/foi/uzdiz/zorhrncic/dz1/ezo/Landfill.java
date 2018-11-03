@@ -94,12 +94,12 @@ public class Landfill {
     }
 
     public void creteReport() {
-        this.builderDirector.addEmptyLineInReport();
-        this.builderDirector.addEmptyLineInReport();
-        this.builderDirector.addEmptyLineInReport();
+        this.builderDirector.addEmptyLineInReport(true);
+        this.builderDirector.addEmptyLineInReport(true);
+        this.builderDirector.addEmptyLineInReport(true);
         this.builderDirector.addTitleInReport("statistika - odlagalište (količina otpada)", true);
 
-        this.builderDirector.addDividerLineInReport();
+        this.builderDirector.addDividerLineInReport(true);
 
         this.builderDirector.addTextLineInReport("Količina stakla:                  " + glassWaste.getAmount(), true);
         this.builderDirector.addTextLineInReport("Količina papira:                  " + paperWaste.getAmount(), true);
@@ -107,15 +107,15 @@ public class Landfill {
         this.builderDirector.addTextLineInReport("Količina bio:                     " + bioWaste.getAmount(), true);
         this.builderDirector.addTextLineInReport("Količina mješano:                 " + mixedWaste.getAmount(), true);
 
-        this.builderDirector.addDividerLineInReport();
+        this.builderDirector.addDividerLineInReport(true);
         float suma = glassWaste.getAmount() + paperWaste.getAmount() + metalWaste.getAmount() + bioWaste.getAmount() + mixedWaste.getAmount();
         this.builderDirector.addTextLineInReport("Ukupno:                           " + suma, true);
 
-        this.builderDirector.addDividerLineInReport();
+        this.builderDirector.addDividerLineInReport(true);
 
         this.builderDirector.addTitleInReport("statistika - vozila (broj preuzetih spremnika)", true);
 
-        this.builderDirector.addDividerLineInReport();
+        this.builderDirector.addDividerLineInReport(true);
         float total = 0;
         Vehicle v;
         for (int i = 0; i < allVehiclesAtLandfill.size(); i++) {
@@ -125,13 +125,13 @@ public class Landfill {
 
         }
 
-        this.builderDirector.addDividerLineInReport();
+        this.builderDirector.addDividerLineInReport(true);
         this.builderDirector.addTextLineInReport("Ukupno:                           " + (int) total, true);
-        this.builderDirector.addDividerLineInReport();
+        this.builderDirector.addDividerLineInReport(true);
 
         this.builderDirector.addTitleInReport("statistika - vozila (broj preuzetih mjesta)", true);
 
-        this.builderDirector.addDividerLineInReport();
+        this.builderDirector.addDividerLineInReport(true);
         Spremnik spremnik;
 
         for (int i = 0; i < allVehiclesAtLandfill.size(); i++) {
@@ -147,7 +147,7 @@ public class Landfill {
 
         }
 
-        this.builderDirector.addDividerLineInReport();
+        this.builderDirector.addDividerLineInReport(true);
 
     }
 

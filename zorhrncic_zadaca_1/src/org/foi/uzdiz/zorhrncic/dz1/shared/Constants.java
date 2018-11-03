@@ -20,6 +20,8 @@ public class Constants {
     public final static String vozila = "vozila";
     // public final static String spremnici = "spremnici";
     public final static String spremnici = "spremnici";
+    public final static String izlaz = "izlaz";
+    public final static String ispis = "ispis";
     public final static String preuzimanje = "preuzimanje";
     public final static String brojRadnihCiklusaZaOdvoz = "brojRadnihCiklusaZaOdvoz";
 
@@ -47,6 +49,10 @@ public class Constants {
 
     public final static String KANTA = "0";
     public final static String KONTEJNER = "1";
+    
+    
+    public final static String ISPIS_STATISIKA = "1";
+    public final static String ISPIS_SVE = "0";
 
     public final static String DIZEL = "0";
     public final static String ELEKTRICNI = "1";
