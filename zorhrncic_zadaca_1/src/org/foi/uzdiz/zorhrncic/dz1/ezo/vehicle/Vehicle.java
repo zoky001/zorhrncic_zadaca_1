@@ -23,19 +23,13 @@ public abstract class Vehicle {
 
     private String name;
     private TypesOfVehicleEngine typesOfVehicleEngine;
-    // private float capacity;
     private List<String> drivers;
-
     private ArrayList<Integer> randomStreetArray;
-    // private float filled;
-
     private int lastStreet;
-
     private int numberOfCyclesAtLandfill;
-
     private int numberOfProcessedContainers;
-
     private List<Spremnik> spremnikList;// = new ArrayList<Spremnik>();
+    private float total;
 
     public Vehicle() {
         //  filled = 0;
@@ -44,6 +38,7 @@ public abstract class Vehicle {
         lastStreet = -1;
         numberOfProcessedContainers = 0;
         spremnikList = new ArrayList<Spremnik>();
+        total = 0;
     }
 
     public String getName() {
@@ -89,6 +84,7 @@ public abstract class Vehicle {
 
     public void emptyVehicle() {
         // this.filled = filled;
+        this.total = this.total + this.tank.getFilled();
         this.tank.emptyToTheEnd();
     }
 
@@ -149,6 +145,10 @@ public abstract class Vehicle {
 
     public void setTank(Tank tank) {
         this.tank = tank;
+    }
+
+    public float getTotal() {
+        return total;
     }
     
     
