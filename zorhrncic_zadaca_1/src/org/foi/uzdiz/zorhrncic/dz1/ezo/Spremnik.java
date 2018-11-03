@@ -8,6 +8,7 @@ package org.foi.uzdiz.zorhrncic.dz1.ezo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.foi.uzdiz.zorhrncic.dz1.bridge.Tank;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfUser;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfWaste;
 import org.foi.uzdiz.zorhrncic.dz1.users.User;
@@ -19,13 +20,16 @@ import org.foi.uzdiz.zorhrncic.dz1.users.User;
 public abstract class Spremnik {
 
     private static int idIncrement = 0;
+
+    private Tank tank;
+
     int id;
     // String kindOfWaste;
     int numberOfSmall;
     int numberOfMedium;
     int numberOfLarge;
-    float capacity;
-    private float filled;
+    // float capacity;
+    //  private float filled;
 
     TypesOfWaste kindOfWaste;
     private TypesOfUser typesOfUser;
@@ -45,10 +49,11 @@ public abstract class Spremnik {
             this.numberOfSmall = target.numberOfSmall;
             this.numberOfMedium = target.numberOfMedium;
             this.numberOfLarge = target.numberOfLarge;
-            this.capacity = target.capacity;
+            // this.capacity = target.capacity;
             this.typesOfUser = target.typesOfUser;
+            this.tank = target.tank.clone();
             usersList = new ArrayList<>();
-            this.filled = 0;
+            // this.filled = 0;
         }
 
     }
@@ -68,7 +73,7 @@ public abstract class Spremnik {
     public static void printArray(List<Spremnik> sviTipoviSpremnika) {
         sviTipoviSpremnika.forEach((k) -> {
 
-            if (k.getCapacity() < k.filled) {
+            if (k.getCapacity() < k.getFilled()) {
                 System.out.println("Višak");
             }
 
@@ -96,7 +101,8 @@ public abstract class Spremnik {
     }
 
     public void addWaste(float amount) {
-        this.filled = this.filled + amount;
+        //this.filled = this.filled + amount;
+        this.tank.fill(amount);
     }
 
     public static int getIdIncrement() {
@@ -144,11 +150,10 @@ public abstract class Spremnik {
     }
 
     public float getCapacity() {
-        return capacity;
-    }
+        //  return capacity;
 
-    public void setCapacity(float capacity) {
-        this.capacity = capacity;
+        return this.tank.getCapacity();
+
     }
 
     public TypesOfUser getTypesOfUser() {
@@ -168,14 +173,17 @@ public abstract class Spremnik {
     }
 
     public float getFilled() {
-        return filled;
-    }
-
-    public void setFilled(float filled) {
-        this.filled = filled;
+        return this.tank.getFilled();
     }
 
     public void empty(float filled) {
-        this.filled = this.filled - filled;
+        // this.filled = this.filled - filled;
+
+        this.tank.empty(filled);
     }
+
+    public void setTank(Tank tank) {
+        this.tank = tank;
+    }
+
 }

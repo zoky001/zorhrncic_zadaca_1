@@ -19,6 +19,16 @@ public class MetalTank implements Tank {
         this.filled = 0;
     }
 
+    public MetalTank(MetalTank tank) {
+        this.capacity = tank.capacity;
+        this.filled = tank.filled;
+    }
+
+    @Override
+    public Tank clone() {
+        return new MetalTank(this);
+    }
+
     @Override
     public float fill(float amount) {
         this.filled = this.filled + amount;

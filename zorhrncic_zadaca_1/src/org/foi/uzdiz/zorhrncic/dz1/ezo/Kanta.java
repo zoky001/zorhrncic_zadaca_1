@@ -8,6 +8,7 @@ package org.foi.uzdiz.zorhrncic.dz1.ezo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.foi.uzdiz.zorhrncic.dz1.bridge.Tank;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfWaste;
 import org.foi.uzdiz.zorhrncic.dz1.users.User;
 
@@ -20,16 +21,17 @@ public class Kanta extends Spremnik {
     public Kanta() {
 
     }
-    
-    public Kanta(TypesOfWaste kindOfWaste) {
+
+    public Kanta(Tank tank, TypesOfWaste kindOfWaste) {
         super(kindOfWaste);
+        this.setTank(tank);
     }
 
     public Kanta(Kanta target) {
 
         super(target);
         if (target != null) {
-           
+
         }
 
     }
@@ -48,6 +50,5 @@ public class Kanta extends Spremnik {
         Kanta shape2 = (Kanta) object2;
         return Objects.equals(shape2.usersList, usersList);
     }
-
 
 }

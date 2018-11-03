@@ -41,7 +41,7 @@ public class UserFactory extends AbstarctFactory {
     }
 
     @Override
-    public Spremnik getSpremnik(TypesOfSpremnik spremnikType, TypesOfWaste waste) {
+    public Spremnik getSpremnik(TypesOfSpremnik spremnikType, TypesOfWaste waste, float capacity) {
         return null;
     }
 

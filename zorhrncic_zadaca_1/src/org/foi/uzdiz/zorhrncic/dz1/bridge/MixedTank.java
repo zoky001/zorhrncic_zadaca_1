@@ -19,6 +19,16 @@ public class MixedTank implements Tank {
         this.filled = 0;
     }
 
+    public MixedTank(MixedTank tank) {
+        this.capacity = tank.capacity;
+        this.filled = tank.filled;
+    }
+
+    @Override
+    public Tank clone() {
+        return new MixedTank(this);
+    }
+
     @Override
     public float fill(float amount) {
         this.filled = this.filled + amount;

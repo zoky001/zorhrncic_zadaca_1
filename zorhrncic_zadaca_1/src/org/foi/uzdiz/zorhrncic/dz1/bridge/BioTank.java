@@ -19,6 +19,16 @@ public class BioTank implements Tank {
         this.filled = 0;
     }
 
+    public BioTank(BioTank tank) {
+        this.capacity = tank.capacity;
+        this.filled = tank.filled;
+    }
+
+    @Override
+    public Tank clone() {
+        return new BioTank(this);
+    }
+
     @Override
     public float fill(float amount) {
         this.filled = this.filled + amount;

@@ -8,6 +8,7 @@ package org.foi.uzdiz.zorhrncic.dz1.ezo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.foi.uzdiz.zorhrncic.dz1.bridge.Tank;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfWaste;
 import org.foi.uzdiz.zorhrncic.dz1.users.User;
 
@@ -20,8 +21,9 @@ public class Kontejner extends Spremnik {
     public Kontejner() {
     }
 
-    public Kontejner(TypesOfWaste kindOfWaste) {
+    public Kontejner(Tank tank, TypesOfWaste kindOfWaste) {
         super(kindOfWaste);
+        this.setTank(tank);
     }
 
     public Kontejner(Kontejner target) {

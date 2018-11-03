@@ -871,22 +871,23 @@ public class LoadInitData {
                         continue;
                     }
                     if (((String) data[1]).equalsIgnoreCase(Constants.KANTA)) {
-                        spremnik = spremnikFactory.getSpremnik(TypesOfSpremnik.KANTA, convertKindOfWaste(data[0]));//new Kanta();
+                    //    spremnik = spremnikFactory.getSpremnik(TypesOfSpremnik.KANTA, convertKindOfWaste(data[0]));//new Kanta();
+                        spremnik = spremnikFactory.getSpremnik(TypesOfSpremnik.KANTA, convertKindOfWaste(data[0]),Float.valueOf(data[5]) );//new Kanta();
                         //spremnik.setKindOfWaste(convertKindOfWaste(data[0]));
                         spremnik.setNumberOfSmall(Integer.valueOf(data[2]));
                         spremnik.setNumberOfMedium(Integer.valueOf(data[3]));
                         spremnik.setNumberOfLarge(Integer.valueOf(data[4]));
-                        spremnik.setCapacity(Float.valueOf(data[5]));
+                      //  spremnik.setCapacity(Float.valueOf(data[5]));
 
                         sviTipoviSpremnika.add(spremnik);
 
                     } else if (((String) data[1]).equalsIgnoreCase(Constants.KONTEJNER)) {
-                        spremnik = spremnikFactory.getSpremnik(TypesOfSpremnik.KONTEJNER, convertKindOfWaste(data[0]));//new Kontejner();
+                        spremnik = spremnikFactory.getSpremnik(TypesOfSpremnik.KONTEJNER, convertKindOfWaste(data[0]),Float.valueOf(data[5]));//new Kontejner();
                         //spremnik.setKindOfWaste(convertKindOfWaste(data[0]));
                         spremnik.setNumberOfSmall(Integer.valueOf(data[2]));
                         spremnik.setNumberOfMedium(Integer.valueOf(data[3]));
                         spremnik.setNumberOfLarge(Integer.valueOf(data[4]));
-                        spremnik.setCapacity(Float.valueOf(data[5]));
+                        //spremnik.setCapacity(Float.valueOf(data[5]));
 
                         sviTipoviSpremnika.add(spremnik);
                     }

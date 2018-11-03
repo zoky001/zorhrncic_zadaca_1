@@ -15,4 +15,5 @@ public interface Tank {
     public  float getCapacity();
     public  float getFilled();
     public  float emptyToTheEnd();
+    public  Tank clone();
 }

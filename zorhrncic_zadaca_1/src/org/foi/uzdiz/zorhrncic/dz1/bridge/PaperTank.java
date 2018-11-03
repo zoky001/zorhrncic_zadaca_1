@@ -19,6 +19,16 @@ public class PaperTank implements Tank {
         this.filled = 0;
     }
 
+    public PaperTank(PaperTank tank) {
+        this.capacity = tank.capacity;
+        this.filled = tank.filled;
+    }
+
+    @Override
+    public Tank clone() {
+        return new PaperTank(this);
+    }
+
     @Override
     public float fill(float amount) {
         this.filled = this.filled + amount;

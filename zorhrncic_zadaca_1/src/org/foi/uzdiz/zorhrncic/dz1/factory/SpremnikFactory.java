@@ -5,6 +5,12 @@
  */
 package org.foi.uzdiz.zorhrncic.dz1.factory;
 
+import org.foi.uzdiz.zorhrncic.dz1.bridge.BioTank;
+import org.foi.uzdiz.zorhrncic.dz1.bridge.GlassTank;
+import org.foi.uzdiz.zorhrncic.dz1.bridge.MetalTank;
+import org.foi.uzdiz.zorhrncic.dz1.bridge.MixedTank;
+import org.foi.uzdiz.zorhrncic.dz1.bridge.PaperTank;
+import org.foi.uzdiz.zorhrncic.dz1.bridge.Tank;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Kanta;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Kontejner;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Spremnik;
@@ -22,16 +28,32 @@ import org.foi.uzdiz.zorhrncic.dz1.waste.Waste;
 public class SpremnikFactory extends AbstarctFactory {
 
     @Override
-    public Spremnik getSpremnik(TypesOfSpremnik spremnikType, TypesOfWaste waste) {
+    public Spremnik getSpremnik(TypesOfSpremnik spremnikType, TypesOfWaste waste, float capacity) {
         if (spremnikType == null || waste == null) {
             return null;
         }
 
+        Tank tank = null;
+
+        switch (waste) {
+            case BIO:
+                tank = new BioTank(capacity);
+            case METAL:
+                tank = new MetalTank(capacity);
+            case MJESANO:
+                tank = new MixedTank(capacity);
+            case PAPIR:
+                tank = new PaperTank(capacity);
+            case STAKLO:
+                tank = new GlassTank(capacity);
+
+        }
+
         switch (spremnikType) {
             case KANTA:
-                return new Kanta(waste);
+                return new Kanta(tank, waste);
             case KONTEJNER:
-                return new Kontejner(waste);
+                return new Kontejner(tank, waste);
             default:
                 return null;
         }

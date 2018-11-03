@@ -21,7 +21,7 @@ public abstract class AbstarctFactory {
 
     public abstract User getUser(TypesOfUser type);
 
-    public abstract Spremnik getSpremnik(TypesOfSpremnik spremnikType, TypesOfWaste waste);
+    public abstract Spremnik getSpremnik(TypesOfSpremnik spremnikType, TypesOfWaste waste, float capacity);
 
     public abstract Waste getWaste(TypesOfWaste waste, float amount);
 
