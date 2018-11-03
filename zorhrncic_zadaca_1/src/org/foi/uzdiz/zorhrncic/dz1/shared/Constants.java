@@ -14,8 +14,8 @@ public class Constants {
     public final static String sjemeGeneratora = "sjemeGeneratora";
     public final static String brojDecimala = "brojDecimala";
     // public final static String ulice = "﻿ulice";
-   // public final static String ulice = "﻿ulice"; // for netbean
-   public final static String ulice = "ulice"; // za dist
+    public final static String ulice = "﻿ulice"; // for netbean
+    // public final static String ulice = "ulice"; // za dist
     //public final static String vozila = "vozila";
     public final static String vozila = "vozila";
     // public final static String spremnici = "spremnici";
@@ -76,7 +76,7 @@ public class Constants {
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
-/*
+    /*
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -86,5 +86,5 @@ public class Constants {
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
-*/
+     */
 }

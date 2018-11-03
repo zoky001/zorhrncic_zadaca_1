@@ -8,6 +8,7 @@ package org.foi.uzdiz.zorhrncic.dz1.ezo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfWaste;
 import org.foi.uzdiz.zorhrncic.dz1.users.User;
 
 /**
@@ -18,6 +19,10 @@ public class Kanta extends Spremnik {
 
     public Kanta() {
 
+    }
+    
+    public Kanta(TypesOfWaste kindOfWaste) {
+        super(kindOfWaste);
     }
 
     public Kanta(Kanta target) {

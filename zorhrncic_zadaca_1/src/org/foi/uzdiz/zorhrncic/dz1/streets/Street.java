@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Kontejner;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Spremnik;
-import org.foi.uzdiz.zorhrncic.dz1.users.LargeUser;
+import org.foi.uzdiz.zorhrncic.dz1.users.BigUser;
 import org.foi.uzdiz.zorhrncic.dz1.users.MediumUser;
 import org.foi.uzdiz.zorhrncic.dz1.users.SmallUser;
 import org.foi.uzdiz.zorhrncic.dz1.users.User;
@@ -70,7 +70,7 @@ public class Street {
               //  System.out.println("      Mali korisnik");
             } else if (u instanceof MediumUser) {
               //  System.out.println("      Srednji korisnik");
-            } else if (u instanceof LargeUser) {
+            } else if (u instanceof BigUser) {
              //   System.out.println("      Veliki korisnik");
             }
 

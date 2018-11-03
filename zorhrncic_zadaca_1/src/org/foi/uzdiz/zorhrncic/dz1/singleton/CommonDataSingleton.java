@@ -18,11 +18,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
+import org.foi.uzdiz.zorhrncic.dz1.abstractFactory.AbstarctFactory;
+import org.foi.uzdiz.zorhrncic.dz1.abstractFactory.FactoryProducer;
 import org.foi.uzdiz.zorhrncic.dz1.log.Report;
 import org.foi.uzdiz.zorhrncic.dz1.log.ReportBuilder;
 import org.foi.uzdiz.zorhrncic.dz1.log.ReportBuilderDirector;
 import org.foi.uzdiz.zorhrncic.dz1.log.ReportBuilderImpl;
 import org.foi.uzdiz.zorhrncic.dz1.shared.Constants;
+import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfFactories;
 
 /**
  *
@@ -168,10 +171,7 @@ public class CommonDataSingleton {
 
                 confData.put(data[0], data[1]);
 
-               
             }
-
-          
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -207,6 +207,10 @@ public class CommonDataSingleton {
 
         return null;
 
+    }
+
+    public AbstarctFactory getFactory(TypesOfFactories typesOfFactories) {
+        return FactoryProducer.getFactory(typesOfFactories);
     }
 
 }

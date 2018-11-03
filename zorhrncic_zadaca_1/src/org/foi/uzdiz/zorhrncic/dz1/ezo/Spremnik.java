@@ -34,6 +34,10 @@ public abstract class Spremnik {
     public Spremnik() {
     }
 
+    public Spremnik(TypesOfWaste kindOfWaste) {
+        this.kindOfWaste = kindOfWaste;
+    }
+
     public Spremnik(Spremnik target) {
         if (target != null) {
             this.id = idIncrement++;

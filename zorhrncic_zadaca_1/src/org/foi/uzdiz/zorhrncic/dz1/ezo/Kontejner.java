@@ -8,6 +8,7 @@ package org.foi.uzdiz.zorhrncic.dz1.ezo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfWaste;
 import org.foi.uzdiz.zorhrncic.dz1.users.User;
 
 /**
@@ -16,16 +17,18 @@ import org.foi.uzdiz.zorhrncic.dz1.users.User;
  */
 public class Kontejner extends Spremnik {
 
-    
-
     public Kontejner() {
+    }
+
+    public Kontejner(TypesOfWaste kindOfWaste) {
+        super(kindOfWaste);
     }
 
     public Kontejner(Kontejner target) {
 
         super(target);
         if (target != null) {
-           
+
         }
 
     }
@@ -44,8 +47,5 @@ public class Kontejner extends Spremnik {
         Kontejner shape2 = (Kontejner) object2;
         return Objects.equals(shape2.usersList, usersList);
     }
-
-    
-    
 
 }

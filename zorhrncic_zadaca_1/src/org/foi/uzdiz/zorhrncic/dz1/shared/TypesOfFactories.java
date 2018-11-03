@@ -3,14 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.foi.uzdiz.zorhrncic.dz1.users;
+package org.foi.uzdiz.zorhrncic.dz1.shared;
 
 /**
  *
  * @author Zoran
  */
-public class LargeUser extends User{
-
-
-    
+public enum TypesOfFactories {
+    USER_FAC,
+    SPREMNIK_FAC
 }

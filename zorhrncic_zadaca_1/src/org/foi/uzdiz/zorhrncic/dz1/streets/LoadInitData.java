@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.foi.uzdiz.zorhrncic.dz1.abstractFactory.AbstarctFactory;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Kanta;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Kontejner;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Spremnik;
@@ -27,11 +28,12 @@ import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.VehiclePaper;
 import org.foi.uzdiz.zorhrncic.dz1.log.Report;
 import org.foi.uzdiz.zorhrncic.dz1.log.ReportBuilderDirector;
 import org.foi.uzdiz.zorhrncic.dz1.shared.Constants;
+import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfFactories;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfUser;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfVehicleEngine;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfWaste;
 import org.foi.uzdiz.zorhrncic.dz1.singleton.CommonDataSingleton;
-import org.foi.uzdiz.zorhrncic.dz1.users.LargeUser;
+import org.foi.uzdiz.zorhrncic.dz1.users.BigUser;
 import org.foi.uzdiz.zorhrncic.dz1.users.MediumUser;
 import org.foi.uzdiz.zorhrncic.dz1.users.SmallUser;
 import org.foi.uzdiz.zorhrncic.dz1.users.User;
@@ -52,12 +54,16 @@ public class LoadInitData {
     private List<Vehicle> allVehicles;
     private final ReportBuilderDirector builderDirector;
     private Report report;
+    private AbstarctFactory userFactory;
+    private AbstarctFactory spremnikFactory;
 
     public LoadInitData() {
         streets = new ArrayList<Street>();
         sviTipoviSpremnika = new ArrayList<Spremnik>();
         allVehicles = new ArrayList<>();
         builderDirector = CommonDataSingleton.getInstance().getReportBuilderDirector();
+        userFactory = CommonDataSingleton.getInstance().getFactory(TypesOfFactories.USER_FAC);
+        spremnikFactory = CommonDataSingleton.getInstance().getFactory(TypesOfFactories.SPREMNIK_FAC);
     }
 
     public void loadData() {
@@ -587,7 +593,7 @@ public class LoadInitData {
                 user.setMixedWaste(new MixedWaste(amount));
                 this.builderDirector.addTextLineInReport("Mješano:          " + amount, false);
 
-            } else if (user instanceof LargeUser) {
+            } else if (user instanceof BigUser) {
 
                 this.builderDirector.addTextLineInReport("Kategorija korisnika:      " + "veliki korisnik", false);
                 this.builderDirector.addDividerLineInReport();
@@ -682,7 +688,7 @@ public class LoadInitData {
                             typesOfUser = TypesOfUser.SMALL;
                         } else if (street.getUsersList().get(j) instanceof MediumUser) {
                             typesOfUser = TypesOfUser.MEDIUM;
-                        } else if (street.getUsersList().get(j) instanceof LargeUser) {
+                        } else if (street.getUsersList().get(j) instanceof BigUser) {
                             typesOfUser = TypesOfUser.LARGE;
                         }
 
@@ -713,7 +719,7 @@ public class LoadInitData {
                             typesOfUser = TypesOfUser.SMALL;
                         } else if (street.getUsersList().get(j) instanceof MediumUser) {
                             typesOfUser = TypesOfUser.MEDIUM;
-                        } else if (street.getUsersList().get(j) instanceof LargeUser) {
+                        } else if (street.getUsersList().get(j) instanceof BigUser) {
                             typesOfUser = TypesOfUser.LARGE;
                         }
 
@@ -924,7 +930,7 @@ public class LoadInitData {
 
             }
             for (int i = 0; i < numberOfLarge; i++) {
-                user = new LargeUser();
+                user = new BigUser();
                 street.addUser(user);
 
             }
@@ -1046,7 +1052,7 @@ public class LoadInitData {
             if (spremnik.getNumberOfMedium() > 0) {
                 canHave = true;
             }
-        } else if (user instanceof LargeUser) {
+        } else if (user instanceof BigUser) {
             if (spremnik.getNumberOfLarge() > 0) {
                 canHave = true;
             }
