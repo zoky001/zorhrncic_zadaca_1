@@ -11,19 +11,16 @@ package org.foi.uzdiz.zorhrncic.dz1.shared;
  */
 public class Constants {
 
-    public final static String sjemeGeneratora = "sjemeGeneratora";
-    public final static String brojDecimala = "brojDecimala";
-    // public final static String ulice = "﻿ulice";
     public final static String ulice = "﻿ulice"; // for netbean
     // public final static String ulice = "ulice"; // za dist
-    //public final static String vozila = "vozila";
-    public final static String vozila = "vozila";
-    // public final static String spremnici = "spremnici";
     public final static String spremnici = "spremnici";
+    public final static String vozila = "vozila";
     public final static String izlaz = "izlaz";
     public final static String ispis = "ispis";
-    public final static String preuzimanje = "preuzimanje";
+    public final static String sjemeGeneratora = "sjemeGeneratora";
+    public final static String brojDecimala = "brojDecimala";
     public final static String brojRadnihCiklusaZaOdvoz = "brojRadnihCiklusaZaOdvoz";
+    public final static String preuzimanje = "preuzimanje";
 
     public final static String maliMin = "maliMin";
     public final static String srednjiMin = "srednjiMin";
@@ -49,8 +46,7 @@ public class Constants {
 
     public final static String KANTA = "0";
     public final static String KONTEJNER = "1";
-    
-    
+
     public final static String ISPIS_STATISIKA = "1";
     public final static String ISPIS_SVE = "0";
 

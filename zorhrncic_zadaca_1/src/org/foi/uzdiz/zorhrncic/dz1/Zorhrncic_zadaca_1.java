@@ -29,34 +29,9 @@ public class Zorhrncic_zadaca_1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-
-    //    System.out.println(ANSI_RED + "This text is red!" + ANSI_RESET);
-        //   System.out.println("parametrgggggi: " + args[0]);
 
         CommonDataSingleton.getInstance().loadParametes(args[0]);
-/*
-        System.out.println("KEY: " + Constants.vozila + " Value: " + (String) CommonDataSingleton.getInstance().getParameterByKey(Constants.vozila));
-        System.out.println("KEY: " + Constants.ulice + " Value: " + (String) CommonDataSingleton.getInstance().getParameterByKey(Constants.ulice));
-        System.out.println("KEY: " + Constants.spremnici + " Value: " + (String) CommonDataSingleton.getInstance().getParameterByKey(Constants.spremnici));
 
-*/
-        /*   System.out.println("vozila: " + CommonDataSingleton.getInstance().getParameterByKey("vozila"));
-        System.out.println("rand INT: " + CommonDataSingleton.getInstance().getRandomInt(8, 10));
-        System.out.println("rand INT: " + CommonDataSingleton.getInstance().getRandomInt(12, 25));
-        System.out.println("rand INT: " + CommonDataSingleton.getInstance().getRandomInt(5, 50));
-
-        
-        System.out.println("rand LONG: " + CommonDataSingleton.getInstance().getRandomLong());
-        System.out.println("rand LONG: " + CommonDataSingleton.getInstance().getRandomLong());
-        System.out.println("rand LONG: " + CommonDataSingleton.getInstance().getRandomLong());
-        
-        
-        System.out.println("rand FLOAT: " + CommonDataSingleton.getInstance().getRandomFloat(new Float(0.00),new Float(5.00)));
-        System.out.println("rand FLOAT: " + CommonDataSingleton.getInstance().getRandomFloat(new Float(5.00),new Float(10.00)));
-        System.out.println("rand FLOAT: " + CommonDataSingleton.getInstance().getRandomFloat(new Float(10.00),new Float(15.00)));
-
-         */
         LoadInitData load = new LoadInitData();
         load.loadData();
 

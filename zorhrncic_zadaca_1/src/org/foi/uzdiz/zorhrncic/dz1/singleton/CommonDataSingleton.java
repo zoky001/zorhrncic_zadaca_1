@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
+import static jdk.nashorn.internal.runtime.JSType.isString;
 import org.foi.uzdiz.zorhrncic.dz1.factory.AbstarctFactory;
 import org.foi.uzdiz.zorhrncic.dz1.factory.FactoryProducer;
 
@@ -36,7 +37,6 @@ public class CommonDataSingleton {
 
     private static CommonDataSingleton instance;
 
-    private HashMap<String, Object> confData = new HashMap<String, Object>();
     Properties prop = new Properties();
     private Random generator;
     DecimalFormat df;
@@ -165,14 +165,8 @@ public class CommonDataSingleton {
                             new FileInputStream(file), "UTF8"));
 
             prop.load(in);
-            while ((line = br.readLine()) != null) {
 
-                // use comma as separator
-                String[] data = line.split(cvsSplitBy);
-
-                confData.put(data[0], data[1]);
-
-            }
+            validateProp(prop);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -212,6 +206,200 @@ public class CommonDataSingleton {
 
     public AbstarctFactory getFactory(TypesOfFactories typesOfFactories) {
         return FactoryProducer.getFactory(typesOfFactories);
+    }
+
+    private void validateProp(Properties prop) {
+
+        List<String> keys = new ArrayList<String>();
+        keys.add(Constants.ulice);
+        keys.add(Constants.spremnici);
+        keys.add(Constants.vozila);
+        keys.add(Constants.izlaz);
+        keys.add(Constants.ispis);
+        keys.add(Constants.sjemeGeneratora);
+        keys.add(Constants.brojDecimala);
+        keys.add(Constants.brojRadnihCiklusaZaOdvoz);
+        keys.add(Constants.preuzimanje);
+        keys.add(Constants.maliMin);
+        keys.add(Constants.srednjiMin);
+        keys.add(Constants.velikiMin);
+        keys.add(Constants.maliStaklo);
+        keys.add(Constants.maliPapir);
+        keys.add(Constants.maliMetal);
+        keys.add(Constants.maliBio);
+        keys.add(Constants.maliMjesano);
+        keys.add(Constants.srednjiStaklo);
+        keys.add(Constants.srednjiPapir);
+        keys.add(Constants.srednjiMetal);
+        keys.add(Constants.srednjiBio);
+        keys.add(Constants.srednjiMjesano);
+        keys.add(Constants.velikiStaklo);
+        keys.add(Constants.velikiPapir);
+        keys.add(Constants.velikiMetal);
+        keys.add(Constants.velikiBio);
+        keys.add(Constants.velikiMjesano);
+
+        prop.forEach(
+                (k, v) -> {
+
+                    System.out.println(k + " -> " + v);
+
+                    if (!keys.contains((String) k)) {
+                        ReportBuilderDirector director = getReportBuilderDirector();
+                        director.addTitleInReport("GREŠKA PRILIKOM UČITAVANJA PARAMETAR!!!", false);
+                        director.addTextLineInReport("Greška prilikom dohvaćanja paremetra: " + k, false);
+                        director.addDividerLineInReport(false);
+                        director.addEmptyLineInReport(false).print();
+                        director.addEmptyLineInReport(false).generateFile();
+                        System.exit(0);
+                    }
+
+                }
+        );
+
+        keys.forEach(key -> {
+
+            try {
+                if (getParameterByKey(key).equals("")) {
+                    ReportBuilderDirector director = getReportBuilderDirector();
+                    director.addTitleInReport("GREŠKA PRILIKOM UČITAVANJA PARAMETAR!!!", false);
+                    director.addTextLineInReport("Greška prilikom dohvaćanja paremetra: " + key, false);
+                    director.addDividerLineInReport(false);
+                    director.addEmptyLineInReport(false).print();
+                    director.addEmptyLineInReport(false).generateFile();
+                    System.exit(0);
+                } else {
+                    switch (key) {
+                        case Constants.ulice:
+                            isStringLocal(getParameterByKey(Constants.ulice), Constants.ulice);
+                            break;
+                        case Constants.spremnici:
+                            isStringLocal(getParameterByKey(Constants.spremnici), Constants.spremnici);
+                            break;
+                        case Constants.vozila:
+                            isStringLocal(getParameterByKey(Constants.vozila), Constants.vozila);
+                            break;
+                        case Constants.izlaz:
+                            isStringLocal(getParameterByKey(Constants.izlaz), Constants.izlaz);
+                            break;
+                        case Constants.ispis:
+                            isNumeric(getParameterByKey(Constants.ispis), Constants.ispis);
+                            break;
+                        case Constants.sjemeGeneratora:
+                            isNumeric(getParameterByKey(Constants.sjemeGeneratora), Constants.sjemeGeneratora);
+                            break;
+                        case Constants.brojDecimala:
+                            isNumeric(getParameterByKey(Constants.brojDecimala), Constants.brojDecimala);
+                            break;
+                        case Constants.brojRadnihCiklusaZaOdvoz:
+                            isNumeric(getParameterByKey(Constants.brojRadnihCiklusaZaOdvoz), Constants.brojRadnihCiklusaZaOdvoz);
+                            break;
+                        case Constants.preuzimanje:
+                            isNumeric(getParameterByKey(Constants.preuzimanje), Constants.preuzimanje);
+                            break;
+                        case Constants.maliMin:
+                            isNumeric(getParameterByKey(Constants.maliMin), Constants.maliMin);
+                            break;
+                        case Constants.srednjiMin:
+                            isNumeric(getParameterByKey(Constants.srednjiMin), Constants.srednjiMin);
+                            break;
+                        case Constants.velikiMin:
+                            isNumeric(getParameterByKey(Constants.velikiMin), Constants.velikiMin);
+                            break;
+                        case Constants.maliStaklo:
+                            isNumeric(getParameterByKey(Constants.maliStaklo), Constants.maliStaklo);
+                            break;
+                        case Constants.maliPapir:
+                            isNumeric(getParameterByKey(Constants.maliPapir), Constants.maliPapir);
+                            break;
+                        case Constants.maliMetal:
+                            isNumeric(getParameterByKey(Constants.maliMetal), Constants.maliMetal);
+                            break;
+                        case Constants.maliBio:
+                            isNumeric(getParameterByKey(Constants.maliBio), Constants.maliBio);
+                            break;
+                        case Constants.maliMjesano:
+                            isNumeric(getParameterByKey(Constants.maliMjesano), Constants.maliMjesano);
+                            break;
+                        case Constants.srednjiStaklo:
+                            isNumeric(getParameterByKey(Constants.srednjiStaklo), Constants.srednjiStaklo);
+                            break;
+                        case Constants.srednjiPapir:
+                            isNumeric(getParameterByKey(Constants.srednjiPapir), Constants.srednjiPapir);
+                            break;
+                        case Constants.srednjiMetal:
+                            isNumeric(getParameterByKey(Constants.srednjiMetal), Constants.srednjiMetal);
+                            break;
+                        case Constants.srednjiBio:
+                            isNumeric(getParameterByKey(Constants.srednjiBio), Constants.srednjiBio);
+                            break;
+                        case Constants.srednjiMjesano:
+                            isNumeric(getParameterByKey(Constants.srednjiMjesano), Constants.srednjiMjesano);
+                            break;
+                        case Constants.velikiStaklo:
+                            isNumeric(getParameterByKey(Constants.velikiStaklo), Constants.velikiStaklo);
+                            break;
+                        case Constants.velikiPapir:
+                            isNumeric(getParameterByKey(Constants.velikiPapir), Constants.velikiPapir);
+                            break;
+                        case Constants.velikiMetal:
+                            isNumeric(getParameterByKey(Constants.velikiMetal), Constants.velikiMetal);
+                            break;
+                        case Constants.velikiBio:
+                            isNumeric(getParameterByKey(Constants.velikiBio), Constants.velikiBio);
+                            break;
+                        case Constants.velikiMjesano:
+                            isNumeric(getParameterByKey(Constants.velikiMjesano), Constants.velikiMjesano);
+                            break;
+
+                    }
+
+                }
+
+            } catch (Exception e) {
+
+                ReportBuilderDirector director = getReportBuilderDirector();
+                director.addTitleInReport("GREŠKA PRILIKOM UČITAVANJA PARAMETAR!!!", false);
+                director.addTextLineInReport("Greška prilikom dohvaćanja paremetra: " + key, false);
+                director.addDividerLineInReport(false);
+                director.addEmptyLineInReport(false).print();
+                director.addEmptyLineInReport(false).generateFile();
+                System.exit(0);
+
+            }
+
+        });
+
+    }
+
+    private void isStringLocal(Object ulice, String key) {
+        if (!isString(ulice)) {
+            ReportBuilderDirector director = getReportBuilderDirector();
+            director.addTitleInReport("GREŠKA PRILIKOM UČITAVANJA PARAMETAR!!!", false);
+            director.addTextLineInReport("Greška prilikom dohvaćanja paremetra: " + key, false);
+            director.addDividerLineInReport(false);
+            director.addEmptyLineInReport(false).print();
+            director.addEmptyLineInReport(false).generateFile();
+            System.exit(0);
+        }
+
+    }
+
+    private void isNumeric(Object parameterByKey, String velikiMjesano) {
+
+        try {
+            int i = Integer.parseInt((String) parameterByKey);
+        } catch (Exception e) {
+            ReportBuilderDirector director = getReportBuilderDirector();
+            director.addTitleInReport("GREŠKA PRILIKOM UČITAVANJA PARAMETAR!!!", false);
+            director.addTextLineInReport("Greška prilikom dohvaćanja paremetra: " + velikiMjesano, false);
+            director.addDividerLineInReport(false);
+            director.addEmptyLineInReport(false).print();
+            director.addEmptyLineInReport(false).generateFile();
+            System.exit(0);
+
+        }
+
     }
 
 }
