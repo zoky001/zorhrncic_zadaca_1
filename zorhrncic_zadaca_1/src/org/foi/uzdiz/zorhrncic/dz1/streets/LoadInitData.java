@@ -57,6 +57,7 @@ public class LoadInitData {
     private Report report;
     private AbstarctFactory userFactory;
     private AbstarctFactory spremnikFactory;
+    private final AbstarctFactory wasteFactory;
 
     public LoadInitData() {
         streets = new ArrayList<Street>();
@@ -65,9 +66,8 @@ public class LoadInitData {
         builderDirector = CommonDataSingleton.getInstance().getReportBuilderDirector();
         userFactory = CommonDataSingleton.getInstance().getFactory(TypesOfFactories.USER_FACTORY);
         spremnikFactory = CommonDataSingleton.getInstance().getFactory(TypesOfFactories.SPREMNIK_FACTORY);
+        wasteFactory = CommonDataSingleton.getInstance().getFactory(TypesOfFactories.WASTE_FACTORY);
     }
-    
-    
 
     public void loadData() {
 
@@ -499,7 +499,8 @@ public class LoadInitData {
 
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxGlass);
 
-                user.setGlassWaste(new GlassWaste(amount));
+                //     user.setGlassWaste(new GlassWaste(amount));
+                user.setGlassWaste(wasteFactory.getWaste(TypesOfWaste.BIO, amount));
 
                 this.builderDirector.addTextLineInReport("Staklo:           " + amount, false);
 
@@ -509,7 +510,8 @@ public class LoadInitData {
 
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxPaper);
 
-                user.setPaperWaste(new PaperWaste(amount));
+                // user.setPaperWaste(new PaperWaste(amount));
+                user.setPaperWaste(wasteFactory.getWaste(TypesOfWaste.PAPIR, amount));
                 this.builderDirector.addTextLineInReport("Papir:            " + amount, false);
 
                 //metal
@@ -518,7 +520,8 @@ public class LoadInitData {
 
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxMetel);
 
-                user.setMetalWaste(new MetalWaste(amount));
+                //user.setMetalWaste(new MetalWaste(amount));
+                user.setMetalWaste(wasteFactory.getWaste(TypesOfWaste.METAL, amount));
                 this.builderDirector.addTextLineInReport("Metal:            " + amount, false);
 
                 //bio
@@ -527,7 +530,8 @@ public class LoadInitData {
 
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxBio);
 
-                user.setBioWaste(new BioWaste(amount));
+                // user.setBioWaste(new BioWaste(amount));
+                user.setBioWaste(wasteFactory.getWaste(TypesOfWaste.BIO, amount));
                 this.builderDirector.addTextLineInReport("Bio:              " + amount, false);
 
                 //mixed
@@ -536,7 +540,9 @@ public class LoadInitData {
 
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxMixed);
 
-                user.setMixedWaste(new MixedWaste(amount));
+                //     user.setMixedWaste(new MixedWaste(amount));
+                user.setMixedWaste(wasteFactory.getWaste(TypesOfWaste.MJESANO, amount));
+
                 this.builderDirector.addTextLineInReport("Mješano:          " + amount, false);
 
             } else if (user instanceof MediumUser) {
@@ -551,7 +557,9 @@ public class LoadInitData {
 
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxGlass);
 
-                user.setGlassWaste(new GlassWaste(amount));
+                //user.setGlassWaste(new GlassWaste(amount));
+                user.setGlassWaste(wasteFactory.getWaste(TypesOfWaste.STAKLO, amount));
+
                 this.builderDirector.addTextLineInReport("Staklo:           " + amount, false);
 
                 //paper
@@ -560,7 +568,8 @@ public class LoadInitData {
 
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxPaper);
 
-                user.setPaperWaste(new PaperWaste(amount));
+                // user.setPaperWaste(new PaperWaste(amount));
+                user.setPaperWaste(wasteFactory.getWaste(TypesOfWaste.PAPIR, amount));
                 this.builderDirector.addTextLineInReport("Papir:            " + amount, false);
 
                 //metal
@@ -569,7 +578,8 @@ public class LoadInitData {
 
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxMetel);
 
-                user.setMetalWaste(new MetalWaste(amount));
+                //user.setMetalWaste(new MetalWaste(amount));
+                user.setMetalWaste(wasteFactory.getWaste(TypesOfWaste.METAL, amount));
                 this.builderDirector.addTextLineInReport("Metal:            " + amount, false);
 
                 //bio
@@ -578,7 +588,8 @@ public class LoadInitData {
 
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxBio);
 
-                user.setBioWaste(new BioWaste(amount));
+                //  user.setBioWaste(new BioWaste(amount));
+                user.setBioWaste(wasteFactory.getWaste(TypesOfWaste.BIO, amount));
                 this.builderDirector.addTextLineInReport("Bio:              " + amount, false);
 
                 //mixed
@@ -587,7 +598,9 @@ public class LoadInitData {
 
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxMixed);
 
-                user.setMixedWaste(new MixedWaste(amount));
+                //user.setMixedWaste(new MixedWaste(amount));
+                user.setMixedWaste(wasteFactory.getWaste(TypesOfWaste.MJESANO, amount));
+
                 this.builderDirector.addTextLineInReport("Mješano:          " + amount, false);
 
             } else if (user instanceof BigUser) {
@@ -603,7 +616,8 @@ public class LoadInitData {
 
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxGlass);
 
-                user.setGlassWaste(new GlassWaste(amount));
+                //  user.setGlassWaste(new GlassWaste(amount));
+                user.setGlassWaste(wasteFactory.getWaste(TypesOfWaste.STAKLO, amount));
                 this.builderDirector.addTextLineInReport("Staklo:           " + amount, false);
 
                 //paper
@@ -612,7 +626,8 @@ public class LoadInitData {
 
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxPaper);
 
-                user.setPaperWaste(new PaperWaste(amount));
+                //user.setPaperWaste(new PaperWaste(amount));
+                user.setPaperWaste(wasteFactory.getWaste(TypesOfWaste.PAPIR, amount));
                 this.builderDirector.addTextLineInReport("Papir:            " + amount, false);
                 //metal
                 maxMetel = Float.valueOf((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.velikiMetal));
@@ -620,7 +635,8 @@ public class LoadInitData {
 
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxMetel);
 
-                user.setMetalWaste(new MetalWaste(amount));
+                //      user.setMetalWaste(new MetalWaste(amount));
+                user.setMetalWaste(wasteFactory.getWaste(TypesOfWaste.METAL, amount));
                 this.builderDirector.addTextLineInReport("Metal:            " + amount, false);
 
                 //bio
@@ -629,7 +645,8 @@ public class LoadInitData {
 
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxBio);
 
-                user.setBioWaste(new BioWaste(amount));
+                // user.setBioWaste(new BioWaste(amount));
+                user.setBioWaste(wasteFactory.getWaste(TypesOfWaste.BIO, amount));
                 this.builderDirector.addTextLineInReport("Bio:              " + amount, false);
 
                 //mixed
@@ -638,7 +655,9 @@ public class LoadInitData {
 
                 amount = CommonDataSingleton.getInstance().getRandomFloat(min, maxMixed);
 
-                user.setMixedWaste(new MixedWaste(amount));
+                // user.setMixedWaste(new MixedWaste(amount));
+                user.setMixedWaste(wasteFactory.getWaste(TypesOfWaste.MJESANO, amount));
+
                 this.builderDirector.addTextLineInReport("Mješano:          " + amount, false);
 
             }
@@ -926,7 +945,7 @@ public class LoadInitData {
 
             }
             for (int i = 0; i < numberOfLarge; i++) {
-                user =userFactory.getUser(TypesOfUser.BIG);// new BigUser();
+                user = userFactory.getUser(TypesOfUser.BIG);// new BigUser();
                 street.addUser(user);
 
             }

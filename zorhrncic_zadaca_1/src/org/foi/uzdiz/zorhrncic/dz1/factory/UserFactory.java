@@ -13,6 +13,7 @@ import org.foi.uzdiz.zorhrncic.dz1.users.BigUser;
 import org.foi.uzdiz.zorhrncic.dz1.users.MediumUser;
 import org.foi.uzdiz.zorhrncic.dz1.users.SmallUser;
 import org.foi.uzdiz.zorhrncic.dz1.users.User;
+import org.foi.uzdiz.zorhrncic.dz1.waste.Waste;
 
 /**
  *
@@ -40,6 +41,11 @@ public class UserFactory extends AbstarctFactory {
 
     @Override
     public Spremnik getSpremnik(TypesOfSpremnik spremnikType, TypesOfWaste waste) {
+        return null;
+    }
+
+    @Override
+    public Waste getWaste(TypesOfWaste waste, float amount) {
         return null;
     }
 

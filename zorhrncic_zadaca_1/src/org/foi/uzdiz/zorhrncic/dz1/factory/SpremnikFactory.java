@@ -12,6 +12,7 @@ import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfSpremnik;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfUser;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfWaste;
 import org.foi.uzdiz.zorhrncic.dz1.users.User;
+import org.foi.uzdiz.zorhrncic.dz1.waste.Waste;
 
 /**
  *
@@ -20,12 +21,7 @@ import org.foi.uzdiz.zorhrncic.dz1.users.User;
 public class SpremnikFactory extends AbstarctFactory {
 
     @Override
-    public User getUser(TypesOfUser type) {
-        return null;
-    }
-
-    @Override
-   public Spremnik getSpremnik(TypesOfSpremnik spremnikType, TypesOfWaste waste) {
+    public Spremnik getSpremnik(TypesOfSpremnik spremnikType, TypesOfWaste waste) {
         if (spremnikType == null || waste == null) {
             return null;
         }
@@ -41,4 +37,13 @@ public class SpremnikFactory extends AbstarctFactory {
 
     }
 
+    @Override
+    public Waste getWaste(TypesOfWaste waste, float amount) {
+        return null;
+    }
+
+    @Override
+    public User getUser(TypesOfUser type) {
+        return null;
+    }
 }

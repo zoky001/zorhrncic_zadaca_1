@@ -20,6 +20,9 @@ public class FactoryProducer {
                 return new UserFactory();
             case SPREMNIK_FACTORY:
                 return new SpremnikFactory();
+            case WASTE_FACTORY:
+                return new WasteFactory();
+
             default:
                 return null;
         }

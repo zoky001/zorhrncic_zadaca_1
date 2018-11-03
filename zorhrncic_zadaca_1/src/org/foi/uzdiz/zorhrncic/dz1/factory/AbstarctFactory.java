@@ -10,6 +10,7 @@ import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfSpremnik;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfUser;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfWaste;
 import org.foi.uzdiz.zorhrncic.dz1.users.User;
+import org.foi.uzdiz.zorhrncic.dz1.waste.Waste;
 
 /**
  *
@@ -20,5 +21,7 @@ public abstract class AbstarctFactory {
     public abstract User getUser(TypesOfUser type);
 
    public abstract Spremnik getSpremnik(TypesOfSpremnik spremnikType, TypesOfWaste waste);
+   
+   public abstract Waste getWaste(TypesOfWaste waste,float amount);
 
 }
