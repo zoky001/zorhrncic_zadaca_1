@@ -18,8 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
-import org.foi.uzdiz.zorhrncic.dz1.abstractFactory.AbstarctFactory;
-import org.foi.uzdiz.zorhrncic.dz1.abstractFactory.FactoryProducer;
+import org.foi.uzdiz.zorhrncic.dz1.factory.AbstarctFactory;
+import org.foi.uzdiz.zorhrncic.dz1.factory.FactoryProducer;
+
 import org.foi.uzdiz.zorhrncic.dz1.log.Report;
 import org.foi.uzdiz.zorhrncic.dz1.log.ReportBuilder;
 import org.foi.uzdiz.zorhrncic.dz1.log.ReportBuilderDirector;

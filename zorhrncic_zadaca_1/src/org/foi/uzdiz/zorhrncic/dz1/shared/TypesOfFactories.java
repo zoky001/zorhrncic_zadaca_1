@@ -10,6 +10,6 @@ package org.foi.uzdiz.zorhrncic.dz1.shared;
  * @author Zoran
  */
 public enum TypesOfFactories {
-    USER_FAC,
-    SPREMNIK_FAC
+    USER_FACTORY,
+    SPREMNIK_FACTORY
 }

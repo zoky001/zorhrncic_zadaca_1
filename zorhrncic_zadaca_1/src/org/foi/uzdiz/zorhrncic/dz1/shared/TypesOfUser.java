@@ -13,6 +13,6 @@ public enum TypesOfUser {
   //  0 - staklo, 1 - papir, 2 - metal, 3 - bio, 4 - mješano
     SMALL,
     MEDIUM,
-    LARGE
+    BIG
 }
 

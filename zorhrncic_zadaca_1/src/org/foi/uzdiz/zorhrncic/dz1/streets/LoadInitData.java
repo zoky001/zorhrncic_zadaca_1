@@ -15,7 +15,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.foi.uzdiz.zorhrncic.dz1.abstractFactory.AbstarctFactory;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Kanta;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Kontejner;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.Spremnik;
@@ -25,10 +24,12 @@ import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.VehicleGlass;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.VehicleMetal;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.VehicleMixed;
 import org.foi.uzdiz.zorhrncic.dz1.ezo.vehicle.VehiclePaper;
+import org.foi.uzdiz.zorhrncic.dz1.factory.AbstarctFactory;
 import org.foi.uzdiz.zorhrncic.dz1.log.Report;
 import org.foi.uzdiz.zorhrncic.dz1.log.ReportBuilderDirector;
 import org.foi.uzdiz.zorhrncic.dz1.shared.Constants;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfFactories;
+import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfSpremnik;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfUser;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfVehicleEngine;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfWaste;
@@ -62,12 +63,13 @@ public class LoadInitData {
         sviTipoviSpremnika = new ArrayList<Spremnik>();
         allVehicles = new ArrayList<>();
         builderDirector = CommonDataSingleton.getInstance().getReportBuilderDirector();
-        userFactory = CommonDataSingleton.getInstance().getFactory(TypesOfFactories.USER_FAC);
-        spremnikFactory = CommonDataSingleton.getInstance().getFactory(TypesOfFactories.SPREMNIK_FAC);
+        userFactory = CommonDataSingleton.getInstance().getFactory(TypesOfFactories.USER_FACTORY);
+        spremnikFactory = CommonDataSingleton.getInstance().getFactory(TypesOfFactories.SPREMNIK_FACTORY);
     }
+    
+    
 
     public void loadData() {
-
 
         ucitajSpremnikePrivate((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.spremnici));
         ucitajVehiclePrivate((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.vozila));
@@ -84,8 +86,7 @@ public class LoadInitData {
         streets.forEach((k) -> {
 
             //     k.print();
-         //   Spremnik.printArray(k.getSpremnikList());
-
+            //   Spremnik.printArray(k.getSpremnikList());
         });
 
     }
@@ -108,7 +109,6 @@ public class LoadInitData {
         float totalAmounMixedAll = 0;
 
         this.builderDirector.addTitleInReport("Popis ukupne količine otpada koji generiraju korisnici po ulicama", false);
-
 
         for (int i = 0; i < streets.size(); i++) {
 
@@ -319,7 +319,6 @@ public class LoadInitData {
                     new InputStreamReader(
                             new FileInputStream(file), "UTF8"));
 
-         
             int lineNo = 0;
             while ((line = br.readLine()) != null) {
                 if (lineNo++ != 0) {
@@ -333,7 +332,6 @@ public class LoadInitData {
                         continue;
                     }
 
-                
                     if (((String) data[2]).equalsIgnoreCase(Constants.VOZILO_STAKLO)) {
                         vehicle = new VehicleGlass();
                         vehicle.setName(data[0]);
@@ -425,7 +423,6 @@ public class LoadInitData {
 
             }
 
-        
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -689,7 +686,7 @@ public class LoadInitData {
                         } else if (street.getUsersList().get(j) instanceof MediumUser) {
                             typesOfUser = TypesOfUser.MEDIUM;
                         } else if (street.getUsersList().get(j) instanceof BigUser) {
-                            typesOfUser = TypesOfUser.LARGE;
+                            typesOfUser = TypesOfUser.BIG;
                         }
 
                         Kontejner kontejnerZaDodjeljivanje = (Kontejner) checkIfExistNepopunjenKontejner(sviTipoviSpremnika.get(i), nepopunjeniKontejneri, typesOfUser, street);
@@ -720,7 +717,7 @@ public class LoadInitData {
                         } else if (street.getUsersList().get(j) instanceof MediumUser) {
                             typesOfUser = TypesOfUser.MEDIUM;
                         } else if (street.getUsersList().get(j) instanceof BigUser) {
-                            typesOfUser = TypesOfUser.LARGE;
+                            typesOfUser = TypesOfUser.BIG;
                         }
 
                         Kanta kontejnerZaDodjeljivanje = (Kanta) checkIfExistNepopunjenKontejner(sviTipoviSpremnika.get(i), nepopunjeniKontejneri, typesOfUser, street);
@@ -764,7 +761,7 @@ public class LoadInitData {
 
                 }
 
-                if (kontejnerZaDodjeljivanje.getTypesOfUser() == TypesOfUser.LARGE) {
+                if (kontejnerZaDodjeljivanje.getTypesOfUser() == TypesOfUser.BIG) {
                     if (kontejnerZaDodjeljivanje.getNumberOfLarge() == kontejnerZaDodjeljivanje.getUsersList().size()) {
                         nepopunjeniKontejneri.remove(i);
                         return;
@@ -785,7 +782,7 @@ public class LoadInitData {
             if (kontejnerZaDodjeljivanje.getNumberOfMedium() > kontejnerZaDodjeljivanje.getUsersList().size()) {
                 nepopunjeniKontejneri.add(kontejnerZaDodjeljivanje);
             }
-        } else if (kontejnerZaDodjeljivanje.getTypesOfUser().equals(TypesOfUser.LARGE)) {
+        } else if (kontejnerZaDodjeljivanje.getTypesOfUser().equals(TypesOfUser.BIG)) {
             if (kontejnerZaDodjeljivanje.getNumberOfLarge() > kontejnerZaDodjeljivanje.getUsersList().size()) {
                 nepopunjeniKontejneri.add(kontejnerZaDodjeljivanje);
             }
@@ -806,7 +803,7 @@ public class LoadInitData {
                     if (spremnik.getNumberOfMedium() > spremnik.getUsersList().size()) {
                         return nepopunjeniKontejneri.get(i);
                     }
-                } else if (typesOfUser.equals(TypesOfUser.LARGE)) {
+                } else if (typesOfUser.equals(TypesOfUser.BIG)) {
                     if (spremnik.getNumberOfLarge() > spremnik.getUsersList().size()) {
                         return nepopunjeniKontejneri.get(i);
                     }
@@ -853,8 +850,8 @@ public class LoadInitData {
                         continue;
                     }
                     if (((String) data[1]).equalsIgnoreCase(Constants.KANTA)) {
-                        spremnik = new Kanta();
-                        spremnik.setKindOfWaste(convertKindOfWaste(data[0]));
+                        spremnik = spremnikFactory.getSpremnik(TypesOfSpremnik.KANTA, convertKindOfWaste(data[0]));//new Kanta();
+                        //spremnik.setKindOfWaste(convertKindOfWaste(data[0]));
                         spremnik.setNumberOfSmall(Integer.valueOf(data[2]));
                         spremnik.setNumberOfMedium(Integer.valueOf(data[3]));
                         spremnik.setNumberOfLarge(Integer.valueOf(data[4]));
@@ -863,8 +860,8 @@ public class LoadInitData {
                         sviTipoviSpremnika.add(spremnik);
 
                     } else if (((String) data[1]).equalsIgnoreCase(Constants.KONTEJNER)) {
-                        spremnik = new Kontejner();
-                        spremnik.setKindOfWaste(convertKindOfWaste(data[0]));
+                        spremnik = spremnikFactory.getSpremnik(TypesOfSpremnik.KONTEJNER, convertKindOfWaste(data[0]));//new Kontejner();
+                        //spremnik.setKindOfWaste(convertKindOfWaste(data[0]));
                         spremnik.setNumberOfSmall(Integer.valueOf(data[2]));
                         spremnik.setNumberOfMedium(Integer.valueOf(data[3]));
                         spremnik.setNumberOfLarge(Integer.valueOf(data[4]));
@@ -877,7 +874,6 @@ public class LoadInitData {
 
             }
 
-       
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -920,17 +916,17 @@ public class LoadInitData {
             int numberOfLarge = street.getNumberOfLarge();
             User user;
             for (int i = 0; i < numberOfSmall; i++) {
-                user = new SmallUser();
+                user = userFactory.getUser(TypesOfUser.SMALL);//new SmallUser();
                 street.addUser(user);
 
             }
             for (int i = 0; i < numberOfMedium; i++) {
-                user = new MediumUser();
+                user = userFactory.getUser(TypesOfUser.MEDIUM);//new MediumUser();
                 street.addUser(user);
 
             }
             for (int i = 0; i < numberOfLarge; i++) {
-                user = new BigUser();
+                user =userFactory.getUser(TypesOfUser.BIG);// new BigUser();
                 street.addUser(user);
 
             }
