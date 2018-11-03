@@ -239,19 +239,23 @@ public class CommonDataSingleton {
         keys.add(Constants.velikiBio);
         keys.add(Constants.velikiMjesano);
 
-        prop.forEach(
-                (k, v) -> {
+        prop.forEach((k, v) -> {
 
-                    System.out.println(k + " -> " + v);
-
+                     System.out.println(k + " -> " + v);
                     if (!keys.contains((String) k)) {
-                        ReportBuilderDirector director = getReportBuilderDirector();
-                        director.addTitleInReport("GREŠKA PRILIKOM UČITAVANJA PARAMETAR!!!", false);
-                        director.addTextLineInReport("Greška prilikom dohvaćanja paremetra: " + k, false);
-                        director.addDividerLineInReport(false);
-                        director.addEmptyLineInReport(false).print();
-                        director.addEmptyLineInReport(false).generateFile();
-                        System.exit(0);
+                        if (((String) k).indexOf("ulice") > 0) {
+
+                        } else {
+                            ReportBuilderDirector director = getReportBuilderDirector();
+                            director.addTitleInReport("GREŠKA PRILIKOM UČITAVANJA PARAMETAR!!!", false);
+                            director.addTextLineInReport("Greška prilikom dohvaćanja paremetra: " + k, false);
+                            director.addDividerLineInReport(false);
+                            director.addEmptyLineInReport(false).print();
+                            director.addEmptyLineInReport(false).generateFile();
+                            System.exit(0);
+
+                        }
+
                     }
 
                 }
@@ -271,7 +275,7 @@ public class CommonDataSingleton {
                 } else {
                     switch (key) {
                         case Constants.ulice:
-                            isStringLocal(getParameterByKey(Constants.ulice), Constants.ulice);
+                            // isStringLocal(getParameterByKey(Constants.ulice), Constants.ulice);
                             break;
                         case Constants.spremnici:
                             isStringLocal(getParameterByKey(Constants.spremnici), Constants.spremnici);

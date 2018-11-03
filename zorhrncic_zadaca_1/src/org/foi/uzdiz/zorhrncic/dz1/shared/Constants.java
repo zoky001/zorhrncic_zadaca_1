@@ -11,8 +11,8 @@ package org.foi.uzdiz.zorhrncic.dz1.shared;
  */
 public class Constants {
 
-    public final static String ulice = "﻿ulice"; // for netbean
-    // public final static String ulice = "ulice"; // za dist
+    //public final static String ulice = "﻿ulice"; // for netbean
+    public final static String ulice = "ulice"; // za dist
     public final static String spremnici = "spremnici";
     public final static String vozila = "vozila";
     public final static String izlaz = "izlaz";

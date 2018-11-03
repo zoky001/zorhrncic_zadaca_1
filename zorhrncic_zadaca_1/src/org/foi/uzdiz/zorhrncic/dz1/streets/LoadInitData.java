@@ -993,6 +993,7 @@ public class LoadInitData {
         BufferedReader br = null;
         String line = " ";
         String cvsSplitBy = ";";
+        System.out.println(path);
         File file = new File(path);
         Street street;
 
