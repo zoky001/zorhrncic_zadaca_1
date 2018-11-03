@@ -158,14 +158,30 @@ public class Landfill {
 
             v = allVehiclesAtLandfill.get(i);
             total = total + v.getTotal();
-            this.builderDirector.addTextLineInReport(v.getName() + "                       " +  v.getTotal(), true);
+            this.builderDirector.addTextLineInReport(v.getName() + "                       " + v.getTotal(), true);
 
         }
         this.builderDirector.addDividerLineInReport(true);
         this.builderDirector.addTextLineInReport("Ukupno:                           " + total, true);
         this.builderDirector.addDividerLineInReport(true);
 
-   
+        this.builderDirector.addDividerLineInReport(true);
+
+        this.builderDirector.addTitleInReport("statistika - vozila (broj pražnjenja)", true);
+
+        this.builderDirector.addDividerLineInReport(true);
+
+        total = 0;
+        for (int i = 0; i < allVehiclesAtLandfill.size(); i++) {
+
+            v = allVehiclesAtLandfill.get(i);
+            total = total + v.getNumberOfDepartures();
+            this.builderDirector.addTextLineInReport(v.getName() + "                       " + v.getNumberOfDepartures(), true);
+
+        }
+        this.builderDirector.addDividerLineInReport(true);
+        this.builderDirector.addTextLineInReport("Ukupno:                           " + total, true);
+        this.builderDirector.addDividerLineInReport(true);
 
     }
 

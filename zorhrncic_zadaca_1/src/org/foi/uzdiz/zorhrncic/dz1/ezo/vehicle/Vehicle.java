@@ -30,6 +30,7 @@ public abstract class Vehicle {
     private int numberOfProcessedContainers;
     private List<Spremnik> spremnikList;// = new ArrayList<Spremnik>();
     private float total;
+    private int numberOfDepartures;
 
     public Vehicle() {
         //  filled = 0;
@@ -39,6 +40,7 @@ public abstract class Vehicle {
         numberOfProcessedContainers = 0;
         spremnikList = new ArrayList<Spremnik>();
         total = 0;
+        numberOfDepartures = 0;
     }
 
     public String getName() {
@@ -85,6 +87,7 @@ public abstract class Vehicle {
     public void emptyVehicle() {
         // this.filled = filled;
         this.total = this.total + this.tank.getFilled();
+        this.numberOfDepartures = this.numberOfDepartures +1;
         this.tank.emptyToTheEnd();
     }
 
@@ -149,6 +152,10 @@ public abstract class Vehicle {
 
     public float getTotal() {
         return total;
+    }
+
+    public int getNumberOfDepartures() {
+        return numberOfDepartures;
     }
     
     
