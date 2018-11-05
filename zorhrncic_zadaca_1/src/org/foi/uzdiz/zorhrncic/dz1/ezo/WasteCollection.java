@@ -52,7 +52,7 @@ public class WasteCollection {
         try {
             this.numberOfCyclesAtLandfill = Integer.parseInt((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.brojRadnihCiklusaZaOdvoz));
         } catch (Exception e) {
-            System.out.println("Greška prilikom učitavanja broja radnih ciklusa za odvoz!");
+            builderDirector.addErrorInReport("Greška prilikom učitavanja broja radnih ciklusa za odvoz!", false);
             System.exit(0);
         }
     }
@@ -67,7 +67,7 @@ public class WasteCollection {
         } else if (((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.preuzimanje)).equalsIgnoreCase(Constants.VOZILO_ODREDJUJE)) {
             isVehicleSelectsStreet = true;
         } else {
-            System.out.println("Nedostaje parametar \"preuzimanje\" !!");
+            builderDirector.addErrorInReport("Nedostaje parametar \"preuzimanje\" !!", false);
             System.exit(0);
         }
 
@@ -88,14 +88,23 @@ public class WasteCollection {
         }
 
         driveAllVehiclesToTheLandfill();
+
+        this.builderDirector.addEmptyLineInReport(false);
+        this.builderDirector.addEmptyLineInReport(false);
+        this.builderDirector.addEmptyLineInReport(false);
+        this.builderDirector.addTitleInReport("Završeno sakupljanje otpad!!!", false);
+        this.builderDirector.addTitleInReport("Završeno sakupljanje otpad!!!", false);
+        this.builderDirector.addTitleInReport("Završeno sakupljanje otpad!!!", false);
+        this.builderDirector.addEmptyLineInReport(false);
+        this.builderDirector.addEmptyLineInReport(false);
+        this.builderDirector.addEmptyLineInReport(false);
+
         landfill.creteReport();
-        
-        
+
         streets.forEach((k) -> {
 
             //     k.print();
-           // Spremnik.printArray(k.getSpremnikList());
-
+            // Spremnik.printArray(k.getSpremnikList());
         });
 
     }
@@ -104,13 +113,15 @@ public class WasteCollection {
         try {
             for (int i = 0; i < allVehiclesInProcess.size(); i++) {
                 if (!landfill.getAllVehiclesAtLandfill().contains(allVehiclesInProcess.get(i))) {
-                    landfill.vehicleComesToLandfill(allVehiclesInProcess.get(i));
+                    //landfill.vehicleComesToLandfill(allVehiclesInProcess.get(i));
+                    driveToLandfill(allVehiclesInProcess.get(i));
                 }
             }
 
         } catch (Exception e) {
 
-            System.out.println("driveAllVehiclesToTheLandfill error " + e);
+            builderDirector.addErrorInReport("driveAllVehiclesToTheLandfill error " + e, false);
+
         }
 
     }
@@ -124,7 +135,6 @@ public class WasteCollection {
                 allVehiclesInProcess.remove(vehicle);
                 allVehiclesInProcess.add(vehicle);
 
-            
                 return false;
             } else {
                 return true;
@@ -204,7 +214,7 @@ public class WasteCollection {
                 vehicle.addProcessedContainers(spremnik);
 
                 this.builderDirector.addDividerLineInReport(false);
-                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName()+"                     Ciklus: " +cycleNumber + ". ", false);
+                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "                     Ciklus: " + cycleNumber + ". ", false);
                 this.builderDirector.addDividerLineInReport(false);
 
                 this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), false);
@@ -224,7 +234,7 @@ public class WasteCollection {
                 success = true;
                 //vehicle.increaseNumberOfProcessedContainers();
                 this.builderDirector.addDividerLineInReport(false);
-                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName()+"                     Ciklus: " +cycleNumber + ". ", false);
+                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "                     Ciklus: " + cycleNumber + ". ", false);
                 this.builderDirector.addDividerLineInReport(false);
 
                 this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), false);

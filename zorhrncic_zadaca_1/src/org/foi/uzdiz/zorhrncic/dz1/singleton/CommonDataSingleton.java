@@ -73,8 +73,9 @@ public class CommonDataSingleton {
             return generator.nextInt((max - min) + 1) + min;
 
         } catch (Exception e) {
+            ReportBuilderDirector director = getReportBuilderDirector();
 
-            System.out.println("Greška u generiranju random INT broja");
+            director.addErrorInReport("Greška u generiranju random INT broja", false);
 
         }
         return -1;
@@ -105,7 +106,9 @@ public class CommonDataSingleton {
 
         } catch (Exception e) {
 
-            System.out.println("Greška u generiranju random LONG broja");
+            ReportBuilderDirector director = getReportBuilderDirector();
+
+            director.addErrorInReport("Greška u generiranju random LONG broja", false);
 
         }
         return -1;
@@ -131,7 +134,9 @@ public class CommonDataSingleton {
 
         } catch (Exception e) {
 
-            System.out.println("Greška u generiranju random FLOAT broja");
+            ReportBuilderDirector director = getReportBuilderDirector();
+
+            director.addErrorInReport("Greška u generiranju random FLOAT broja", false);
 
         }
         return -1;
@@ -196,7 +201,9 @@ public class CommonDataSingleton {
 
         } catch (Exception e) {
 
-            System.out.println("Greška prilikom dohvata podataka.");
+            ReportBuilderDirector director = getReportBuilderDirector();
+
+            director.addErrorInReport("Greška prilikom dohvata podataka.", false);
 
         }
 
@@ -241,24 +248,24 @@ public class CommonDataSingleton {
 
         prop.forEach((k, v) -> {
 
-                     System.out.println(k + " -> " + v);
-                    if (!keys.contains((String) k)) {
-                        if (((String) k).indexOf("ulice") > 0) {
+         //   System.out.println(k + " -> " + v);
+            if (!keys.contains((String) k)) {
+                if (((String) k).indexOf("ulice") > 0) {
 
-                        } else {
-                            ReportBuilderDirector director = getReportBuilderDirector();
-                            director.addTitleInReport("GREŠKA PRILIKOM UČITAVANJA PARAMETAR!!!", false);
-                            director.addTextLineInReport("Greška prilikom dohvaćanja paremetra: " + k, false);
-                            director.addDividerLineInReport(false);
-                            director.addEmptyLineInReport(false).print();
-                            director.addEmptyLineInReport(false).generateFile();
-                            System.exit(0);
-
-                        }
-
-                    }
+                } else {
+                    ReportBuilderDirector director = getReportBuilderDirector();
+                    director.addTitleInReport("GREŠKA PRILIKOM UČITAVANJA PARAMETAR!!!", false);
+                    director.addTextLineInReport("Greška prilikom dohvaćanja paremetra: " + k, false);
+                    director.addDividerLineInReport(false);
+                    director.addEmptyLineInReport(false).print();
+                    director.addEmptyLineInReport(false).generateFile();
+                    System.exit(0);
 
                 }
+
+            }
+
+        }
         );
 
         keys.forEach(key -> {

@@ -37,6 +37,24 @@ public class ReportBuilderDirector {
 
     }
 
+    public Report addErrorInReport(String line, boolean isStatistic) {
+        addEmptyLineInReport(isStatistic);
+        String divider = Constants.ANSI_BLUE + "##########################################################################################" + Constants.ANSI_RESET;
+        addTextLineInReport(divider, isStatistic);
+        addTextLineInReport(divider, isStatistic);
+        addTextLineInReport(divider, isStatistic);
+        divider = Constants.ANSI_BLUE + "                    " + line.toUpperCase() + Constants.ANSI_RESET;
+        OneLine oneLine = new OneLine(new Date(), divider, id++, isStatistic);
+        builder.addLine(oneLine).build();
+
+        divider = Constants.ANSI_BLUE + "##########################################################################################" + Constants.ANSI_RESET;
+        addTextLineInReport(divider, isStatistic);
+        addTextLineInReport(divider, isStatistic);
+        return addTextLineInReport(divider, isStatistic);
+        //  addDividerLineInReport();
+
+    }
+
     public Report addTextLineInReport(String line, boolean isStatistic) {
 
         OneLine oneLine = new OneLine(new Date(), line, id++, isStatistic);

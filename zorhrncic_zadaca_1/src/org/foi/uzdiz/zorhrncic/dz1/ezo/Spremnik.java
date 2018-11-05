@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import org.foi.uzdiz.zorhrncic.dz1.bridge.Tank;
+import org.foi.uzdiz.zorhrncic.dz1.log.ReportBuilderDirector;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfUser;
 import org.foi.uzdiz.zorhrncic.dz1.shared.TypesOfWaste;
+import org.foi.uzdiz.zorhrncic.dz1.singleton.CommonDataSingleton;
 import org.foi.uzdiz.zorhrncic.dz1.users.User;
 
 /**
@@ -71,31 +73,40 @@ public abstract class Spremnik {
     }
 
     public static void printArray(List<Spremnik> sviTipoviSpremnika) {
+        
+        ReportBuilderDirector builderDirector = CommonDataSingleton.getInstance().getReportBuilderDirector();
         sviTipoviSpremnika.forEach((k) -> {
 
             if (k.getCapacity() < k.getFilled()) {
-                System.out.println("Višak");
+                builderDirector.addTextLineInReport("Višak", false);
             }
 
-            System.out.println("ID: " + k.getId());
+          
+              builderDirector.addTextLineInReport("ID: " + k.getId(), false);
 
-            System.out.print("TIP: ");
+ 
+              builderDirector.addTextLineInReport("TIP: ", false);
 
             if (k instanceof Kanta) {
-                System.out.println(" Kanta");
+               
+                 builderDirector.addTextLineInReport(" Kanta", false);
             } else if (k instanceof Kontejner) {
-                System.out.println(" Kontejner");
+           
+                 builderDirector.addTextLineInReport(" Kontejner", false);
             }
-            System.out.println("Name: " + k.getKindOfWaste());
-            System.out.println("Vrsta korisnika: " + k.getTypesOfUser().name());
-            System.out.println("Broj korisnika: " + k.getUsersList().size());
-
-            System.out.println("Broj kapacitet: " + k.getCapacity());
-            System.out.println("Broj popunjen: " + k.getFilled());
-            System.out.println("Broj malih: " + k.getNumberOfSmall());
-            System.out.println("Broj srednjih: " + k.getNumberOfMedium());
-            System.out.println("Broj velikih: " + k.getNumberOfLarge());
-            System.out.println("------------------------------------------------------------------------------------------------------------");
+     
+            builderDirector.addTextLineInReport("Name: " + k.getKindOfWaste(), false);
+            builderDirector.addTextLineInReport("Vrsta korisnika: " + k.getTypesOfUser().name(), false);
+            builderDirector.addTextLineInReport("Broj korisnika: " + k.getUsersList().size(), false);
+            
+            
+            builderDirector.addTextLineInReport("Broj kapacitet: " + k.getCapacity(), false);
+            builderDirector.addTextLineInReport("Broj popunjen: " + k.getFilled(), false);
+            builderDirector.addTextLineInReport("Broj malih: " + k.getNumberOfSmall(), false);
+            builderDirector.addTextLineInReport("Broj srednjih: " + k.getNumberOfMedium(), false);
+            builderDirector.addTextLineInReport("Broj velikih: " + k.getNumberOfLarge(), false);
+            builderDirector.addDividerLineInReport(false);
+            
 
         });
     }

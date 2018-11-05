@@ -1,0 +1,8 @@
+﻿naziv;broj mjesta; udio (%) mali;udio (%) srednji;udio (%) veliki;
+Pavlinska;100;70;20;10
+Alojzija Stepinca;105;100;0;0
+Petra Krešimira IV;307;50;30;20
+Slavenska;208;70;30;0
+Julija Merlića;302;40;20;40
+Petra Preradovića;208;50;20;30
+Ivana Kukuljevića Sakcinskog;600;60;20;20
