@@ -19,8 +19,7 @@ import org.foi.uzdiz.zorhrncic.dz2.users.User;
  * @author Zoran
  */
 public class Street implements Place {
-    
-    
+
     private Place area;
     private String id;
 
@@ -48,7 +47,26 @@ public class Street implements Place {
 
     @Override
     public void printDataAboutGeneratedWaste() {
+        System.out.println("------------------------------------------------------------------------------------------------------------");
+        System.out.println("                                                            ------------------------------------------------");
+        System.out.println("                                                            |   IME NAD-PODRUČJA: " + ((CompositePlace)getParrent()).getName() + "          ");
+        System.out.println("                                                            ------------------------------------------------");
+        System.out.println("                                                            |          IME ULICE: " + name + "                 ");
+        System.out.println("                                                            ------------------------------------------------");
+        System.out.println("                                                            |   Količina otpada staklo:     |  " + getTotalAmountOfGlassWaste());
+        System.out.println("                                                            ------------------------------------------------");
+        System.out.println("                                                            |   Količina otpada papir:      |  " + getTotalAmountOfPaperWaste());
+        System.out.println("                                                            ------------------------------------------------");
+        System.out.println("                                                            |   Količina otpada metal:      |  " + getTotalAmountOfMetalWaste());
+        System.out.println("                                                            ------------------------------------------------");
+        System.out.println("                                                            |   Količina otpada bio:        |  " + getTotalAmountOfBioWaste());
+        System.out.println("                                                            ------------------------------------------------");
+        System.out.println("                                                            |   Količina otpada mixed:      |  " + getTotalAmountOfMixedWaste());
+        System.out.println("                                                            ------------------------------------------------");
+        System.out.println("------------------------------------------------------------------------------------------------------------");
+    }
 
+    public void print() {
         System.out.println("Name: " + name);
         System.out.println("Broj mjesta: " + numberOfPlaces);
         System.out.println("Broj malih: " + numberOfSmall);
@@ -192,7 +210,8 @@ public class Street implements Place {
         this.numberOfLarge = numberOfLarge;
     }
 
-    private float getTotalAmountOfGlassWaste() {
+    @Override
+    public float getTotalAmountOfGlassWaste() {
 
         float sum = 0;
 
@@ -207,7 +226,8 @@ public class Street implements Place {
 
     }
 
-    private float getTotalAmountOfMetalWaste() {
+    @Override
+    public float getTotalAmountOfMetalWaste() {
 
         float sum = 0;
 
@@ -222,7 +242,8 @@ public class Street implements Place {
 
     }
 
-    private float getTotalAmountOfPaperWaste() {
+    @Override
+    public float getTotalAmountOfPaperWaste() {
 
         float sum = 0;
 
@@ -237,7 +258,8 @@ public class Street implements Place {
 
     }
 
-    private float getTotalAmountOfBioWaste() {
+    @Override
+    public float getTotalAmountOfBioWaste() {
 
         float sum = 0;
 
@@ -252,7 +274,8 @@ public class Street implements Place {
 
     }
 
-    private float getTotalAmountOfMixedWaste() {
+    @Override
+    public float getTotalAmountOfMixedWaste() {
 
         float sum = 0;
 
@@ -272,12 +295,19 @@ public class Street implements Place {
         return area;
     }
 
-    public void setArea(Place area) {
-        this.area = area;
-    }
-
+  
     public String getId() {
         return id;
+    }
+
+    @Override
+    public Place getParrent() {
+        return area;
+    }
+
+    @Override
+    public void setParrent(Place area) {
+        this.area = area;
     }
 
 }

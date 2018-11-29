@@ -90,14 +90,14 @@ public class LoadInitData {
         genrateWasteForUsersPrivate();
         calculateTotalAmountOfUsersWasteInEveryStreet();
         //  report.print();
-        
+
         areaRootElement.printDataAboutGeneratedWaste();
-     /*   streets.forEach((k) -> {
+        /*   streets.forEach((k) -> {
 
                  k.printDataAboutGeneratedWaste();
             //   Spremnik.printArray(k.getSpremnikList());
         });
-        */
+         */
         popuniSpremnikeOtpadom();
         calculateTotalAmountOfWasteInEveryStreet();
         //  report.print();
@@ -1135,16 +1135,6 @@ public class LoadInitData {
         areaRootElement = findRootArea();
         System.out.println("ROOT is " + areaRootElement.getId() + " - " + areaRootElement.getName());
 
-        Place subPlace;
-        /*    for (String id : areaRootElement.getParts()) {
-            subPlace = findSubPlaceByID(id);
-            if (subPlace != null) {
-                areaRootElement.add(subPlace);
-            } else {
-                builderDirector.addErrorInReport("Ne postoji područje/ulica sa ID: " + id, false);
-            }
-        }
-         */
         areaRootElement = (CompositePlace) findAllSubAreasRecursive(areaRootElement);
 
         System.out.println("tu sam");
@@ -1159,6 +1149,7 @@ public class LoadInitData {
             for (String id : ((CompositePlace) compositePlace).getParts()) {
                 subPlace = findSubPlaceByID(id);
                 if (subPlace != null) {
+                    subPlace.setParrent(compositePlace);
                     ((CompositePlace) compositePlace).add(subPlace);
                 } else {
                     builderDirector.addErrorInReport("Ne postoji područje/ulica sa ID: " + id, false);
@@ -1171,6 +1162,7 @@ public class LoadInitData {
                     for (String id : ((CompositePlace) place).getParts()) {
                         subPlace = findSubPlaceByID(id);
                         if (subPlace != null) {
+                            subPlace.setParrent(place);
                             ((CompositePlace) place).add(subPlace);
                             if (subPlace instanceof CompositePlace) {
                                 subPlace = findAllSubAreasRecursive(subPlace);

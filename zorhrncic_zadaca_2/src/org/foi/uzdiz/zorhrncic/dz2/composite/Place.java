@@ -10,8 +10,22 @@ package org.foi.uzdiz.zorhrncic.dz2.composite;
  * @author Zoran
  */
 public interface Place {
+
     //Prints the graphic.
-    
+    public Place getParrent();
+
+    public void setParrent(Place place);
+
     public void printDataAboutGeneratedWaste();
+
+    public float getTotalAmountOfGlassWaste();
+
+    public float getTotalAmountOfMetalWaste();
+
+    public float getTotalAmountOfPaperWaste();
+
+    public float getTotalAmountOfBioWaste();
+
+    public float getTotalAmountOfMixedWaste();
 
 }
