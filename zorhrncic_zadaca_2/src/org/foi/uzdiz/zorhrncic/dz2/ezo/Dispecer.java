@@ -8,6 +8,7 @@ package org.foi.uzdiz.zorhrncic.dz2.ezo;
 import java.util.ArrayList;
 import java.util.List;
 import jdk.nashorn.internal.parser.TokenType;
+import org.foi.uzdiz.zorhrncic.dz2.composite.CompositePlace;
 import org.foi.uzdiz.zorhrncic.dz2.ezo.vehicle.Vehicle;
 import org.foi.uzdiz.zorhrncic.dz2.ezo.vehicle.VehicleBio;
 import org.foi.uzdiz.zorhrncic.dz2.ezo.vehicle.VehicleGlass;
@@ -19,13 +20,16 @@ import org.foi.uzdiz.zorhrncic.dz2.shared.Constants;
 import org.foi.uzdiz.zorhrncic.dz2.shared.TypesOfWaste;
 import org.foi.uzdiz.zorhrncic.dz2.singleton.CommonDataSingleton;
 import org.foi.uzdiz.zorhrncic.dz2.composite.Street;
+import org.foi.uzdiz.zorhrncic.dz2.iterator.Command;
+import org.foi.uzdiz.zorhrncic.dz2.iterator.CommandRepository;
+import org.foi.uzdiz.zorhrncic.dz2.iterator.Iterator;
 import org.foi.uzdiz.zorhrncic.dz2.waste.BioWaste;
 
 /**
  *
  * @author Zoran
  */
-public class WasteCollection {
+public class Dispecer {
 
     private List<Vehicle> allVehiclesInProcess;
     ///private List<Vehicle> allVehiclesAtLandfill;
@@ -40,8 +44,12 @@ public class WasteCollection {
     private int selectedStreetIndex;
     private final ReportBuilderDirector builderDirector;
     private final Landfill landfill;
+    private CompositePlace areaRootElement;
+    private final CommandRepository commandRepository;
 
-    public WasteCollection(List<Vehicle> allVehicles, List<Street> streets) {
+    public Dispecer(List<Vehicle> allVehicles, List<Street> streets, CompositePlace areaRoot) {
+        this.commandRepository = new CommandRepository(allVehicles);
+        this.areaRootElement = areaRoot;
         this.allVehiclesInProcess = allVehicles;
         this.streets = streets;
 
@@ -51,6 +59,7 @@ public class WasteCollection {
         builderDirector = CommonDataSingleton.getInstance().getReportBuilderDirector();
         try {
             this.numberOfCyclesAtLandfill = Integer.parseInt((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.brojRadnihCiklusaZaOdvoz));
+            
         } catch (Exception e) {
             builderDirector.addErrorInReport("Greška prilikom učitavanja broja radnih ciklusa za odvoz!", false);
             System.exit(0);
@@ -58,7 +67,13 @@ public class WasteCollection {
     }
 
     public void startCollecting() {
-
+        for (Iterator iterator = commandRepository.getIterator(); iterator.hasNext();) {
+            Command next = iterator.next();
+            System.out.println(next.getTypeOfCommand());
+            
+        }
+        
+        
         this.builderDirector.addTitleInReport("Početak sakupljanja otpada po ulicama", false);
 
         if (((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.preuzimanje)).equalsIgnoreCase(Constants.VOZILA_NE_ODREDJUJE)) {

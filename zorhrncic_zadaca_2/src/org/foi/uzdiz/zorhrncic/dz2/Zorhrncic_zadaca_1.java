@@ -11,7 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-import org.foi.uzdiz.zorhrncic.dz2.ezo.WasteCollection;
+import org.foi.uzdiz.zorhrncic.dz2.ezo.Dispecer;
 import org.foi.uzdiz.zorhrncic.dz2.shared.Constants;
 import org.foi.uzdiz.zorhrncic.dz2.singleton.CommonDataSingleton;
 
@@ -35,8 +35,8 @@ public class Zorhrncic_zadaca_1 {
         LoadInitData load = new LoadInitData();
         load.loadData();
 
-        WasteCollection wasteCollection = new WasteCollection(load.getAllVehicles(), load.getStreets());
-        wasteCollection.startCollecting();;
+        Dispecer dispecer = new Dispecer(load.getAllVehicles(), load.getStreets(),load.getAreaRootElement());
+        dispecer.startCollecting();;
 
         CommonDataSingleton.getInstance().getReportBuilderDirector().addEmptyLineInReport(false).print();
         CommonDataSingleton.getInstance().getReportBuilderDirector().addEmptyLineInReport(false).generateFile();

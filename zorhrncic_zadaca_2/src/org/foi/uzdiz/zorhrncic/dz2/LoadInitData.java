@@ -99,6 +99,7 @@ public class LoadInitData {
         });
          */
         popuniSpremnikeOtpadom();
+        
         calculateTotalAmountOfWasteInEveryStreet();
         //  report.print();
 
@@ -1280,6 +1281,10 @@ public class LoadInitData {
 
     public List<Vehicle> getAllVehicles() {
         return allVehicles;
+    }
+
+    public CompositePlace getAreaRootElement() {
+        return areaRootElement;
     }
 
 }
