@@ -15,7 +15,8 @@ public enum TypeOfCommand {
     KRENI_S_PARAMETRIMA("KRENI "),
     KVAR("KVAR"),
     STATUS("STATUS"),
-    ISPRAZNI("ISPRAZNI");
+    ISPRAZNI("ISPRAZNI"),
+    KONTROLA("KONTROLA");
 
   
     // declaring private variable for getting values 

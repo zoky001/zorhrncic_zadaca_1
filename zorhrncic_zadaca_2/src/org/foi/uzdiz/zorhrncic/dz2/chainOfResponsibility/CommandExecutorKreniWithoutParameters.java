@@ -3,135 +3,85 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.foi.uzdiz.zorhrncic.dz2.ezo;
+package org.foi.uzdiz.zorhrncic.dz2.chainOfResponsibility;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import jdk.nashorn.internal.parser.TokenType;
-import org.foi.uzdiz.zorhrncic.dz2.chainOfResponsibility.CommandExecutorPripremi;
-import org.foi.uzdiz.zorhrncic.dz2.chainOfResponsibility.CommandExecutor;
-import org.foi.uzdiz.zorhrncic.dz2.chainOfResponsibility.CommandExecutorIsprazni;
-import org.foi.uzdiz.zorhrncic.dz2.chainOfResponsibility.CommandExecutorKontrola;
-import org.foi.uzdiz.zorhrncic.dz2.chainOfResponsibility.CommandExecutorKreniWithParameters;
-import org.foi.uzdiz.zorhrncic.dz2.chainOfResponsibility.CommandExecutorKreniWithoutParameters;
-import org.foi.uzdiz.zorhrncic.dz2.chainOfResponsibility.CommandExecutorKvar;
-import org.foi.uzdiz.zorhrncic.dz2.chainOfResponsibility.CommandExecutorStatus;
-import org.foi.uzdiz.zorhrncic.dz2.composite.CompositePlace;
+import org.foi.uzdiz.zorhrncic.dz2.composite.Street;
+import org.foi.uzdiz.zorhrncic.dz2.ezo.DispecerContext;
+import org.foi.uzdiz.zorhrncic.dz2.ezo.Spremnik;
 import org.foi.uzdiz.zorhrncic.dz2.ezo.vehicle.Vehicle;
 import org.foi.uzdiz.zorhrncic.dz2.ezo.vehicle.VehicleBio;
 import org.foi.uzdiz.zorhrncic.dz2.ezo.vehicle.VehicleGlass;
 import org.foi.uzdiz.zorhrncic.dz2.ezo.vehicle.VehicleMetal;
 import org.foi.uzdiz.zorhrncic.dz2.ezo.vehicle.VehicleMixed;
 import org.foi.uzdiz.zorhrncic.dz2.ezo.vehicle.VehiclePaper;
-import org.foi.uzdiz.zorhrncic.dz2.log.ReportBuilderDirector;
+import org.foi.uzdiz.zorhrncic.dz2.iterator.Command;
+import org.foi.uzdiz.zorhrncic.dz2.iterator.TypeOfCommand;
 import org.foi.uzdiz.zorhrncic.dz2.shared.Constants;
 import org.foi.uzdiz.zorhrncic.dz2.shared.TypesOfWaste;
 import org.foi.uzdiz.zorhrncic.dz2.singleton.CommonDataSingleton;
-import org.foi.uzdiz.zorhrncic.dz2.composite.Street;
-import org.foi.uzdiz.zorhrncic.dz2.iterator.Command;
-import org.foi.uzdiz.zorhrncic.dz2.iterator.CommandRepository;
-import org.foi.uzdiz.zorhrncic.dz2.iterator.Iterator;
-import org.foi.uzdiz.zorhrncic.dz2.iterator.TypeOfCommand;
-import org.foi.uzdiz.zorhrncic.dz2.waste.BioWaste;
 
 /**
  *
  * @author Zoran
  */
-public class Dispecer {
+public class CommandExecutorKreniWithoutParameters extends CommandExecutor {
 
-    DispecerContext dispecerContext;
+    public CommandExecutorKreniWithoutParameters() {
+        this.typeOfCommand = typeOfCommand.KRENI_BEZ_PARAMETRA;
+    }
 
-    private List<Vehicle> allVehiclesInProcess;
-    ///private List<Vehicle> allVehiclesAtLandfill;
-    private List<Street> streets;
-    private Vehicle vehicleInProcess;
-    private int cycleNumber = 0;
-    private boolean isAllWasteCollected = false;
-    private boolean isVehicleSelectsStreet = false;
-    private ArrayList<Integer> randomStreetArray;
-    private int numberOfCyclesAtLandfill;
-    private Street selectedStreet;
-    private int selectedStreetIndex;
-    private final ReportBuilderDirector builderDirector;
-    private final Landfill landfill;
-    private CompositePlace areaRootElement;
-    private final CommandRepository commandRepository;
-    private final CommandExecutor commandExecutor;
+    @Override
+    protected DispecerContext executeCommandPrivate(Command command, DispecerContext dispecerContext) {
+        this.context = dispecerContext;
+        this.command = command;
+        System.out.println("JA SAM COMMAND EXECUTOR __ KRENI_BEZ_PARAMETRA ___ : " + command.getTypeOfCommand().getCommand());
+        this.builderDirector.addTitleInReport("Kreće preuzimanje otpada do kraja.", false);
+        startCollecting();
+        return context;
+    }
 
-    public Dispecer(List<Vehicle> allVehicles, List<Street> streets, CompositePlace areaRoot) {
-        this.commandRepository = new CommandRepository(allVehicles);
-        this.commandExecutor = new CommandExecutorPripremi()
-                .setNext(new CommandExecutorKreniWithParameters()
-                        .setNext(new CommandExecutorKvar()
-                                .setNext(new CommandExecutorStatus()
-                                        .setNext(new CommandExecutorIsprazni()
-                                                .setNext(new CommandExecutorKreniWithoutParameters()
-                                                        .setNext(new CommandExecutorKontrola()))))));
+    public void startCollecting() {
 
-        this.areaRootElement = areaRoot;
-        this.allVehiclesInProcess = allVehicles;
-        this.streets = streets;
-        this.dispecerContext = new DispecerContext(allVehicles, streets, areaRoot);
-
-//        this.allVehiclesAtLandfill = new ArrayList<Vehicle>();
-        this.landfill = new Landfill();
-
-        builderDirector = CommonDataSingleton.getInstance().getReportBuilderDirector();
         try {
-            this.numberOfCyclesAtLandfill = Integer.parseInt((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.brojRadnihCiklusaZaOdvoz));
+            context.setNumberOfCyclesAtLandfill(Integer.parseInt((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.brojRadnihCiklusaZaOdvoz)));
 
         } catch (Exception e) {
             builderDirector.addErrorInReport("Greška prilikom učitavanja broja radnih ciklusa za odvoz!", false);
             System.exit(0);
         }
-    }
 
-    public void startCollecting() {
-
-        for (Iterator iterator = commandRepository.getIterator(); iterator.hasNext();) {
-            try {
-                Command command = iterator.next();
-                System.out.println(command.getTypeOfCommand());
-                dispecerContext = commandExecutor.executeCommand(command, dispecerContext);
-            } catch (Exception ex) {
-                Logger.getLogger(Dispecer.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
-/*
-         this.builderDirector.addTitleInReport("Početak sakupljanja otpada po ulicama", false);
+        this.builderDirector.addTitleInReport("Početak sakupljanja otpada po ulicama", false);
 
         if (((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.preuzimanje)).equalsIgnoreCase(Constants.VOZILA_NE_ODREDJUJE)) {
-            randomStreetArray = CommonDataSingleton.getInstance().getRandomArray(streets.size());
-            isVehicleSelectsStreet = false;
+
+            context.setRandomStreetArray(CommonDataSingleton.getInstance().getRandomArray(context.getStreets().size()));
+            context.setIsVehicleSelectsStreet(false);
         } else if (((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.preuzimanje)).equalsIgnoreCase(Constants.VOZILO_ODREDJUJE)) {
-            isVehicleSelectsStreet = true;
+            context.setIsVehicleSelectsStreet(true);
         } else {
             builderDirector.addErrorInReport("Nedostaje parametar \"preuzimanje\" !!", false);
             System.exit(0);
         }
 
-        ArrayList<Integer> randomArray = CommonDataSingleton.getInstance().getRandomArray(allVehiclesInProcess.size());
-        while (!isAllWasteCollected || landfill.getAllVehiclesAtLandfill().size() > 0) {
-            isAllWasteCollected = true;
-            for (int i = 0; i < randomArray.size(); i++) {
+        // ArrayList<Integer> randomArray = CommonDataSingleton.getInstance().getRandomArray(allVehiclesInProcess.size());
+        while (!context.isIsAllWasteCollected() || context.getAllVehiclesAtLandfill().size() > 0) {
+            context.setIsAllWasteCollected(true);
+            for (int i = 0; i < context.getAllVehiclesInProcess().size(); i++) {
 
-                vehicleInProcess = chooseVehicle(randomArray.get(i));
-                if (checkIsVehicleAtLandfill(vehicleInProcess)) {
+                context.setVehicleInProcess(context.getAllVehiclesInProcess().get(i));
+                if (checkIsVehicleAtLandfill(context.getVehicleInProcess())) {
                     continue;
                 }
 
-                pickUpWaste(vehicleInProcess);
+                pickUpWaste(context.getVehicleInProcess());
+                context.setCycleNumber(context.getCycleNumber() + 1);
 
             }
-            cycleNumber++;
+
         }
 
         driveAllVehiclesToTheLandfill();
-
         this.builderDirector.addEmptyLineInReport(false);
         this.builderDirector.addEmptyLineInReport(false);
         this.builderDirector.addEmptyLineInReport(false);
@@ -142,22 +92,16 @@ public class Dispecer {
         this.builderDirector.addEmptyLineInReport(false);
         this.builderDirector.addEmptyLineInReport(false);
 
-        landfill.creteReport();
+        context.getLandfill().creteReport();
 
-        streets.forEach((k) -> {
-
-            //     k.print();
-            // Spremnik.printArray(k.getSpremnikList());
-        });
-*/
     }
 
     private void driveAllVehiclesToTheLandfill() {
         try {
-            for (int i = 0; i < allVehiclesInProcess.size(); i++) {
-                if (!landfill.getAllVehiclesAtLandfill().contains(allVehiclesInProcess.get(i))) {
+            for (int i = 0; i < context.getAllVehiclesInProcess().size(); i++) {
+                if (!context.getAllVehiclesAtLandfill().contains(context.getAllVehiclesInProcess().get(i))) {
                     //landfill.vehicleComesToLandfill(allVehiclesInProcess.get(i));
-                    driveToLandfill(allVehiclesInProcess.get(i));
+                    driveToLandfill(context.getAllVehiclesInProcess().get(i));
                 }
             }
 
@@ -170,13 +114,13 @@ public class Dispecer {
     }
 
     private boolean checkIsVehicleAtLandfill(Vehicle vehicle) {
-        if (landfill.getAllVehiclesAtLandfill().contains(vehicle)) {
+        if (context.getAllVehiclesAtLandfill().contains(vehicle)) {
 
-            if (vehicle.increaseAndCheckNumberOfCyclesAtLandfill(numberOfCyclesAtLandfill)) {
-                landfill.vehicleLeavesLandfill(vehicle);//getAllVehiclesAtLandfill().remove(vehicle);
-                int index = allVehiclesInProcess.indexOf(vehicle);
-                allVehiclesInProcess.remove(vehicle);
-                allVehiclesInProcess.add(vehicle);
+            if (vehicle.increaseAndCheckNumberOfCyclesAtLandfill(context.getNumberOfCyclesAtLandfill())) {
+                context.getLandfill().vehicleLeavesLandfill(vehicle);//getAllVehiclesAtLandfill().remove(vehicle);
+                int index = context.getAllVehiclesInProcess().indexOf(vehicle);
+                context.getAllVehiclesInProcess().remove(vehicle);
+                context.getAllVehiclesInProcess().add(vehicle);
 
                 return false;
             } else {
@@ -199,14 +143,14 @@ public class Dispecer {
         }
 
         for (int i = 0; i < streetArray.size(); i++) {
-            selectedStreetIndex = i;
-            selectedStreet = streets.get(streetArray.get(i));
+            context.setSelectedStreetIndex(i);
+            context.setSelectedStreet(context.getStreets().get(streetArray.get(i)));
             if (vehicle.getLastStreet() > -1 && vehicle.getLastStreet() > i) {
                 continue;
             } else if (vehicle.getLastStreet() > -1 && vehicle.getLastStreet() == i) {
                 vehicle.resetLastStreet();
             }
-            if (pickUpWasteInStreet(vehicle, selectedStreet)) {
+            if (pickUpWasteInStreet(vehicle, context.getSelectedStreet())) {
                 return;
             }
 
@@ -257,7 +201,7 @@ public class Dispecer {
                 vehicle.addProcessedContainers(spremnik);
 
                 this.builderDirector.addDividerLineInReport(false);
-                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "                     Ciklus: " + cycleNumber + ". ", false);
+                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "                     Ciklus: " + context.getCycleNumber() + ". ", false);
                 this.builderDirector.addDividerLineInReport(false);
 
                 this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), false);
@@ -267,7 +211,7 @@ public class Dispecer {
                 this.builderDirector.addDividerLineInReport(false);
                 this.builderDirector.addEmptyLineInReport(false);
 
-                isAllWasteCollected = false; //todo check if filled
+                context.setIsAllWasteCollected(false);//isAllWasteCollected = false; //todo check if filled
                 if (vehicle.getCapacity() == vehicle.getFilled()) {
                     driveToLandfill(vehicle);
                 }
@@ -277,7 +221,7 @@ public class Dispecer {
                 success = true;
                 //vehicle.increaseNumberOfProcessedContainers();
                 this.builderDirector.addDividerLineInReport(false);
-                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "                     Ciklus: " + cycleNumber + ". ", false);
+                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "                     Ciklus: " + context.getCycleNumber() + ". ", false);
                 this.builderDirector.addDividerLineInReport(false);
 
                 this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), false);
@@ -288,7 +232,8 @@ public class Dispecer {
                 this.builderDirector.addEmptyLineInReport(false);
 
                 driveToLandfill(vehicle);
-                isAllWasteCollected = false;
+                //  isAllWasteCollected = false;
+                context.setIsAllWasteCollected(false);//isAllWasteCollected = false; //todo check if filled
 
             }
 
@@ -317,36 +262,35 @@ public class Dispecer {
 
         this.builderDirector.addDividerLineInReport(false);
 
-        this.builderDirector.addTextLineInReport("Broj vozila na odlagalištu:   " + (landfill.getAllVehiclesAtLandfill().size() + 1), false);
+        this.builderDirector.addTextLineInReport("Broj vozila na odlagalištu:   " + (context.getAllVehiclesAtLandfill().size() + 1), false);
 
         this.builderDirector.addTitleInReport("Vožnja kamiona na odlagalište", false);
         this.builderDirector.addEmptyLineInReport(false);
         this.builderDirector.addEmptyLineInReport(false);
         this.builderDirector.addEmptyLineInReport(false);
 
-        vehicle.setLastStreet(selectedStreetIndex);
+        vehicle.setLastStreet(context.getSelectedStreetIndex());
 
-        landfill.vehicleComesToLandfill(vehicle);//getAllVehiclesAtLandfill().add(vehicle);
+        context.getLandfill().vehicleComesToLandfill(vehicle);//getAllVehiclesAtLandfill().add(vehicle);
     }
 
     private Vehicle chooseVehicle(int chosenIndex) {
         /* int from = 0;
         int to = allVehiclesInProcess.size() - 1;
         int chosenIndex = CommonDataSingleton.getInstance().getRandomInt(from, to);*/
-        return allVehiclesInProcess.get(chosenIndex);
+        return context.getAllVehiclesInProcess().get(chosenIndex);
     }
 
     private ArrayList<Integer> getStreetRandomArray() {
         ArrayList<Integer> streetArray;
 
-        if (isVehicleSelectsStreet) {
-            streetArray = CommonDataSingleton.getInstance().getRandomArray(streets.size());
+        if (context.isIsVehicleSelectsStreet()) {
+            streetArray = CommonDataSingleton.getInstance().getRandomArray(context.getStreets().size());
         } else {
-            streetArray = randomStreetArray;
+            streetArray = context.getRandomStreetArray();
         }
 
         return streetArray;
 
     }
-
 }

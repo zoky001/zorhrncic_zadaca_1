@@ -90,6 +90,11 @@ public class CommandRepository implements Container {
                         newCommand = new Command(TypeOfCommand.ISPRAZNI, laodVehiclesIfExist(data), -1);
                         commandsList.add(newCommand);
 
+                    } else if (dataCommand.equalsIgnoreCase(TypeOfCommand.KONTROLA.getCommand())) {
+
+                        newCommand = new Command(TypeOfCommand.KONTROLA, laodVehiclesIfExist(data), -1);
+                        commandsList.add(newCommand);
+
                     } else if (dataCommand.startsWith(TypeOfCommand.KRENI_S_PARAMETRIMA.getCommand())) {
                         String[] kreniData = dataCommand.split(" ");
                         if (kreniData.length == 2 && kreniData[0].equalsIgnoreCase(TypeOfCommand.KRENI_BEZ_PARAMETRA.getCommand())) {

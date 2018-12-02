@@ -33,7 +33,7 @@ public abstract class Spremnik {
     // float capacity;
     //  private float filled;
 
-    TypesOfWaste kindOfWaste;
+    public TypesOfWaste kindOfWaste;
     private TypesOfUser typesOfUser;
     public List<User> usersList = new ArrayList<>();
 
