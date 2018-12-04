@@ -11,10 +11,22 @@ import org.foi.uzdiz.zorhrncic.dz2.bridge.Tank;
  *
  * @author Zoran
  */
+// implementation of a vehice without any equipment
 public class VehicleBio extends Vehicle {
 
     public VehicleBio(Tank tank) {
         this.setTank(tank);
+    }
+
+    @Override
+    public void turnOn() {
+        this.builderDirector.addTextLineInReport("Vozilo za bio-otpad je uključeno.", false);
+
+    }
+
+    @Override
+    public String getDescription() {
+        return "Vozilo za bio otpad.";
     }
 
 }

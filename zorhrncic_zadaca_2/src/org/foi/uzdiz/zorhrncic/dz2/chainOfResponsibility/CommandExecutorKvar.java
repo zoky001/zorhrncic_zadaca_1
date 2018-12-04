@@ -24,7 +24,7 @@ public class CommandExecutorKvar extends CommandExecutor {
     protected DispecerContext executeCommandPrivate(Command command, DispecerContext dispecerContext) {
         this.command = command;
         this.context = dispecerContext;
-        System.out.println("JA SAM COMMAND EXECUTOR __ KVAR ___ : " + command.getTypeOfCommand().getCommand());
+      //  System.out.println("JA SAM COMMAND EXECUTOR __ KVAR ___ : " + command.getTypeOfCommand().getCommand());
         this.builderDirector.addTitleInReport("Dogodio se kvar na vozilima", false);
         moveVehicleInMalfunctionList();
 

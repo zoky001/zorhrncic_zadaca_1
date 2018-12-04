@@ -12,12 +12,18 @@ import org.foi.uzdiz.zorhrncic.dz2.ezo.Spremnik;
 import org.foi.uzdiz.zorhrncic.dz2.shared.TypesOfVehicleEngine;
 import org.foi.uzdiz.zorhrncic.dz2.shared.TypesOfWaste;
 import org.foi.uzdiz.zorhrncic.dz2.composite.Street;
+import org.foi.uzdiz.zorhrncic.dz2.log.ReportBuilderDirector;
+import org.foi.uzdiz.zorhrncic.dz2.singleton.CommonDataSingleton;
+import org.foi.uzdiz.zorhrncic.dz2.ezo.vehicle.decorator.IVehicleEquipment;
 
 /**
  *
  * @author Zoran
  */
-public abstract class Vehicle {
+public abstract class Vehicle implements IVehicleEquipment {
+
+    private IVehicleEquipment vehicleEquipment;
+    protected final ReportBuilderDirector builderDirector = CommonDataSingleton.getInstance().getReportBuilderDirector();
 
     private Tank tank;
 
@@ -88,7 +94,7 @@ public abstract class Vehicle {
     public void emptyVehicle() {
         // this.filled = filled;
         this.total = this.total + this.tank.getFilled();
-        this.numberOfDepartures = this.numberOfDepartures +1;
+        this.numberOfDepartures = this.numberOfDepartures + 1;
         this.tank.emptyToTheEnd();
     }
 
@@ -166,7 +172,13 @@ public abstract class Vehicle {
     public void setId(String id) {
         this.id = id;
     }
-    
-    
+
+    public IVehicleEquipment getVehicleEquipment() {
+        return vehicleEquipment;
+    }
+
+    public void setVehicleEquipment(IVehicleEquipment vehicleEquipment) {
+        this.vehicleEquipment = vehicleEquipment;
+    }
 
 }

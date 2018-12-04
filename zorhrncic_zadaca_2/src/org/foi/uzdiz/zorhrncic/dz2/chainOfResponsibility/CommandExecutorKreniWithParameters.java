@@ -19,10 +19,10 @@ import org.foi.uzdiz.zorhrncic.dz2.ezo.vehicle.VehicleMetal;
 import org.foi.uzdiz.zorhrncic.dz2.ezo.vehicle.VehicleMixed;
 import org.foi.uzdiz.zorhrncic.dz2.ezo.vehicle.VehiclePaper;
 import org.foi.uzdiz.zorhrncic.dz2.iterator.Command;
-import org.foi.uzdiz.zorhrncic.dz2.iterator.Iterator;
 import org.foi.uzdiz.zorhrncic.dz2.shared.Constants;
 import org.foi.uzdiz.zorhrncic.dz2.shared.TypesOfWaste;
 import org.foi.uzdiz.zorhrncic.dz2.singleton.CommonDataSingleton;
+import org.foi.uzdiz.zorhrncic.dz2.iterator.IIterator;
 
 /**
  *
@@ -38,7 +38,7 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
     protected DispecerContext executeCommandPrivate(Command command, DispecerContext dispecerContext) {
         this.context = dispecerContext;
         this.command = command;
-        System.out.println("JA SAM COMMAND EXECUTOR __KRENI S PARAMETRIMA__ : " + command.getTypeOfCommand().getCommand() + " - " + command.getValue());
+      //  System.out.println("JA SAM COMMAND EXECUTOR __KRENI S PARAMETRIMA__ : " + command.getTypeOfCommand().getCommand() + " - " + command.getValue());
         this.builderDirector.addTitleInReport("Kreće preuzimanje otpada u " + command.getValue() + " ciklusa.", false);
         startCollecting();
         return context;
@@ -81,7 +81,7 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
                 pickUpWaste(context.getVehicleInProcess());
                 context.setCycleNumber(context.getCycleNumber() + 1);
                 numberOfRequiredCycle--;
-               
+
                 if (numberOfRequiredCycle <= 0) {
                     break;
                 }
@@ -89,9 +89,8 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
 
         }
 
-      //todo  driveAllVehiclesToTheLandfill();
-
-  /*      this.builderDirector.addEmptyLineInReport(false);
+       // driveAllVehiclesToTheLandfill();
+        this.builderDirector.addEmptyLineInReport(false);
         this.builderDirector.addEmptyLineInReport(false);
         this.builderDirector.addEmptyLineInReport(false);
         this.builderDirector.addTitleInReport("Završeno sakupljanje otpad!!!", false);
@@ -101,8 +100,7 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
         this.builderDirector.addEmptyLineInReport(false);
         this.builderDirector.addEmptyLineInReport(false);
 
-        context.getLandfill().creteReport();
-*/
+        //     context.getLandfill().creteReport();
     }
 
     private void driveAllVehiclesToTheLandfill() {

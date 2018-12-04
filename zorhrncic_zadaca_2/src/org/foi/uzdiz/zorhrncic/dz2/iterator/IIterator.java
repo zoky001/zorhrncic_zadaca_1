@@ -9,7 +9,10 @@ package org.foi.uzdiz.zorhrncic.dz2.iterator;
  *
  * @author Zoran
  */
-public interface Container {
+public interface IIterator {
 
-    public IIterator getIterator();
+    public boolean hasNext();
+
+    public Command next();
+
 }

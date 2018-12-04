@@ -3,16 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.foi.uzdiz.zorhrncic.dz2.iterator;
+package org.foi.uzdiz.zorhrncic.dz2.ezo.vehicle.decorator;
 
 /**
  *
  * @author Zoran
  */
-public interface Iterator {
+public interface IVehicleEquipment {
 
-    public boolean hasNext();
+    public void turnOn();
 
-    public Command next();
-
+    public String getDescription();
 }

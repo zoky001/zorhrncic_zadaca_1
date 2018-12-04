@@ -11,10 +11,22 @@ import org.foi.uzdiz.zorhrncic.dz2.bridge.Tank;
  *
  * @author Zoran
  */
-public class VehicleMixed extends Vehicle{
+// implementation of a vehice without any equipment
+public class VehicleMixed extends Vehicle {
 
     public VehicleMixed(Tank tank) {
         this.setTank(tank);
     }
-    
+
+    @Override
+    public void turnOn() {
+        this.builderDirector.addTextLineInReport("Vozilo za mješani otpad  je uključeno.", false);
+
+    }
+
+    @Override
+    public String getDescription() {
+        return "Vozilo za bio mješeni.";
+    }
+
 }

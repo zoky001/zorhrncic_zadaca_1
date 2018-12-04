@@ -165,11 +165,11 @@ public class CommandRepository implements Container {
     }
 
     @Override
-    public Iterator getIterator() {
+    public IIterator getIterator() {
         return new CommandIterator();
     }
 
-    private class CommandIterator implements Iterator {
+    private class CommandIterator implements IIterator {
 
         int index;
 

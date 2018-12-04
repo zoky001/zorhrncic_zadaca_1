@@ -11,10 +11,22 @@ import org.foi.uzdiz.zorhrncic.dz2.bridge.Tank;
  *
  * @author Zoran
  */
-public class VehicleMetal extends Vehicle{
+// implementation of a vehice without any equipment
+public class VehicleMetal extends Vehicle {
 
     public VehicleMetal(Tank tank) {
         this.setTank(tank);
     }
-    
+
+    @Override
+    public void turnOn() {
+        this.builderDirector.addTextLineInReport("Vozilo za metalni otpad  je uključeno.", false);
+
+    }
+
+    @Override
+    public String getDescription() {
+        return "Vozilo za metalni otpad.";
+    }
+
 }

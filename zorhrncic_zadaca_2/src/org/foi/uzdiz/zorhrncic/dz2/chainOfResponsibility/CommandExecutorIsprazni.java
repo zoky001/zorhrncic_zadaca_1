@@ -24,7 +24,7 @@ public class CommandExecutorIsprazni extends CommandExecutor {
     protected DispecerContext executeCommandPrivate(Command command, DispecerContext dispecerContext) {
         this.command = command;
         this.context = dispecerContext;
-        System.out.println("JA SAM COMMAND EXECUTOR __ ISPRAZNI ___ : " + command.getTypeOfCommand().getCommand());
+      //  System.out.println("JA SAM COMMAND EXECUTOR __ ISPRAZNI ___ : " + command.getTypeOfCommand().getCommand());
         this.builderDirector.addTitleInReport("Premještanje vozila na odlagalište.. (Pražnjenje)", false);
         emptyVehicles();
         this.builderDirector.addEmptyLineInReport(false);

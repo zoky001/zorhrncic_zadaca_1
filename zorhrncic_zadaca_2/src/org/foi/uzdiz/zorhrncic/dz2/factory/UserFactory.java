@@ -20,7 +20,7 @@ import org.foi.uzdiz.zorhrncic.dz2.waste.Waste;
  *
  * @author Zoran
  */
-public class UserFactory extends AbstarctFactory {
+public class UserFactory extends Factory {
 
     @Override
     public User getUser(TypesOfUser type) {

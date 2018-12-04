@@ -25,7 +25,7 @@ import org.foi.uzdiz.zorhrncic.dz2.waste.Waste;
  *
  * @author Zoran
  */
-public class SpremnikFactory extends AbstarctFactory {
+public class SpremnikFactory extends Factory {
 
     @Override
     public Spremnik getSpremnik(TypesOfSpremnik spremnikType, TypesOfWaste waste, float capacity) {

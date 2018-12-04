@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 import static jdk.nashorn.internal.runtime.JSType.isString;
-import org.foi.uzdiz.zorhrncic.dz2.factory.AbstarctFactory;
+import org.foi.uzdiz.zorhrncic.dz2.factory.Factory;
 import org.foi.uzdiz.zorhrncic.dz2.factory.FactoryProducer;
 import org.foi.uzdiz.zorhrncic.dz2.log.Report;
 import org.foi.uzdiz.zorhrncic.dz2.log.ReportBuilder;
@@ -179,9 +179,11 @@ public class CommonDataSingleton {
             validateProp(prop);
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("Nije pronađena datoteka parametara na lokaciji \"" + file.getAbsolutePath() + "\"");
+            System.exit(0);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Probelem kod učitavanja datoteke parametra sa lokacije \"" + file.getAbsolutePath() + "\"");
+            System.exit(0);
         } finally {
             if (br != null) {
                 try {
@@ -216,7 +218,7 @@ public class CommonDataSingleton {
 
     }
 
-    public AbstarctFactory getFactory(TypesOfFactories typesOfFactories) {
+    public Factory getFactory(TypesOfFactories typesOfFactories) {
         return FactoryProducer.getFactory(typesOfFactories);
     }
 

@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.foi.uzdiz.zorhrncic.dz2.ezo.Kontejner;
 import org.foi.uzdiz.zorhrncic.dz2.ezo.Spremnik;
+import org.foi.uzdiz.zorhrncic.dz2.log.ReportBuilderDirector;
+import org.foi.uzdiz.zorhrncic.dz2.singleton.CommonDataSingleton;
 import org.foi.uzdiz.zorhrncic.dz2.users.BigUser;
 import org.foi.uzdiz.zorhrncic.dz2.users.MediumUser;
 import org.foi.uzdiz.zorhrncic.dz2.users.SmallUser;
@@ -18,9 +20,9 @@ import org.foi.uzdiz.zorhrncic.dz2.users.User;
  *
  * @author Zoran
  */
-public class Street implements Place {
+public class Street implements IPlace {
 
-    private Place area;
+    private IPlace area;
     private String id;
 
     private String name;
@@ -35,6 +37,7 @@ public class Street implements Place {
 
     private List<User> usersList = new ArrayList<User>();
     private List<Spremnik> spremnikList = new ArrayList<Spremnik>();
+    protected final ReportBuilderDirector builderDirector = CommonDataSingleton.getInstance().getReportBuilderDirector();
 
     public Street(String id, String name, int numberOfPlaces, int shareOfSmall, int shareOfMedium, int shareOfLarge) {
         this.id = id;
@@ -47,23 +50,23 @@ public class Street implements Place {
 
     @Override
     public void printDataAboutGeneratedWaste() {
-        System.out.println("------------------------------------------------------------------------------------------------------------");
-        System.out.println("                                                            ------------------------------------------------");
-        System.out.println("                                                            |   IME NAD-PODRUČJA: " + ((CompositePlace)getParrent()).getName() + "          ");
-        System.out.println("                                                            ------------------------------------------------");
-        System.out.println("                                                            |          IME ULICE: " + name + "                 ");
-        System.out.println("                                                            ------------------------------------------------");
-        System.out.println("                                                            |   Količina otpada staklo:     |  " + getTotalAmountOfGlassWaste());
-        System.out.println("                                                            ------------------------------------------------");
-        System.out.println("                                                            |   Količina otpada papir:      |  " + getTotalAmountOfPaperWaste());
-        System.out.println("                                                            ------------------------------------------------");
-        System.out.println("                                                            |   Količina otpada metal:      |  " + getTotalAmountOfMetalWaste());
-        System.out.println("                                                            ------------------------------------------------");
-        System.out.println("                                                            |   Količina otpada bio:        |  " + getTotalAmountOfBioWaste());
-        System.out.println("                                                            ------------------------------------------------");
-        System.out.println("                                                            |   Količina otpada mixed:      |  " + getTotalAmountOfMixedWaste());
-        System.out.println("                                                            ------------------------------------------------");
-        System.out.println("------------------------------------------------------------------------------------------------------------");
+        this.builderDirector.addTextLineInReport("------------------------------------------------------------------------------------------------------------", false);
+        this.builderDirector.addTextLineInReport("                                                            ------------------------------------------------", false);
+        this.builderDirector.addTextLineInReport("                                                            |   IME NAD-PODRUČJA: " + ((CompositePlace) getParrent()).getName() + "          ", false);
+        this.builderDirector.addTextLineInReport("                                                            ------------------------------------------------", false);
+        this.builderDirector.addTextLineInReport("                                                            |          IME ULICE: " + name + "                 ", false);
+        this.builderDirector.addTextLineInReport("                                                            ------------------------------------------------", false);
+        this.builderDirector.addTextLineInReport("                                                            |   Količina otpada staklo:     |  " + getTotalAmountOfGlassWaste(), false);
+        this.builderDirector.addTextLineInReport("                                                            ------------------------------------------------", false);
+        this.builderDirector.addTextLineInReport("                                                            |   Količina otpada papir:      |  " + getTotalAmountOfPaperWaste(), false);
+        this.builderDirector.addTextLineInReport("                                                            ------------------------------------------------", false);
+        this.builderDirector.addTextLineInReport("                                                            |   Količina otpada metal:      |  " + getTotalAmountOfMetalWaste(), false);
+        this.builderDirector.addTextLineInReport("                                                            ------------------------------------------------", false);
+        this.builderDirector.addTextLineInReport("                                                            |   Količina otpada bio:        |  " + getTotalAmountOfBioWaste(), false);
+        this.builderDirector.addTextLineInReport("                                                            ------------------------------------------------", false);
+        this.builderDirector.addTextLineInReport("                                                            |   Količina otpada mixed:      |  " + getTotalAmountOfMixedWaste(), false);
+        this.builderDirector.addTextLineInReport("                                                            ------------------------------------------------", false);
+        this.builderDirector.addTextLineInReport("------------------------------------------------------------------------------------------------------------", false);
     }
 
     public void print() {
@@ -291,22 +294,21 @@ public class Street implements Place {
 
     }
 
-    public Place getArea() {
+    public IPlace getArea() {
         return area;
     }
 
-  
     public String getId() {
         return id;
     }
 
     @Override
-    public Place getParrent() {
+    public IPlace getParrent() {
         return area;
     }
 
     @Override
-    public void setParrent(Place area) {
+    public void setParrent(IPlace area) {
         this.area = area;
     }
 

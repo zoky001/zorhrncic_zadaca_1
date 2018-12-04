@@ -22,7 +22,7 @@ import org.foi.uzdiz.zorhrncic.dz2.waste.Waste;
  *
  * @author Zoran
  */
-public class WasteFactory extends AbstarctFactory {
+public class WasteFactory extends Factory {
 
     @Override
     public Waste getWaste(TypesOfWaste waste, float amount) {

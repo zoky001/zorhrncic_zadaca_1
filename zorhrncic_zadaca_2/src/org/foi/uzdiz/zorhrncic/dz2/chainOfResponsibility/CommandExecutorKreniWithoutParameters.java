@@ -35,7 +35,7 @@ public class CommandExecutorKreniWithoutParameters extends CommandExecutor {
     protected DispecerContext executeCommandPrivate(Command command, DispecerContext dispecerContext) {
         this.context = dispecerContext;
         this.command = command;
-        System.out.println("JA SAM COMMAND EXECUTOR __ KRENI_BEZ_PARAMETRA ___ : " + command.getTypeOfCommand().getCommand());
+       // System.out.println("JA SAM COMMAND EXECUTOR __ KRENI_BEZ_PARAMETRA ___ : " + command.getTypeOfCommand().getCommand());
         this.builderDirector.addTitleInReport("Kreće preuzimanje otpada do kraja.", false);
         startCollecting();
         return context;

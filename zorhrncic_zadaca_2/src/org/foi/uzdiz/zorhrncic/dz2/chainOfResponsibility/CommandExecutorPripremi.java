@@ -24,7 +24,7 @@ public class CommandExecutorPripremi extends CommandExecutor {
     protected DispecerContext executeCommandPrivate(Command command, DispecerContext dispecerContext) {
         this.command = command;
         this.context = dispecerContext;
-        System.out.println("JA SAM COMMAND EXECUTOR __PRIPREMI__ : " + command.getTypeOfCommand().getCommand());
+       // System.out.println("JA SAM COMMAND EXECUTOR __PRIPREMI__ : " + command.getTypeOfCommand().getCommand());
         this.builderDirector.addTitleInReport("Pripremam vozila..", false);
         prepareVehicles();
         this.builderDirector.addEmptyLineInReport(false);
@@ -38,17 +38,35 @@ public class CommandExecutorPripremi extends CommandExecutor {
             if (context.getAllVehiclesAtParking().contains(vehicle) && !context.getAllVehiclesInProcess().contains(vehicle)) {
                 context.getAllVehiclesAtParking().remove(vehicle);
                 context.getAllVehiclesInProcess().add(vehicle);
+
+                this.builderDirector.addDividerLineInReport(false);
+                this.builderDirector.addTextLineInReport("Palim vozilo: " + vehicle.getId(), false);
+                this.builderDirector.addDividerLineInReport(false);
+                vehicle.getVehicleEquipment().turnOn();
+                this.builderDirector.addDividerLineInReport(false);
                 this.builderDirector.addTextLineInReport("Pripremljeno vozilo " + vehicle.getId(), false);
 
             }
             if (context.getAllVehiclesOnControll().contains(vehicle) && !context.getAllVehiclesInProcess().contains(vehicle)) {
                 context.getAllVehiclesOnControll().remove(vehicle);
                 context.getAllVehiclesInProcess().add(vehicle);
+
+                this.builderDirector.addDividerLineInReport(false);
+                this.builderDirector.addTextLineInReport("Palim vozilo: " + vehicle.getId(), false);
+                this.builderDirector.addDividerLineInReport(false);
+                vehicle.getVehicleEquipment().turnOn();
+                this.builderDirector.addDividerLineInReport(false);
                 this.builderDirector.addTextLineInReport("Pripremljeno vozilo " + vehicle.getId(), false);
             }
             if (context.getAllVehiclesInMalfunction().contains(vehicle) && context.getAllVehiclesAtLandfill().contains(vehicle) && !context.getAllVehiclesInProcess().contains(vehicle)) {
                 context.getAllVehiclesInMalfunction().remove(vehicle);
                 context.getAllVehiclesInProcess().add(vehicle);
+
+                this.builderDirector.addDividerLineInReport(false);
+                this.builderDirector.addTextLineInReport("Palim vozilo: " + vehicle.getId(), false);
+                this.builderDirector.addDividerLineInReport(false);
+                vehicle.getVehicleEquipment().turnOn();
+                this.builderDirector.addDividerLineInReport(false);
                 this.builderDirector.addTextLineInReport("Pripremljeno vozilo " + vehicle.getId(), false);
             }
 

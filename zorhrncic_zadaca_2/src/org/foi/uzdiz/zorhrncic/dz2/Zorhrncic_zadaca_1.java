@@ -5,6 +5,7 @@
  */
 package org.foi.uzdiz.zorhrncic.dz2;
 //zadaca 2
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,18 +29,22 @@ public class Zorhrncic_zadaca_1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        if (args.length > 0) {
+            CommonDataSingleton.getInstance().loadParametes(args[0]);
+            //CommonDataSingleton.getInstance().printProp();
 
-        CommonDataSingleton.getInstance().loadParametes(args[0]);
-        CommonDataSingleton.getInstance().printProp();
+            LoadInitData load = new LoadInitData();
+            load.loadData();
 
-        LoadInitData load = new LoadInitData();
-        load.loadData();
+            Dispecer dispecer = new Dispecer(load.getAllVehicles(), load.getStreets(), load.getAreaRootElement());
+            dispecer.startCollecting();;
 
-        Dispecer dispecer = new Dispecer(load.getAllVehicles(), load.getStreets(),load.getAreaRootElement());
-        dispecer.startCollecting();;
+            CommonDataSingleton.getInstance().getReportBuilderDirector().addEmptyLineInReport(false).print();
+            CommonDataSingleton.getInstance().getReportBuilderDirector().addEmptyLineInReport(false).generateFile();
+        } else {
+            System.out.println("Nije upisan naziv datoteke parametara!!");
+        }
 
-        CommonDataSingleton.getInstance().getReportBuilderDirector().addEmptyLineInReport(false).print();
-        CommonDataSingleton.getInstance().getReportBuilderDirector().addEmptyLineInReport(false).generateFile();
     }
 
 }

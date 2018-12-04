@@ -24,7 +24,7 @@ public class CommandExecutorKontrola extends CommandExecutor {
     protected DispecerContext executeCommandPrivate(Command command, DispecerContext dispecerContext) {
         this.command = command;
         this.context = dispecerContext;
-        System.out.println("JA SAM COMMAND EXECUTOR __ KONTROLA ___ : " + command.getTypeOfCommand().getCommand());
+      //  System.out.println("JA SAM COMMAND EXECUTOR __ KONTROLA ___ : " + command.getTypeOfCommand().getCommand());
         this.builderDirector.addTitleInReport("Premještanje vozila u controlnu listu..", false);
         moveVehicleToControllList();
         this.builderDirector.addEmptyLineInReport(false);

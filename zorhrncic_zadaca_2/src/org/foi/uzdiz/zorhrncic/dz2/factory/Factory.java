@@ -17,7 +17,7 @@ import org.foi.uzdiz.zorhrncic.dz2.waste.Waste;
  *
  * @author Zoran
  */
-public abstract class AbstarctFactory {
+public abstract class Factory {
 
     public abstract User getUser(TypesOfUser type);
 

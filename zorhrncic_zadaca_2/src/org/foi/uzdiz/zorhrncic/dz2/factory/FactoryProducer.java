@@ -13,7 +13,7 @@ import org.foi.uzdiz.zorhrncic.dz2.shared.TypesOfFactories;
  */
 public class FactoryProducer {
 
-    public static AbstarctFactory getFactory(TypesOfFactories choice) {
+    public static Factory getFactory(TypesOfFactories choice) {
 
         switch (choice) {
             case USER_FACTORY:

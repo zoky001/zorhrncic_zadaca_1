@@ -32,9 +32,9 @@ import org.foi.uzdiz.zorhrncic.dz2.singleton.CommonDataSingleton;
 import org.foi.uzdiz.zorhrncic.dz2.composite.Street;
 import org.foi.uzdiz.zorhrncic.dz2.iterator.Command;
 import org.foi.uzdiz.zorhrncic.dz2.iterator.CommandRepository;
-import org.foi.uzdiz.zorhrncic.dz2.iterator.Iterator;
 import org.foi.uzdiz.zorhrncic.dz2.iterator.TypeOfCommand;
 import org.foi.uzdiz.zorhrncic.dz2.waste.BioWaste;
+import org.foi.uzdiz.zorhrncic.dz2.iterator.IIterator;
 
 /**
  *
@@ -91,10 +91,10 @@ public class Dispecer {
 
     public void startCollecting() {
 
-        for (Iterator iterator = commandRepository.getIterator(); iterator.hasNext();) {
+        for (IIterator iterator = commandRepository.getIterator(); iterator.hasNext();) {
             try {
                 Command command = iterator.next();
-                System.out.println(command.getTypeOfCommand());
+                //System.out.println(command.getTypeOfCommand());
                 dispecerContext = commandExecutor.executeCommand(command, dispecerContext);
             } catch (Exception ex) {
                 Logger.getLogger(Dispecer.class.getName()).log(Level.SEVERE, null, ex);

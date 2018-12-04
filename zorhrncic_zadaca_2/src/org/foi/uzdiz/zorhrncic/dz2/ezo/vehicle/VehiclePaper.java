@@ -11,10 +11,22 @@ import org.foi.uzdiz.zorhrncic.dz2.bridge.Tank;
  *
  * @author Zoran
  */
-public class VehiclePaper extends Vehicle{
+// implementation of a vehice without any equipment
+public class VehiclePaper extends Vehicle {
 
     public VehiclePaper(Tank tank) {
         this.setTank(tank);
     }
-    
+
+    @Override
+    public void turnOn() {
+        this.builderDirector.addTextLineInReport("Vozilo za papirnati otpad  je uključeno.", false);
+
+    }
+
+    @Override
+    public String getDescription() {
+        return "Vozilo za papirnati otpad.";
+    }
+
 }

@@ -32,7 +32,7 @@ import org.foi.uzdiz.zorhrncic.dz2.waste.Waste;
  *
  * @author Zoran
  */
-public class VehicleFactory extends AbstarctFactory {
+public class VehicleFactory extends Factory {
 
     @Override
     public Vehicle getVehicle(TypesOfWaste waste, float capacity) {

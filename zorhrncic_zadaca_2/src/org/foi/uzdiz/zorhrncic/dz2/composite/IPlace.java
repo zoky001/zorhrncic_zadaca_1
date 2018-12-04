@@ -9,12 +9,12 @@ package org.foi.uzdiz.zorhrncic.dz2.composite;
  *
  * @author Zoran
  */
-public interface Place {
+public interface IPlace {
 
     //Prints the graphic.
-    public Place getParrent();
+    public IPlace getParrent();
 
-    public void setParrent(Place place);
+    public void setParrent(IPlace place);
 
     public void printDataAboutGeneratedWaste();
 
