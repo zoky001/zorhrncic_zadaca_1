@@ -27,6 +27,9 @@ import org.foi.uzdiz.zorhrncic.dz2.log.ReportBuilderDirector;
 import org.foi.uzdiz.zorhrncic.dz2.log.ReportBuilderImpl;
 import org.foi.uzdiz.zorhrncic.dz2.shared.Constants;
 import org.foi.uzdiz.zorhrncic.dz2.shared.TypesOfFactories;
+import org.foi.uzdiz.zorhrncic.dz2.vt100.VT100Controller;
+import org.foi.uzdiz.zorhrncic.dz2.vt100.VT100Model;
+import org.foi.uzdiz.zorhrncic.dz2.vt100.VT100View;
 
 /**
  *
@@ -40,12 +43,12 @@ public class CommonDataSingleton {
     private Random generator;
     DecimalFormat df;
 
-    private final ReportBuilder builder;
-    private final ReportBuilderDirector builderDirector;
+    private  ReportBuilder builder;
+    private  ReportBuilderDirector builderDirector;
+    private  VT100Controller vt100Controller;
 
     private CommonDataSingleton() {
-        this.builder = new ReportBuilderImpl();
-        this.builderDirector = new ReportBuilderDirector(builder);
+
     }
 
     public void printProp() {
@@ -155,6 +158,17 @@ public class CommonDataSingleton {
 
     public void loadParametes(String path) {
         loadParametersPrivate(path);
+    }
+
+    public void initViewAndReportBuilder(int brg, int brd) {
+
+        VT100View vt100view = new VT100View(brg, brd);
+        VT100Model vt100model = new VT100Model();
+        vt100Controller = new VT100Controller(vt100model, vt100view);
+
+        this.builder = new ReportBuilderImpl();
+        this.builderDirector = new ReportBuilderDirector(builder, vt100Controller);
+
     }
 
     private void loadParametersPrivate(String path) {
@@ -444,6 +458,10 @@ public class CommonDataSingleton {
 
         }
 
+    }
+
+    public VT100Controller getVt100Controller() {
+        return vt100Controller;
     }
 
 }

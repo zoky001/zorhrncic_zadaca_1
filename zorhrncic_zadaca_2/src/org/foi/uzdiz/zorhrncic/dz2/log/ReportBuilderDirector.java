@@ -7,6 +7,10 @@ package org.foi.uzdiz.zorhrncic.dz2.log;
 
 import java.util.Date;
 import org.foi.uzdiz.zorhrncic.dz2.shared.Constants;
+import org.foi.uzdiz.zorhrncic.dz2.singleton.CommonDataSingleton;
+import org.foi.uzdiz.zorhrncic.dz2.vt100.VT100Controller;
+import org.foi.uzdiz.zorhrncic.dz2.vt100.VT100Model;
+import org.foi.uzdiz.zorhrncic.dz2.vt100.VT100View;
 
 /**
  *
@@ -17,18 +21,27 @@ public class ReportBuilderDirector {
     private ReportBuilder builder;
 
     private long id;
+    private final VT100Controller vt100;
 
-    public ReportBuilderDirector(ReportBuilder builder) {
+    public ReportBuilderDirector(ReportBuilder builder, VT100Controller controller) {
         this.builder = builder;
         this.id = 0;
+
+        vt100 = controller;
     }
 
     public Report addTitleInReport(String line, boolean isStatistic) {
+
         addEmptyLineInReport(isStatistic);
         String divider = Constants.ANSI_BLUE + "*****************************************************************************************" + Constants.ANSI_RESET;
+
+
+
         addTextLineInReport(divider, isStatistic);
         divider = Constants.ANSI_BLUE + "                    " + line.toUpperCase() + Constants.ANSI_RESET;
         OneLine oneLine = new OneLine(new Date(), divider, id++, isStatistic);
+        printLine(oneLine);
+
         builder.addLine(oneLine).build();
 
         divider = Constants.ANSI_BLUE + "*****************************************************************************************" + Constants.ANSI_RESET;
@@ -40,11 +53,14 @@ public class ReportBuilderDirector {
     public Report addErrorInReport(String line, boolean isStatistic) {
         addEmptyLineInReport(isStatistic);
         String divider = Constants.ANSI_BLUE + "##########################################################################################" + Constants.ANSI_RESET;
+
         addTextLineInReport(divider, isStatistic);
         addTextLineInReport(divider, isStatistic);
         addTextLineInReport(divider, isStatistic);
+
         divider = Constants.ANSI_BLUE + "                    " + line.toUpperCase() + Constants.ANSI_RESET;
         OneLine oneLine = new OneLine(new Date(), divider, id++, isStatistic);
+        printLine(oneLine);
         builder.addLine(oneLine).build();
 
         divider = Constants.ANSI_BLUE + "##########################################################################################" + Constants.ANSI_RESET;
@@ -58,21 +74,51 @@ public class ReportBuilderDirector {
     public Report addTextLineInReport(String line, boolean isStatistic) {
 
         OneLine oneLine = new OneLine(new Date(), line, id++, isStatistic);
+        printLine(oneLine);
+
         return builder.addLine(oneLine).build();
 
     }
 
     public Report addEmptyLineInReport(boolean isStatistic) {
-
         OneLine oneLine = new OneLine(new Date(), " ", id++, isStatistic);
+        printLine(oneLine);
+
         return builder.addLine(oneLine).build();
 
     }
 
     public Report addDividerLineInReport(boolean isStatistic) {
         String divider = "-----------------------------------------------------------------------------------------";
+
         OneLine oneLine = new OneLine(new Date(), divider, id++, isStatistic);
+        printLine(oneLine);
+
         return builder.addLine(oneLine).build();
+
+    }
+
+    public void printLine(OneLine line) {
+
+        boolean isStatistic = false;
+
+        if (((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.ispis)).equalsIgnoreCase(Constants.ISPIS_SVE)) {
+            isStatistic = false;
+        } else {
+            isStatistic = true;
+        }
+
+        if (isStatistic) {
+
+            if (line.isIsStatistic()) {
+                // System.out.println(line.toString());
+                vt100.printOutputLine(line.getData());
+
+            }
+
+        } else {
+            vt100.printOutputLine(line.getData());
+        }
 
     }
 

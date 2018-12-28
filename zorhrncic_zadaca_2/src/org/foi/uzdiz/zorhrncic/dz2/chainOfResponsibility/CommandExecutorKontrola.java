@@ -25,11 +25,11 @@ public class CommandExecutorKontrola extends CommandExecutor {
         this.command = command;
         this.context = dispecerContext;
       //  System.out.println("JA SAM COMMAND EXECUTOR __ KONTROLA ___ : " + command.getTypeOfCommand().getCommand());
-        this.builderDirector.addTitleInReport("Premještanje vozila u controlnu listu..", false);
+        this.builderDirector.addTitleInReport("Premještanje vozila u controlnu listu..", true);
         moveVehicleToControllList();
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addTextLineInReport("Završeno premještanje vozila u controlnu listu.", false);
-        this.builderDirector.addDividerLineInReport(false);
+        this.builderDirector.addEmptyLineInReport(true);
+        this.builderDirector.addTextLineInReport("Završeno premještanje vozila u controlnu listu.", true);
+        this.builderDirector.addDividerLineInReport(true);
         return this.context;
     }
 
@@ -38,7 +38,7 @@ public class CommandExecutorKontrola extends CommandExecutor {
             if (context.getAllVehiclesInProcess().contains(vehicle) && !context.getAllVehiclesOnControll().contains(vehicle)) {
                 context.getAllVehiclesInProcess().remove(vehicle);
                 context.getAllVehiclesOnControll().add(vehicle);
-                this.builderDirector.addTextLineInReport("Vozilo u kontroli.. ID:" + vehicle.getId(), false);
+                this.builderDirector.addTextLineInReport("Vozilo u kontroli.. ID:" + vehicle.getId(), true);
 
             }
 

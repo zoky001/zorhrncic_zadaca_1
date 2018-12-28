@@ -47,7 +47,7 @@ public abstract class CommandExecutor {
                 return next.executeCommand(command, dispecerContext);
             } else {
 
-                builderDirector.addErrorInReport("Ne postoji implementacije izvršavanja sljedeće komande! " + command.getTypeOfCommand().getCommand(), false);
+                builderDirector.addErrorInReport("Ne postoji implementacije izvršavanja sljedeće komande! " + command.getTypeOfCommand().getCommand(), true);
                 throw new Exception("Ne postoji implementacije izvršavanja sljedeće komande! " + command.getTypeOfCommand().getCommand());
             }
         }

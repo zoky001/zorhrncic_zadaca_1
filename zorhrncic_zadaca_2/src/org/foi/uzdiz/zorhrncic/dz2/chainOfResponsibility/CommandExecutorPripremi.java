@@ -25,11 +25,11 @@ public class CommandExecutorPripremi extends CommandExecutor {
         this.command = command;
         this.context = dispecerContext;
        // System.out.println("JA SAM COMMAND EXECUTOR __PRIPREMI__ : " + command.getTypeOfCommand().getCommand());
-        this.builderDirector.addTitleInReport("Pripremam vozila..", false);
+        this.builderDirector.addTitleInReport("Pripremam vozila..", true);
         prepareVehicles();
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addTextLineInReport("Završeno pripremanje vozila.", false);
-        this.builderDirector.addDividerLineInReport(false);
+        this.builderDirector.addEmptyLineInReport(true);
+        this.builderDirector.addTextLineInReport("Završeno pripremanje vozila.", true);
+        this.builderDirector.addDividerLineInReport(true);
         return this.context;
     }
 
@@ -39,35 +39,35 @@ public class CommandExecutorPripremi extends CommandExecutor {
                 context.getAllVehiclesAtParking().remove(vehicle);
                 context.getAllVehiclesInProcess().add(vehicle);
 
-                this.builderDirector.addDividerLineInReport(false);
-                this.builderDirector.addTextLineInReport("Palim vozilo: " + vehicle.getId(), false);
-                this.builderDirector.addDividerLineInReport(false);
+                this.builderDirector.addDividerLineInReport(true);
+                this.builderDirector.addTextLineInReport("Palim vozilo: " + vehicle.getId(), true);
+                //this.builderDirector.addDividerLineInReport(true);
                 vehicle.getVehicleEquipment().turnOn();
-                this.builderDirector.addDividerLineInReport(false);
-                this.builderDirector.addTextLineInReport("Pripremljeno vozilo " + vehicle.getId(), false);
+               // this.builderDirector.addDividerLineInReport(true);
+                this.builderDirector.addTextLineInReport("Pripremljeno vozilo " + vehicle.getId(), true);
 
             }
             if (context.getAllVehiclesOnControll().contains(vehicle) && !context.getAllVehiclesInProcess().contains(vehicle)) {
                 context.getAllVehiclesOnControll().remove(vehicle);
                 context.getAllVehiclesInProcess().add(vehicle);
 
-                this.builderDirector.addDividerLineInReport(false);
-                this.builderDirector.addTextLineInReport("Palim vozilo: " + vehicle.getId(), false);
-                this.builderDirector.addDividerLineInReport(false);
+                this.builderDirector.addDividerLineInReport(true);
+                this.builderDirector.addTextLineInReport("Palim vozilo: " + vehicle.getId(), true);
+             //   this.builderDirector.addDividerLineInReport(true);
                 vehicle.getVehicleEquipment().turnOn();
-                this.builderDirector.addDividerLineInReport(false);
-                this.builderDirector.addTextLineInReport("Pripremljeno vozilo " + vehicle.getId(), false);
+             //   this.builderDirector.addDividerLineInReport(true);
+                this.builderDirector.addTextLineInReport("Pripremljeno vozilo " + vehicle.getId(), true);
             }
             if (context.getAllVehiclesInMalfunction().contains(vehicle) && context.getAllVehiclesAtLandfill().contains(vehicle) && !context.getAllVehiclesInProcess().contains(vehicle)) {
                 context.getAllVehiclesInMalfunction().remove(vehicle);
                 context.getAllVehiclesInProcess().add(vehicle);
 
-                this.builderDirector.addDividerLineInReport(false);
-                this.builderDirector.addTextLineInReport("Palim vozilo: " + vehicle.getId(), false);
-                this.builderDirector.addDividerLineInReport(false);
+                this.builderDirector.addDividerLineInReport(true);
+                this.builderDirector.addTextLineInReport("Palim vozilo: " + vehicle.getId(), true);
+             //   this.builderDirector.addDividerLineInReport(true);
                 vehicle.getVehicleEquipment().turnOn();
-                this.builderDirector.addDividerLineInReport(false);
-                this.builderDirector.addTextLineInReport("Pripremljeno vozilo " + vehicle.getId(), false);
+             //   this.builderDirector.addDividerLineInReport(true);
+                this.builderDirector.addTextLineInReport("Pripremljeno vozilo " + vehicle.getId(), true);
             }
 
         }

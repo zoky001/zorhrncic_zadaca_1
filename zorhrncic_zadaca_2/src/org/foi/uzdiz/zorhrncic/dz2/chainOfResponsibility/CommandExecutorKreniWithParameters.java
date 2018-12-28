@@ -39,7 +39,7 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
         this.context = dispecerContext;
         this.command = command;
       //  System.out.println("JA SAM COMMAND EXECUTOR __KRENI S PARAMETRIMA__ : " + command.getTypeOfCommand().getCommand() + " - " + command.getValue());
-        this.builderDirector.addTitleInReport("Kreće preuzimanje otpada u " + command.getValue() + " ciklusa.", false);
+        this.builderDirector.addTitleInReport("Kreće preuzimanje otpada u " + command.getValue() + " ciklusa.", true);
         startCollecting();
         return context;
     }
@@ -50,11 +50,11 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
             context.setNumberOfCyclesAtLandfill(Integer.parseInt((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.brojRadnihCiklusaZaOdvoz)));
 
         } catch (Exception e) {
-            builderDirector.addErrorInReport("Greška prilikom učitavanja broja radnih ciklusa za odvoz!", false);
+            builderDirector.addErrorInReport("Greška prilikom učitavanja broja radnih ciklusa za odvoz!", true);
             System.exit(0);
         }
 
-        this.builderDirector.addTitleInReport("Početak sakupljanja otpada po ulicama", false);
+        this.builderDirector.addTitleInReport("Početak sakupljanja otpada po ulicama", true);
 
         if (((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.preuzimanje)).equalsIgnoreCase(Constants.VOZILA_NE_ODREDJUJE)) {
 
@@ -63,7 +63,7 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
         } else if (((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.preuzimanje)).equalsIgnoreCase(Constants.VOZILO_ODREDJUJE)) {
             context.setIsVehicleSelectsStreet(true);
         } else {
-            builderDirector.addErrorInReport("Nedostaje parametar \"preuzimanje\" !!", false);
+            builderDirector.addErrorInReport("Nedostaje parametar \"preuzimanje\" !!", true);
             System.exit(0);
         }
 
@@ -90,15 +90,15 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
         }
 
        // driveAllVehiclesToTheLandfill();
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addTitleInReport("Završeno sakupljanje otpad!!!", false);
-        this.builderDirector.addTitleInReport("Završeno sakupljanje otpad!!!", false);
-        this.builderDirector.addTitleInReport("Završeno sakupljanje otpad!!!", false);
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addEmptyLineInReport(false);
+        this.builderDirector.addEmptyLineInReport(true);
+        this.builderDirector.addEmptyLineInReport(true);
+        this.builderDirector.addEmptyLineInReport(true);
+        this.builderDirector.addTitleInReport("Završeno sakupljanje otpad!!!", true);
+        this.builderDirector.addTitleInReport("Završeno sakupljanje otpad!!!", true);
+        this.builderDirector.addTitleInReport("Završeno sakupljanje otpad!!!", true);
+        this.builderDirector.addEmptyLineInReport(true);
+        this.builderDirector.addEmptyLineInReport(true);
+        this.builderDirector.addEmptyLineInReport(true);
 
         //     context.getLandfill().creteReport();
     }
@@ -114,7 +114,7 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
 
         } catch (Exception e) {
 
-            builderDirector.addErrorInReport("driveAllVehiclesToTheLandfill error " + e, false);
+            builderDirector.addErrorInReport("driveAllVehiclesToTheLandfill error " + e, true);
 
         }
 
@@ -207,16 +207,16 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
                 vehicle.increaseNumberOfProcessedContainers();
                 vehicle.addProcessedContainers(spremnik);
 
-                this.builderDirector.addDividerLineInReport(false);
-                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "                     Ciklus: " + context.getCycleNumber() + ". ", false);
-                this.builderDirector.addDividerLineInReport(false);
+                this.builderDirector.addDividerLineInReport(true);
+                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "              Ciklus: " + context.getCycleNumber() + ". ", true);
+                this.builderDirector.addDividerLineInReport(true);
 
-                this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), false);
-                this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), false);
-                this.builderDirector.addTextLineInReport("Kapacitet:                    " + vehicle.getCapacity(), false);
+                this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), true);
+                this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), true);
+                this.builderDirector.addTextLineInReport("Kapacitet:                    " + vehicle.getCapacity(), true);
 
-                this.builderDirector.addDividerLineInReport(false);
-                this.builderDirector.addEmptyLineInReport(false);
+                this.builderDirector.addDividerLineInReport(true);
+                this.builderDirector.addEmptyLineInReport(true);
 
                 context.setIsAllWasteCollected(false);//isAllWasteCollected = false; //todo check if filled
                 if (vehicle.getCapacity() == vehicle.getFilled()) {
@@ -227,16 +227,16 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
                 spremnik.empty(mjestaUVozilu);
                 success = true;
                 //vehicle.increaseNumberOfProcessedContainers();
-                this.builderDirector.addDividerLineInReport(false);
-                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "                     Ciklus: " + context.getCycleNumber() + ". ", false);
-                this.builderDirector.addDividerLineInReport(false);
+                this.builderDirector.addDividerLineInReport(true);
+                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "              Ciklus: " + context.getCycleNumber() + ". ", true);
+                this.builderDirector.addDividerLineInReport(true);
 
-                this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), false);
-                this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), false);
-                this.builderDirector.addTextLineInReport("Kapacitet:                    " + vehicle.getCapacity(), false);
+                this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), true);
+                this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), true);
+                this.builderDirector.addTextLineInReport("Kapacitet:                    " + vehicle.getCapacity(), true);
 
-                this.builderDirector.addDividerLineInReport(false);
-                this.builderDirector.addEmptyLineInReport(false);
+                this.builderDirector.addDividerLineInReport(true);
+                this.builderDirector.addEmptyLineInReport(true);
 
                 driveToLandfill(vehicle);
                 //  isAllWasteCollected = false;
@@ -254,27 +254,27 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
 
     private void driveToLandfill(Vehicle vehicle) {
 
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addTitleInReport("Vožnja kamiona na odlagalište", false);
+        this.builderDirector.addEmptyLineInReport(true);
+        this.builderDirector.addEmptyLineInReport(true);
+        this.builderDirector.addEmptyLineInReport(true);
+        this.builderDirector.addTitleInReport("Vožnja kamiona na odlagalište", true);
 
-        this.builderDirector.addDividerLineInReport(false);
-        this.builderDirector.addTextLineInReport("Na odlagalište ide vozilo:                    " + vehicle.getName(), false);
-        this.builderDirector.addDividerLineInReport(false);
+        this.builderDirector.addDividerLineInReport(true);
+        this.builderDirector.addTextLineInReport("Na odlagalište ide vozilo:                    " + vehicle.getName(), true);
+        this.builderDirector.addDividerLineInReport(true);
 
-        this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), false);
-        this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), false);
-        this.builderDirector.addTextLineInReport("Kapacitet:                    " + vehicle.getCapacity(), false);
+        this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), true);
+        this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), true);
+        this.builderDirector.addTextLineInReport("Kapacitet:                    " + vehicle.getCapacity(), true);
 
-        this.builderDirector.addDividerLineInReport(false);
+        this.builderDirector.addDividerLineInReport(true);
 
-        this.builderDirector.addTextLineInReport("Broj vozila na odlagalištu:   " + (context.getAllVehiclesAtLandfill().size() + 1), false);
+        this.builderDirector.addTextLineInReport("Broj vozila na odlagalištu:   " + (context.getAllVehiclesAtLandfill().size() + 1), true);
 
-        this.builderDirector.addTitleInReport("Vožnja kamiona na odlagalište", false);
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addEmptyLineInReport(false);
+        this.builderDirector.addTitleInReport("Vožnja kamiona na odlagalište", true);
+        this.builderDirector.addEmptyLineInReport(true);
+        this.builderDirector.addEmptyLineInReport(true);
+        this.builderDirector.addEmptyLineInReport(true);
 
         vehicle.setLastStreet(context.getSelectedStreetIndex());
 
