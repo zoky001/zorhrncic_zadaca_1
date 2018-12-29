@@ -43,9 +43,9 @@ public class CommonDataSingleton {
     private Random generator;
     DecimalFormat df;
 
-    private  ReportBuilder builder;
-    private  ReportBuilderDirector builderDirector;
-    private  VT100Controller vt100Controller;
+    private ReportBuilder builder;
+    private ReportBuilderDirector builderDirector;
+    private VT100Controller vt100Controller;
 
     private CommonDataSingleton() {
 
@@ -168,6 +168,13 @@ public class CommonDataSingleton {
 
         this.builder = new ReportBuilderImpl();
         this.builderDirector = new ReportBuilderDirector(builder, vt100Controller);
+
+    }
+
+    public void exitFromProgram() {
+
+        vt100Controller.prepareTerminalForExit();
+        System.exit(0);
 
     }
 

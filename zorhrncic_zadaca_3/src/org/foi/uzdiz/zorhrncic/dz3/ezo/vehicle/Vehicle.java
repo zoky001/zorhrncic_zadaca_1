@@ -8,6 +8,7 @@ package org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle;
 import java.util.ArrayList;
 import java.util.List;
 import org.foi.uzdiz.zorhrncic.dz3.bridge.Tank;
+import org.foi.uzdiz.zorhrncic.dz3.composite.CompositePlace;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.Spremnik;
 import org.foi.uzdiz.zorhrncic.dz3.shared.TypesOfVehicleEngine;
 import org.foi.uzdiz.zorhrncic.dz3.shared.TypesOfWaste;
@@ -40,6 +41,8 @@ public abstract class Vehicle implements IVehicleEquipment {
     private float total;
     private int numberOfDepartures;
 
+    private CompositePlace area;
+
     public Vehicle() {
         //  filled = 0;
         // capacity = 0;
@@ -56,7 +59,7 @@ public abstract class Vehicle implements IVehicleEquipment {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.trim();
     }
 
     public TypesOfVehicleEngine getTypesOfVehicleEngine() {
@@ -70,8 +73,6 @@ public abstract class Vehicle implements IVehicleEquipment {
     public float getCapacity() {
         return this.tank.getCapacity();
     }
-
-
 
     public ArrayList<Integer> getRandomStreetArray() {
         return randomStreetArray;
@@ -182,6 +183,14 @@ public abstract class Vehicle implements IVehicleEquipment {
 
     public void setDrivers(List<Driver> drivers) {
         this.drivers = drivers;
+    }
+
+    public CompositePlace getArea() {
+        return area;
+    }
+
+    public void setArea(CompositePlace area) {
+        this.area = area;
     }
 
 }

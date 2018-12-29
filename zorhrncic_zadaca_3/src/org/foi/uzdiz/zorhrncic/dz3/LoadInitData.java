@@ -375,6 +375,9 @@ public class LoadInitData {
 
                         //     vehicle.setCapacity(Float.valueOf(data[3]));
                         List<Driver> drivers = laodNewDriversIfExist(data, 5);// Arrays.asList(data[5].split(","));
+                        if (drivers.size() > 0) {
+                            drivers.get(0).zauzmiVozilo(vehicle);
+                        }
                         vehicle.setDrivers(drivers);
 
                         vehicleEquipment = new HeatedSeatsDecorator(new LedLightsDecorator(
@@ -400,6 +403,9 @@ public class LoadInitData {
 
                         //  vehicle.setCapacity(Integer.valueOf(data[3]));
                         List<Driver> drivers = laodNewDriversIfExist(data, 5);// Arrays.asList(data[5].split(","));
+                        if (drivers.size() > 0) {
+                            drivers.get(0).zauzmiVozilo(vehicle);
+                        }
                         vehicle.setDrivers(drivers);
 
                         vehicleEquipment = new GPSDecorator(new LedLightsDecorator(
@@ -425,6 +431,9 @@ public class LoadInitData {
 
                         //vehicle.setCapacity(Integer.valueOf(data[3]));
                         List<Driver> drivers = laodNewDriversIfExist(data, 5);// Arrays.asList(data[5].split(","));
+                        if (drivers.size() > 0) {
+                            drivers.get(0).zauzmiVozilo(vehicle);
+                        }
                         vehicle.setDrivers(drivers);
 
                         vehicleEquipment = new GPSDecorator(new AutoPilotDecorator(new LedLightsDecorator(
@@ -449,6 +458,9 @@ public class LoadInitData {
 
                         //  vehicle.setCapacity(Integer.valueOf(data[3]));
                         List<Driver> drivers = laodNewDriversIfExist(data, 5);// Arrays.asList(data[5].split(","));
+                        if (drivers.size() > 0) {
+                            drivers.get(0).zauzmiVozilo(vehicle);
+                        }
                         vehicle.setDrivers(drivers);
 
                         vehicleEquipment = new AutoPilotDecorator(new LedLightsDecorator(
@@ -474,6 +486,9 @@ public class LoadInitData {
 
                         //   vehicle.setCapacity(Integer.valueOf(data[3]));
                         List<Driver> drivers = laodNewDriversIfExist(data, 5);// Arrays.asList(data[5].split(","));
+                        if (drivers.size() > 0) {
+                            drivers.get(0).zauzmiVozilo(vehicle);
+                        }
                         vehicle.setDrivers(drivers);
 
                         vehicleEquipment = new ACDecorator(new LedLightsDecorator(

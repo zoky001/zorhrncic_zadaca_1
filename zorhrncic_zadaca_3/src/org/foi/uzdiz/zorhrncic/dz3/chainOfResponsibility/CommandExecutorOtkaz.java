@@ -6,9 +6,11 @@
 package org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility;
 
 import org.foi.uzdiz.zorhrncic.dz3.ezo.DispecerContext;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.drivers.Driver;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.Vehicle;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.Command;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.TypeOfCommand;
+import org.foi.uzdiz.zorhrncic.dz3.shared.TypeOfDriverState;
 
 /**
  *
@@ -26,16 +28,18 @@ public class CommandExecutorOtkaz extends CommandExecutor {
         this.context = dispecerContext;
         // System.out.println("JA SAM COMMAND EXECUTOR __PRIPREMI__ : " + command.getTypeOfCommand().getCommand());
         this.builderDirector.addTitleInReport("Izvršavam komandu \"OTKAZ\"..", true);
-        vehicleProccessing();
+        proccessing();
         this.builderDirector.addEmptyLineInReport(true);
         this.builderDirector.addTitleInReport("Završna komanda \"OTKAZ\"..", true);
         this.builderDirector.addDividerLineInReport(true);
         return this.context;
     }
 
-    private void vehicleProccessing() {
-        this.builderDirector.addTextLineInReport("Komanda OTKAZ TODO", true);
-// todo komanda Obradi
+    private void proccessing() {
+
+        for (Driver driver : command.getDriversList()) {
+            driver.dajOtkaz();
+        }
     }
 
 }

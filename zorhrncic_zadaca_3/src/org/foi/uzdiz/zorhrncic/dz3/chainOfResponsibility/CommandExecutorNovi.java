@@ -6,6 +6,7 @@
 package org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility;
 
 import org.foi.uzdiz.zorhrncic.dz3.ezo.DispecerContext;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.drivers.Driver;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.Vehicle;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.Command;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.TypeOfCommand;
@@ -34,8 +35,15 @@ public class CommandExecutorNovi extends CommandExecutor {
     }
 
     private void vehicleProccessing() {
-        this.builderDirector.addTextLineInReport("Komanda NOVI TODO", true);
-// todo komanda Obradi
+        try {
+            for (Driver driver : command.getDriversList()) {
+                this.builderDirector.addTextLineInReport("Dodan novi vozač \"" + driver.getName() + "\"", true);
+                this.context.getDriversList().add(driver);
+            }
+        } catch (Exception e) {
+
+            //
+        }
     }
 
 }

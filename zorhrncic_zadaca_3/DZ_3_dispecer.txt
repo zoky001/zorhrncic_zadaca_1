@@ -2,6 +2,7 @@ komanda;lista vozila;
 OBRADI;p4;v1,v2,v5,v6;
 OBRADI;p5;v3,v4,v7;
 PRIPREMI;v1,v2,v3,v4;
+PREUZMI;pero;v7;
 STATUS;
 VOZAČI;
 GODIŠNJI ODMOR;pero,ivo;

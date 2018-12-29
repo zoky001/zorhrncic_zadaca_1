@@ -26,16 +26,24 @@ public class CommandExecutorObradi extends CommandExecutor {
         this.context = dispecerContext;
         // System.out.println("JA SAM COMMAND EXECUTOR __PRIPREMI__ : " + command.getTypeOfCommand().getCommand());
         this.builderDirector.addTitleInReport("Izvršavam komandu \"OBRADI\"..", true);
-        vehicleProccessing();
-        this.builderDirector.addEmptyLineInReport(true);
+        proccessing();
         this.builderDirector.addTitleInReport("Završena komanda \"OBRADI\"..", true);
         this.builderDirector.addDividerLineInReport(true);
         return this.context;
     }
 
-    private void vehicleProccessing() {
-        this.builderDirector.addTextLineInReport("Komanda obradi TODO", true);
-// todo komanda Obradi
+    private void proccessing() {
+        try {
+            for (Vehicle vehicle : command.getVehiclesList()) {
+                vehicle.setArea(command.getPlace());
+                this.builderDirector.addTextLineInReport("Vozilo \"" + vehicle.getName() + "\" se dodjeljuje područje \"" + command.getPlace().getName() + "\"", true);
+
+            }
+
+        } catch (Exception e) {
+
+            //
+        }
     }
 
 }

@@ -9,6 +9,7 @@ import org.foi.uzdiz.zorhrncic.dz3.ezo.DispecerContext;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.Vehicle;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.Command;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.TypeOfCommand;
+import org.foi.uzdiz.zorhrncic.dz3.singleton.CommonDataSingleton;
 
 /**
  *
@@ -34,8 +35,7 @@ public class CommandExecutorIzlaz extends CommandExecutor {
     }
 
     private void vehicleProccessing() {
-        this.builderDirector.addTextLineInReport("Komanda IZLAZ TODO", true);
-// todo komanda Obradi
+        CommonDataSingleton.getInstance().exitFromProgram();
     }
 
 }

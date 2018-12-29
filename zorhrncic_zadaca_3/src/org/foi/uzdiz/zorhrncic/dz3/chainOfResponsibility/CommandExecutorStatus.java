@@ -28,8 +28,6 @@ public class CommandExecutorStatus extends CommandExecutor {
       //  System.out.println("JA SAM COMMAND EXECUTOR __ STATUS ___ : " + command.getTypeOfCommand().getCommand());
         this.builderDirector.addTitleInReport("Izvršavam komandu \"STATUS\"..", true);
         printStatus();
-
-        this.builderDirector.addEmptyLineInReport(true);
         this.builderDirector.addTitleInReport("Završena komanda \"STATUS\"..", true);
         this.builderDirector.addDividerLineInReport(true);
         return this.context;

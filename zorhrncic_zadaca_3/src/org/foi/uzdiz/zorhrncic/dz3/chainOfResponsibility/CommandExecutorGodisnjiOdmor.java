@@ -6,9 +6,11 @@
 package org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility;
 
 import org.foi.uzdiz.zorhrncic.dz3.ezo.DispecerContext;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.drivers.Driver;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.Vehicle;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.Command;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.TypeOfCommand;
+import org.foi.uzdiz.zorhrncic.dz3.shared.TypeOfDriverState;
 
 /**
  *
@@ -34,8 +36,13 @@ public class CommandExecutorGodisnjiOdmor extends CommandExecutor {
     }
 
     private void proccessing() {
-        this.builderDirector.addTextLineInReport("Komanda godišnji-odmor TODO", true);
-// todo komanda Obradi
+
+        for (Driver driver : command.getDriversList()) {
+            if (driver.getState() != TypeOfDriverState.OTKAZ) {
+                driver.idiNaGO();
+            }
+        }
+
     }
 
 }
