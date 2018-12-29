@@ -14,10 +14,10 @@ import org.foi.uzdiz.zorhrncic.dz3.iterator.TypeOfCommand;
  *
  * @author Zoran
  */
-public class CommandExecutorObradi extends CommandExecutor {
+public class CommandExecutorBolovanje extends CommandExecutor {
 
-    public CommandExecutorObradi() {
-        this.typeOfCommand = typeOfCommand.OBRADI;
+    public CommandExecutorBolovanje() {
+        this.typeOfCommand = typeOfCommand.BOLOVANJE;
     }
 
     @Override
@@ -25,16 +25,16 @@ public class CommandExecutorObradi extends CommandExecutor {
         this.command = command;
         this.context = dispecerContext;
         // System.out.println("JA SAM COMMAND EXECUTOR __PRIPREMI__ : " + command.getTypeOfCommand().getCommand());
-        this.builderDirector.addTitleInReport("Izvršavam komandu \"OBRADI\"..", true);
+        this.builderDirector.addTitleInReport("Izvršavam komandu \"BOLOVANJE\"..", true);
         vehicleProccessing();
         this.builderDirector.addEmptyLineInReport(true);
-        this.builderDirector.addTitleInReport("Završena komanda \"OBRADI\"..", true);
+        this.builderDirector.addTitleInReport("Završena komanda \"BOLOVANJE\"..", true);
         this.builderDirector.addDividerLineInReport(true);
         return this.context;
     }
 
     private void vehicleProccessing() {
-        this.builderDirector.addTextLineInReport("Komanda obradi TODO", true);
+        this.builderDirector.addTextLineInReport("Komanda BOLOVANJE TODO", true);
 // todo komanda Obradi
     }
 

@@ -38,9 +38,13 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
     protected DispecerContext executeCommandPrivate(Command command, DispecerContext dispecerContext) {
         this.context = dispecerContext;
         this.command = command;
-      //  System.out.println("JA SAM COMMAND EXECUTOR __KRENI S PARAMETRIMA__ : " + command.getTypeOfCommand().getCommand() + " - " + command.getValue());
+        //  System.out.println("JA SAM COMMAND EXECUTOR __KRENI S PARAMETRIMA__ : " + command.getTypeOfCommand().getCommand() + " - " + command.getValue());
+        this.builderDirector.addTitleInReport("Izvršavam komandu \"KRENI_S_PARAMETRIMA\"..", true);
+
         this.builderDirector.addTitleInReport("Kreće preuzimanje otpada u " + command.getValue() + " ciklusa.", true);
         startCollecting();
+        this.builderDirector.addTitleInReport("Završena komanda \"KRENI_S_PARAMETRIMA\"..", true);
+
         return context;
     }
 
@@ -89,7 +93,7 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
 
         }
 
-       // driveAllVehiclesToTheLandfill();
+        // driveAllVehiclesToTheLandfill();
         this.builderDirector.addEmptyLineInReport(true);
         this.builderDirector.addEmptyLineInReport(true);
         this.builderDirector.addEmptyLineInReport(true);

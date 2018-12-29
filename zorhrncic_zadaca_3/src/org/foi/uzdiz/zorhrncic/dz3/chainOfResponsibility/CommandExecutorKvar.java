@@ -25,12 +25,12 @@ public class CommandExecutorKvar extends CommandExecutor {
         this.command = command;
         this.context = dispecerContext;
       //  System.out.println("JA SAM COMMAND EXECUTOR __ KVAR ___ : " + command.getTypeOfCommand().getCommand());
-        this.builderDirector.addTitleInReport("Dogodio se kvar na vozilima", false);
+        this.builderDirector.addTitleInReport("Izvršavam komandu \"KVAR\"..", true);
         moveVehicleInMalfunctionList();
 
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addTextLineInReport("Završeno premještanje vozila u kvar - listu.", false);
-        this.builderDirector.addDividerLineInReport(false);
+        this.builderDirector.addEmptyLineInReport(true);
+        this.builderDirector.addTitleInReport("Završena komanda \"KVAR\"..", true);
+        this.builderDirector.addDividerLineInReport(true);
         return this.context;
     }
 
@@ -39,7 +39,7 @@ public class CommandExecutorKvar extends CommandExecutor {
             if (context.getAllVehiclesInProcess().contains(vehicle) && !context.getAllVehiclesInMalfunction().contains(vehicle)) {
                 context.getAllVehiclesInProcess().remove(vehicle);
                 context.getAllVehiclesInMalfunction().add(vehicle);
-                this.builderDirector.addTextLineInReport("Vozilo u kvaru.. ID:" + vehicle.getId(), false);
+                this.builderDirector.addTextLineInReport("Vozilo u kvaru.. ID:" + vehicle.getId(), true);
 
             }
 

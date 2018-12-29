@@ -25,10 +25,10 @@ public class CommandExecutorKontrola extends CommandExecutor {
         this.command = command;
         this.context = dispecerContext;
       //  System.out.println("JA SAM COMMAND EXECUTOR __ KONTROLA ___ : " + command.getTypeOfCommand().getCommand());
-        this.builderDirector.addTitleInReport("Premještanje vozila u controlnu listu..", true);
+        this.builderDirector.addTitleInReport("Izvršavam komandu \"KONTROLA\"..", true);
         moveVehicleToControllList();
         this.builderDirector.addEmptyLineInReport(true);
-        this.builderDirector.addTextLineInReport("Završeno premještanje vozila u controlnu listu.", true);
+        this.builderDirector.addTitleInReport("Završena komanda \"KONTROLA\"..", true);
         this.builderDirector.addDividerLineInReport(true);
         return this.context;
     }

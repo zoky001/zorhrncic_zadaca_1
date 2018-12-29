@@ -26,12 +26,12 @@ public class CommandExecutorStatus extends CommandExecutor {
         this.command = command;
         this.context = dispecerContext;
       //  System.out.println("JA SAM COMMAND EXECUTOR __ STATUS ___ : " + command.getTypeOfCommand().getCommand());
-        this.builderDirector.addTitleInReport("Ispis statusa", false);
+        this.builderDirector.addTitleInReport("Izvršavam komandu \"STATUS\"..", true);
         printStatus();
 
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addTextLineInReport("Završio ispis statusa.", false);
-        this.builderDirector.addDividerLineInReport(false);
+        this.builderDirector.addEmptyLineInReport(true);
+        this.builderDirector.addTitleInReport("Završena komanda \"STATUS\"..", true);
+        this.builderDirector.addDividerLineInReport(true);
         return this.context;
     }
 
@@ -39,33 +39,33 @@ public class CommandExecutorStatus extends CommandExecutor {
         for (Vehicle vehicle : context.getAllVehicles()) {
             if (!context.getAllVehiclesInMalfunction().contains(vehicle)) {
 
-                this.builderDirector.addDividerLineInReport(false);
-                this.builderDirector.addTextLineInReport("------------------------------------------------", false);
+                this.builderDirector.addDividerLineInReport(true);
+                this.builderDirector.addTextLineInReport("------------------------------------------------", true);
 
-                this.builderDirector.addTextLineInReport("------------------------------------------------", false);
-                this.builderDirector.addTextLineInReport("|          IME VOZILA: " + vehicle.getName() + "                 ", false);
-                this.builderDirector.addTextLineInReport("------------------------------------------------", false);
-                this.builderDirector.addTextLineInReport("|          ID VOZILA: " + vehicle.getId() + "                 ", false);
-                this.builderDirector.addTextLineInReport("------------------------------------------------", false);
-                this.builderDirector.addTextLineInReport("|          Status vozila: " + getStatus(vehicle) + "                 ", false);
-                this.builderDirector.addTextLineInReport("------------------------------------------------", false);
-                this.builderDirector.addTextLineInReport("|   Količina u vozilu:            |  " + vehicle.getFilled(), false);
-                this.builderDirector.addTextLineInReport("------------------------------------------------", false);
-                this.builderDirector.addTextLineInReport("|   Količina do popunjavanja:     |  " + (vehicle.getCapacity() - vehicle.getFilled()), false);
-                this.builderDirector.addTextLineInReport("------------------------------------------------", false);
-                this.builderDirector.addTextLineInReport("|   Nosivost:                     |  " + vehicle.getCapacity(), false);
-                this.builderDirector.addTextLineInReport("  ------------------------------------------------", false);
-                this.builderDirector.addTextLineInReport("|   Broj odlazaka na pražnjenje:  |  " + vehicle.getNumberOfDepartures(), false);
-                this.builderDirector.addTextLineInReport("------------------------------------------------", false);
-                this.builderDirector.addTextLineInReport("|   Broj ispražnejnih spremnika:  |  " + vehicle.getNumberOfProcessedContainers(), false);
-                this.builderDirector.addTextLineInReport("------------------------------------------------", false);
-                this.builderDirector.addTextLineInReport("|   Količina preveženog otpada:   |  " + vehicle.getTotal(), false);
-                this.builderDirector.addTextLineInReport("------------------------------------------------", false);
-                this.builderDirector.addTextLineInReport("|   Tip motora:                   |  " + vehicle.getTypesOfVehicleEngine().name(), false);
-                this.builderDirector.addTextLineInReport("------------------------------------------------", false);
-                this.builderDirector.addTextLineInReport("|   Vozači:                       |  " + vehicle.getDrivers().toString(), false);
-                this.builderDirector.addTextLineInReport("------------------------------------------------", false);
-                this.builderDirector.addDividerLineInReport(false);
+                this.builderDirector.addTextLineInReport("------------------------------------------------", true);
+                this.builderDirector.addTextLineInReport("|          IME VOZILA: " + vehicle.getName() + "                 ", true);
+                this.builderDirector.addTextLineInReport("------------------------------------------------", true);
+                this.builderDirector.addTextLineInReport("|          ID VOZILA: " + vehicle.getId() + "                 ", true);
+                this.builderDirector.addTextLineInReport("------------------------------------------------", true);
+                this.builderDirector.addTextLineInReport("|          Status vozila: " + getStatus(vehicle) + "                 ", true);
+                this.builderDirector.addTextLineInReport("------------------------------------------------", true);
+                this.builderDirector.addTextLineInReport("|   Količina u vozilu:            |  " + vehicle.getFilled(), true);
+                this.builderDirector.addTextLineInReport("------------------------------------------------", true);
+                this.builderDirector.addTextLineInReport("|   Količina do popunjavanja:     |  " + (vehicle.getCapacity() - vehicle.getFilled()), true);
+                this.builderDirector.addTextLineInReport("------------------------------------------------", true);
+                this.builderDirector.addTextLineInReport("|   Nosivost:                     |  " + vehicle.getCapacity(), true);
+                this.builderDirector.addTextLineInReport("  ------------------------------------------------", true);
+                this.builderDirector.addTextLineInReport("|   Broj odlazaka na pražnjenje:  |  " + vehicle.getNumberOfDepartures(), true);
+                this.builderDirector.addTextLineInReport("------------------------------------------------", true);
+                this.builderDirector.addTextLineInReport("|   Broj ispražnejnih spremnika:  |  " + vehicle.getNumberOfProcessedContainers(), true);
+                this.builderDirector.addTextLineInReport("------------------------------------------------", true);
+                this.builderDirector.addTextLineInReport("|   Količina preveženog otpada:   |  " + vehicle.getTotal(), true);
+                this.builderDirector.addTextLineInReport("------------------------------------------------", true);
+                this.builderDirector.addTextLineInReport("|   Tip motora:                   |  " + vehicle.getTypesOfVehicleEngine().name(), true);
+                this.builderDirector.addTextLineInReport("------------------------------------------------", true);
+                this.builderDirector.addTextLineInReport("|   Vozači:                       |  " + vehicle.getDrivers().toString(), true);
+                this.builderDirector.addTextLineInReport("------------------------------------------------", true);
+                this.builderDirector.addDividerLineInReport(true);
 
                 /*
                 System.out.println("------------------------------------------------",false);

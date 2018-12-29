@@ -13,12 +13,20 @@ import java.util.logging.Logger;
 import jdk.nashorn.internal.parser.TokenType;
 import org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility.CommandExecutorPripremi;
 import org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility.CommandExecutor;
+import org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility.CommandExecutorBolovanje;
+import org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility.CommandExecutorGodisnjiOdmor;
 import org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility.CommandExecutorIsprazni;
+import org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility.CommandExecutorIzlaz;
 import org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility.CommandExecutorKontrola;
 import org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility.CommandExecutorKreniWithParameters;
 import org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility.CommandExecutorKreniWithoutParameters;
 import org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility.CommandExecutorKvar;
+import org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility.CommandExecutorNovi;
+import org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility.CommandExecutorObradi;
+import org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility.CommandExecutorOtkaz;
+import org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility.CommandExecutorPreuzmi;
 import org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility.CommandExecutorStatus;
+import org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility.CommandExecutorVozaci;
 import org.foi.uzdiz.zorhrncic.dz3.composite.CompositePlace;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.Vehicle;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.VehicleBio;
@@ -69,11 +77,19 @@ public class Dispecer {
 
         this.commandExecutor = new CommandExecutorPripremi()
                 .setNext(new CommandExecutorKreniWithParameters()
-                        .setNext(new CommandExecutorKvar()
-                                .setNext(new CommandExecutorStatus()
-                                        .setNext(new CommandExecutorIsprazni()
-                                                .setNext(new CommandExecutorKreniWithoutParameters()
-                                                        .setNext(new CommandExecutorKontrola()))))));
+                        .setNext(new CommandExecutorBolovanje()
+                                .setNext(new CommandExecutorOtkaz()
+                                        .setNext(new CommandExecutorGodisnjiOdmor()
+                                                .setNext(new CommandExecutorIzlaz()
+                                                        .setNext(new CommandExecutorNovi()
+                                                                .setNext(new CommandExecutorObradi()
+                                                                        .setNext(new CommandExecutorPreuzmi()
+                                                                                .setNext(new CommandExecutorVozaci()
+                                                                                        .setNext(new CommandExecutorKvar()
+                                                                                                .setNext(new CommandExecutorStatus()
+                                                                                                        .setNext(new CommandExecutorIsprazni()
+                                                                                                                .setNext(new CommandExecutorKreniWithoutParameters()
+                                                                                                                        .setNext(new CommandExecutorKontrola()))))))))))))));
 
         this.allVehiclesInProcess = allVehicles;
         this.streets = streets;
@@ -90,7 +106,6 @@ public class Dispecer {
             System.exit(0);
         }
     }
-
 
     public void startCollecting() {
 

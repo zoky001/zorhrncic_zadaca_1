@@ -25,10 +25,10 @@ public class CommandExecutorPripremi extends CommandExecutor {
         this.command = command;
         this.context = dispecerContext;
        // System.out.println("JA SAM COMMAND EXECUTOR __PRIPREMI__ : " + command.getTypeOfCommand().getCommand());
-        this.builderDirector.addTitleInReport("Pripremam vozila..", true);
+        this.builderDirector.addTitleInReport("Izvršavam komandu \"PRIPREMI\"..", true);
         prepareVehicles();
         this.builderDirector.addEmptyLineInReport(true);
-        this.builderDirector.addTextLineInReport("Završeno pripremanje vozila.", true);
+        this.builderDirector.addTitleInReport("Završena  komandu \"PRIPREMI\"..", true);
         this.builderDirector.addDividerLineInReport(true);
         return this.context;
     }

@@ -24,11 +24,11 @@ public class CommandExecutorIsprazni extends CommandExecutor {
     protected DispecerContext executeCommandPrivate(Command command, DispecerContext dispecerContext) {
         this.command = command;
         this.context = dispecerContext;
-      //  System.out.println("JA SAM COMMAND EXECUTOR __ ISPRAZNI ___ : " + command.getTypeOfCommand().getCommand());
-        this.builderDirector.addTitleInReport("Premještanje vozila na odlagalište.. (Pražnjenje)", true);
+        //  System.out.println("JA SAM COMMAND EXECUTOR __ ISPRAZNI ___ : " + command.getTypeOfCommand().getCommand());
+        this.builderDirector.addTitleInReport("Izvršavam komandu \"ISPRAZNI\"..", true);
         emptyVehicles();
         this.builderDirector.addEmptyLineInReport(true);
-        this.builderDirector.addTextLineInReport("Završeno pražnjenje vozila.", true);
+        this.builderDirector.addTitleInReport("Završena komanda \"ISPRAZNI\"..", true);
         this.builderDirector.addDividerLineInReport(true);
         return this.context;
     }
@@ -37,12 +37,12 @@ public class CommandExecutorIsprazni extends CommandExecutor {
         for (Vehicle vehicle : command.getVehiclesList()) {
             if (context.getAllVehiclesInProcess().contains(vehicle) && !context.getAllVehiclesAtLandfill().contains(vehicle)) {
                 driveToLandfill(vehicle);
-              //  this.builderDirector.addTextLineInReport("Vozilo u istovaruje.. ID:" + vehicle.getId(), true);
+                //  this.builderDirector.addTextLineInReport("Vozilo u istovaruje.. ID:" + vehicle.getId(), true);
 
             }
             if (context.getAllVehiclesInMalfunction().contains(vehicle) && !context.getAllVehiclesAtLandfill().contains(vehicle)) {
                 driveToLandfill(vehicle);
-              //  this.builderDirector.addTextLineInReport("Vozilo u istovaruje.. ID:" + vehicle.getId(), true);
+                //  this.builderDirector.addTextLineInReport("Vozilo u istovaruje.. ID:" + vehicle.getId(), true);
 
             }
         }
