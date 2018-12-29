@@ -99,7 +99,7 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
         this.builderDirector.addEmptyLineInReport(true);
         this.builderDirector.addEmptyLineInReport(true);
         this.builderDirector.addEmptyLineInReport(true);
-
+// todoo ne ispiše stat
         //     context.getLandfill().creteReport();
     }
 

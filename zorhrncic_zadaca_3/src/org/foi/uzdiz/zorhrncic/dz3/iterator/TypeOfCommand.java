@@ -11,6 +11,14 @@ package org.foi.uzdiz.zorhrncic.dz3.iterator;
  */
 public enum TypeOfCommand {
     PRIPREMI("PRIPREMI"),
+    OBRADI("OBRADI"),
+    GODISNJI_ODMOR("GODIŠNJI ODMOR"),
+    BOLOVANJE("BOLOVANJE"),
+    OTKAZ("OTKAZ"),
+    PREUZMI("PREUZMI"),
+    NOVI("NOVI"),
+    VOZACI("VOZAČI"),
+    IZLAZ("IZLAZ"),
     KRENI_BEZ_PARAMETRA("KRENI"),
     KRENI_S_PARAMETRIMA("KRENI "),
     KVAR("KVAR"),

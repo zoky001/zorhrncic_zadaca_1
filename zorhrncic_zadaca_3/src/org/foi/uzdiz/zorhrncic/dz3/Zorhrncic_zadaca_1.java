@@ -58,10 +58,10 @@ public class Zorhrncic_zadaca_1 {
             LoadInitData load = new LoadInitData();
             load.loadData();
 
-            Dispecer dispecer = new Dispecer(load.getAllVehicles(), load.getStreets(), load.getAreaRootElement());
+            Dispecer dispecer = new Dispecer(load.getAllVehicles(), load.getStreets(), load.getAreaRootElementList());
             dispecer.startCollecting();;
 
-           //    CommonDataSingleton.getInstance().getReportBuilderDirector().addEmptyLineInReport(false).print();
+            //    CommonDataSingleton.getInstance().getReportBuilderDirector().addEmptyLineInReport(false).print();
             //   CommonDataSingleton.getInstance().getReportBuilderDirector().addEmptyLineInReport(false).generateFile();
             CommonDataSingleton.getInstance().getVt100Controller().prepareTerminalForExit();
 

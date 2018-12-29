@@ -12,6 +12,7 @@ import org.foi.uzdiz.zorhrncic.dz3.ezo.Spremnik;
 import org.foi.uzdiz.zorhrncic.dz3.shared.TypesOfVehicleEngine;
 import org.foi.uzdiz.zorhrncic.dz3.shared.TypesOfWaste;
 import org.foi.uzdiz.zorhrncic.dz3.composite.Street;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.drivers.Driver;
 import org.foi.uzdiz.zorhrncic.dz3.log.ReportBuilderDirector;
 import org.foi.uzdiz.zorhrncic.dz3.singleton.CommonDataSingleton;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.decorator.IVehicleEquipment;
@@ -30,7 +31,7 @@ public abstract class Vehicle implements IVehicleEquipment {
     private String name;
     private String id;
     private TypesOfVehicleEngine typesOfVehicleEngine;
-    private List<String> drivers;
+    private List<Driver> drivers;
     private ArrayList<Integer> randomStreetArray;
     private int lastStreet;
     private int numberOfCyclesAtLandfill;
@@ -70,13 +71,7 @@ public abstract class Vehicle implements IVehicleEquipment {
         return this.tank.getCapacity();
     }
 
-    public List<String> getDrivers() {
-        return drivers;
-    }
 
-    public void setDrivers(List<String> drivers) {
-        this.drivers = drivers;
-    }
 
     public ArrayList<Integer> getRandomStreetArray() {
         return randomStreetArray;
@@ -179,6 +174,14 @@ public abstract class Vehicle implements IVehicleEquipment {
 
     public void setVehicleEquipment(IVehicleEquipment vehicleEquipment) {
         this.vehicleEquipment = vehicleEquipment;
+    }
+
+    public List<Driver> getDrivers() {
+        return drivers;
+    }
+
+    public void setDrivers(List<Driver> drivers) {
+        this.drivers = drivers;
     }
 
 }

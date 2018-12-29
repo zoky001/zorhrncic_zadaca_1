@@ -48,8 +48,14 @@ public class VT100Controller {
     }
 
     public String readInputLine() {
-        Scanner scanner = new Scanner(System.in);
-        return scanner.next();
+        try {
+            Scanner scanner = new Scanner(System.in);
+            return scanner.next();
+        } catch (Exception e) {
+
+            return "";
+
+        }
     }
 
     public void prepareTerminalForExit() {

@@ -6,6 +6,7 @@
 package org.foi.uzdiz.zorhrncic.dz3.ezo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,6 +31,7 @@ import org.foi.uzdiz.zorhrncic.dz3.shared.Constants;
 import org.foi.uzdiz.zorhrncic.dz3.shared.TypesOfWaste;
 import org.foi.uzdiz.zorhrncic.dz3.singleton.CommonDataSingleton;
 import org.foi.uzdiz.zorhrncic.dz3.composite.Street;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.drivers.Driver;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.Command;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.CommandRepository;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.TypeOfCommand;
@@ -57,12 +59,14 @@ public class Dispecer {
     private int selectedStreetIndex;
     private final ReportBuilderDirector builderDirector;
     private final Landfill landfill;
-    private CompositePlace areaRootElement;
     private final CommandRepository commandRepository;
     private final CommandExecutor commandExecutor;
 
-    public Dispecer(List<Vehicle> allVehicles, List<Street> streets, CompositePlace areaRoot) {
-        this.commandRepository = new CommandRepository(allVehicles);
+    public Dispecer(List<Vehicle> allVehicles, List<Street> streets, List<CompositePlace> areaRoot) {
+        this.dispecerContext = new DispecerContext(allVehicles, streets, areaRoot);
+
+        this.commandRepository = new CommandRepository(this.dispecerContext);
+
         this.commandExecutor = new CommandExecutorPripremi()
                 .setNext(new CommandExecutorKreniWithParameters()
                         .setNext(new CommandExecutorKvar()
@@ -71,10 +75,8 @@ public class Dispecer {
                                                 .setNext(new CommandExecutorKreniWithoutParameters()
                                                         .setNext(new CommandExecutorKontrola()))))));
 
-        this.areaRootElement = areaRoot;
         this.allVehiclesInProcess = allVehicles;
         this.streets = streets;
-        this.dispecerContext = new DispecerContext(allVehicles, streets, areaRoot);
 
 //        this.allVehiclesAtLandfill = new ArrayList<Vehicle>();
         this.landfill = new Landfill();
@@ -89,6 +91,7 @@ public class Dispecer {
         }
     }
 
+
     public void startCollecting() {
 
         for (IIterator iterator = commandRepository.getIterator(); iterator.hasNext();) {
@@ -101,7 +104,7 @@ public class Dispecer {
             }
 
         }
-/*
+        /*
          this.builderDirector.addTitleInReport("Početak sakupljanja otpada po ulicama", false);
 
         if (((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.preuzimanje)).equalsIgnoreCase(Constants.VOZILA_NE_ODREDJUJE)) {
@@ -149,7 +152,7 @@ public class Dispecer {
             //     k.print();
             // Spremnik.printArray(k.getSpremnikList());
         });
-*/
+         */
     }
 
     private void driveAllVehiclesToTheLandfill() {

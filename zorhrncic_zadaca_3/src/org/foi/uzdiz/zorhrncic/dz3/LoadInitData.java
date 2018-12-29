@@ -10,7 +10,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -21,11 +20,6 @@ import org.foi.uzdiz.zorhrncic.dz3.ezo.Kanta;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.Kontejner;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.Spremnik;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.Vehicle;
-import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.VehicleBio;
-import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.VehicleGlass;
-import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.VehicleMetal;
-import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.VehicleMixed;
-import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.VehiclePaper;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.decorator.ACDecorator;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.decorator.AutoPilotDecorator;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.decorator.CDRadioDecorator;
@@ -46,12 +40,8 @@ import org.foi.uzdiz.zorhrncic.dz3.users.BigUser;
 import org.foi.uzdiz.zorhrncic.dz3.users.MediumUser;
 import org.foi.uzdiz.zorhrncic.dz3.users.SmallUser;
 import org.foi.uzdiz.zorhrncic.dz3.users.User;
-import org.foi.uzdiz.zorhrncic.dz3.waste.BioWaste;
-import org.foi.uzdiz.zorhrncic.dz3.waste.GlassWaste;
-import org.foi.uzdiz.zorhrncic.dz3.waste.MetalWaste;
-import org.foi.uzdiz.zorhrncic.dz3.waste.MixedWaste;
-import org.foi.uzdiz.zorhrncic.dz3.waste.PaperWaste;
 import org.foi.uzdiz.zorhrncic.dz3.composite.IPlace;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.drivers.Driver;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.decorator.IVehicleEquipment;
 
 /**
@@ -70,9 +60,10 @@ public class LoadInitData {
     private Factory spremnikFactory;
     private final Factory wasteFactory;
     private final Factory vehicleFactory;
-    private CompositePlace areaRootElement;
+    private List<CompositePlace> areaRootElementList;
 
     public LoadInitData() {
+        areaRootElementList = new ArrayList<CompositePlace>();
         areasModelList = new ArrayList<CompositePlace>();
         streets = new ArrayList<Street>();
         sviTipoviSpremnika = new ArrayList<Spremnik>();
@@ -91,13 +82,15 @@ public class LoadInitData {
         loadStreetsPrivate((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.ulice));
         loadAreasPrivate((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.podrucja));
         putTheStreetsInTheArea();
-        loadUsersForStreetsPrivate();
-        assignSpremnikToUsersPrivate();
+        loadUsersForStreetsAndAssignSpremnikPrivate();
+        //   assignSpremnikToUsersPrivate();
         genrateWasteForUsersPrivate();
         calculateTotalAmountOfUsersWasteInEveryStreet();
         //  report.print();
+        for (CompositePlace compositePlace : areaRootElementList) {
+            compositePlace.printDataAboutGeneratedWaste();
 
-        areaRootElement.printDataAboutGeneratedWaste();
+        }
         /*   streets.forEach((k) -> {
 
                  k.printDataAboutGeneratedWaste();
@@ -381,7 +374,7 @@ public class LoadInitData {
                         }
 
                         //     vehicle.setCapacity(Float.valueOf(data[3]));
-                        List<String> drivers = Arrays.asList(data[5].split(","));
+                        List<Driver> drivers = laodNewDriversIfExist(data, 5);// Arrays.asList(data[5].split(","));
                         vehicle.setDrivers(drivers);
 
                         vehicleEquipment = new HeatedSeatsDecorator(new LedLightsDecorator(
@@ -406,7 +399,7 @@ public class LoadInitData {
                         }
 
                         //  vehicle.setCapacity(Integer.valueOf(data[3]));
-                        List<String> drivers = Arrays.asList(data[5].split(","));
+                        List<Driver> drivers = laodNewDriversIfExist(data, 5);// Arrays.asList(data[5].split(","));
                         vehicle.setDrivers(drivers);
 
                         vehicleEquipment = new GPSDecorator(new LedLightsDecorator(
@@ -431,7 +424,7 @@ public class LoadInitData {
                         }
 
                         //vehicle.setCapacity(Integer.valueOf(data[3]));
-                        List<String> drivers = Arrays.asList(data[5].split(","));
+                        List<Driver> drivers = laodNewDriversIfExist(data, 5);// Arrays.asList(data[5].split(","));
                         vehicle.setDrivers(drivers);
 
                         vehicleEquipment = new GPSDecorator(new AutoPilotDecorator(new LedLightsDecorator(
@@ -455,7 +448,7 @@ public class LoadInitData {
                         }
 
                         //  vehicle.setCapacity(Integer.valueOf(data[3]));
-                        List<String> drivers = Arrays.asList(data[5].split(","));
+                        List<Driver> drivers = laodNewDriversIfExist(data, 5);// Arrays.asList(data[5].split(","));
                         vehicle.setDrivers(drivers);
 
                         vehicleEquipment = new AutoPilotDecorator(new LedLightsDecorator(
@@ -480,7 +473,7 @@ public class LoadInitData {
                         }
 
                         //   vehicle.setCapacity(Integer.valueOf(data[3]));
-                        List<String> drivers = Arrays.asList(data[5].split(","));
+                        List<Driver> drivers = laodNewDriversIfExist(data, 5);// Arrays.asList(data[5].split(","));
                         vehicle.setDrivers(drivers);
 
                         vehicleEquipment = new ACDecorator(new LedLightsDecorator(
@@ -514,6 +507,35 @@ public class LoadInitData {
 
     }
 
+    private List<Driver> laodNewDriversIfExist(String[] data, int i) {
+        List<Driver> driverList = new ArrayList<>();
+
+        try {
+            if (data[i] != null) {
+                List<String> names = Arrays.asList(data[i].split(","));
+                driverList = createDriversByName(names);
+                if (driverList == null) {
+                    throw new Exception();
+                }
+            } else {
+                throw new Exception();
+            }
+        } catch (Exception e) {
+            builderDirector.addErrorInReport("Pogreška kod učitavanja vozača komande " + data, false);
+        }
+
+        return driverList;
+    }
+
+    private List<Driver> createDriversByName(List<String> names) {
+        List<Driver> driversList = new ArrayList<Driver>();
+
+        for (String name : names) {
+            driversList.add(new Driver(name.trim()));
+        }
+        return driversList;
+    }
+
     private void genrateWasteForUsersPrivate() {
 
         builderDirector.addEmptyLineInReport(false);
@@ -521,19 +543,36 @@ public class LoadInitData {
         builderDirector.addTitleInReport("Pridružene količine otpada po korisnicima", false);
 
         try {
-            for (int i = 0; i < streets.size(); i++) {
-                builderDirector.addTitleInReport(streets.get(i).getName(), false);
-                generateWasteForStreet(streets.get(i));
-            }
-            /*   streets.forEach((street) -> {
-                builderDirector.addTitleInReport(street.getName(), false);
-                generateWasteForStreet(street);
+//            for (int i = 0; i < streets.size(); i++) {
+//                builderDirector.addTitleInReport(streets.get(i).getName(), false);
+//                generateWasteForStreet(streets.get(i));
+//            }
+            for (CompositePlace compositePlace : areaRootElementList) {
+                generateWasteForEachStreet(compositePlace);
 
-            });*/
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    private void generateWasteForEachStreet(CompositePlace area) {
+
+        if (area instanceof CompositePlace && area.getmChildPlaces().size() == 0) {
+            return;
+        }
+
+        for (IPlace subArea : area.getmChildPlaces()) {
+            if (subArea instanceof Street) {
+
+                builderDirector.addTitleInReport(((Street) subArea).getName(), false);
+                generateWasteForStreet((Street) subArea);
+                return;
+            } else if (subArea instanceof CompositePlace) {
+                generateWasteForEachStreet((CompositePlace) subArea);
+            }
+        }
     }
 
     private void generateWasteForStreet(Street street) {
@@ -990,21 +1029,47 @@ public class LoadInitData {
 
     }
 
-    private void loadUsersForStreetsPrivate() {
+    private void loadUsersForStreetsAndAssignSpremnikPrivate() {
 
+//        try {
+//
+//            streets.forEach((k) -> {
+//
+//                setNumberOfUsersInStreet(k);
+//                setUsersInStreet(k);
+//
+//            }
+//            );
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         try {
-
-            streets.forEach((k) -> {
-
-                setNumberOfUsersInStreet(k);
-                setUsersInStreet(k);
+            for (CompositePlace compositePlace : areaRootElementList) {
+                loadUsersForArea(compositePlace);
 
             }
-            );
+
         } catch (Exception e) {
-            e.printStackTrace();
         }
 
+    }
+
+    private void loadUsersForArea(CompositePlace area) {
+
+        if (area instanceof CompositePlace && area.getmChildPlaces().size() == 0) {
+            return;
+        }
+
+        for (IPlace subArea : area.getmChildPlaces()) {
+            if (subArea instanceof Street) {
+                setNumberOfUsersInStreet((Street) subArea);
+                setUsersInStreet((Street) subArea);
+                assignSpremnikToStreet((Street) subArea);
+                return;
+            } else if (subArea instanceof CompositePlace) {
+                loadUsersForArea((CompositePlace) subArea);
+            }
+        }
     }
 
     private void setUsersInStreet(Street street) {
@@ -1169,13 +1234,12 @@ public class LoadInitData {
     }
 
     private void putTheStreetsInTheArea() {
-        areaRootElement = findRootArea();
-      //  System.out.println("ROOT is " + areaRootElement.getId() + " - " + areaRootElement.getName());
+        areaRootElementList = findRoots();
+        //  System.out.println("ROOT is " + areaRootElement.getId() + " - " + areaRootElement.getName());
 
-        areaRootElement = (CompositePlace) findAllSubAreasRecursive(areaRootElement);
-
-     //   System.out.println("tu sam");
-
+        for (CompositePlace compositePlace : areaRootElementList) {
+            compositePlace = (CompositePlace) findAllSubAreasRecursive(compositePlace);
+        }
     }
 
     private IPlace findAllSubAreasRecursive(IPlace compositePlace) {
@@ -1239,15 +1303,15 @@ public class LoadInitData {
         return place;
     }
 
-    private CompositePlace findRootArea() {
-        CompositePlace areaModelRoot = null;
+    private List<CompositePlace> findRoots() {
+        List<CompositePlace> areaModelRootList = new ArrayList<CompositePlace>();
 //todo check if exist more root area
         for (CompositePlace areaModel : areasModelList) {
             if (!checkIfItIsSubArea(areaModel)) {
-                return areaModelRoot = areaModel;
+                areaModelRootList.add(areaModel);//areaModel;
             }
         }
-        return areaModelRoot;
+        return areaModelRootList;
     }
 
     private boolean checkIfItIsSubArea(CompositePlace area) {
@@ -1319,8 +1383,8 @@ public class LoadInitData {
         return allVehicles;
     }
 
-    public CompositePlace getAreaRootElement() {
-        return areaRootElement;
+    public List<CompositePlace> getAreaRootElementList() {
+        return areaRootElementList;
     }
 
 }

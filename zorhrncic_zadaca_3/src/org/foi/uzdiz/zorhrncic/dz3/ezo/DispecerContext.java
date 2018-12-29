@@ -6,9 +6,11 @@
 package org.foi.uzdiz.zorhrncic.dz3.ezo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.foi.uzdiz.zorhrncic.dz3.composite.CompositePlace;
 import org.foi.uzdiz.zorhrncic.dz3.composite.Street;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.drivers.Driver;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.Vehicle;
 
 /**
@@ -23,7 +25,6 @@ public class DispecerContext {
     private List<Vehicle> allVehiclesInMalfunction;/// = new ArrayList<>();
     private List<Vehicle> allVehiclesAtLandfill;// = new ArrayList<>();
     private List<Vehicle> allVehiclesOnControll;// = new ArrayList<>();
-    private CompositePlace areaRootElement;
     private List<Street> streets;
     private boolean isVehicleSelectsStreet = false;
     private boolean isAllWasteCollected = false;
@@ -34,8 +35,10 @@ public class DispecerContext {
     private int selectedStreetIndex;
     private Street selectedStreet;
     private ArrayList<Integer> randomStreetArray;
+    private final List<CompositePlace> areaRootElement;
+    private final List<Driver> driversList;
 
-    public DispecerContext(List<Vehicle> allVehicles, List<Street> allStreets, CompositePlace areaRootElement) {
+    public DispecerContext(List<Vehicle> allVehicles, List<Street> allStreets, List<CompositePlace> areaRootElement) {
         this.allVehicles = new ArrayList<Vehicle>(allVehicles);
         this.allVehiclesAtParking = allVehicles;
         this.allVehiclesInProcess = new ArrayList<Vehicle>();
@@ -46,6 +49,7 @@ public class DispecerContext {
 
         this.streets = allStreets;
         this.areaRootElement = areaRootElement;
+        this.driversList = getAllDriversFromVehicles(allVehicles);
     }
 
     public List<Vehicle> getAllVehicles() {
@@ -167,5 +171,27 @@ public class DispecerContext {
 
     public List<Vehicle> getAllVehiclesOnControll() {
         return allVehiclesOnControll;
+    }
+
+    public List<CompositePlace> getAreaRootElement() {
+        return areaRootElement;
+    }
+
+    public List<Driver> getDriversList() {
+        return driversList;
+    }
+
+    private List<Driver> getAllDriversFromVehicles(List<Vehicle> allVehicles) {
+        List<Driver> driverList = new ArrayList<>();
+
+        try {
+            for (Vehicle allVehicle : allVehicles) {
+                driverList.addAll(allVehicle.getDrivers());
+            }
+        } catch (Exception e) {
+//
+        }
+
+        return driverList;
     }
 }

@@ -37,12 +37,12 @@ public class CommandExecutorIsprazni extends CommandExecutor {
         for (Vehicle vehicle : command.getVehiclesList()) {
             if (context.getAllVehiclesInProcess().contains(vehicle) && !context.getAllVehiclesAtLandfill().contains(vehicle)) {
                 driveToLandfill(vehicle);
-                this.builderDirector.addTextLineInReport("Vozilo u istovaruje.. ID:" + vehicle.getId(), true);
+              //  this.builderDirector.addTextLineInReport("Vozilo u istovaruje.. ID:" + vehicle.getId(), true);
 
             }
             if (context.getAllVehiclesInMalfunction().contains(vehicle) && !context.getAllVehiclesAtLandfill().contains(vehicle)) {
                 driveToLandfill(vehicle);
-                this.builderDirector.addTextLineInReport("Vozilo u istovaruje.. ID:" + vehicle.getId(), true);
+              //  this.builderDirector.addTextLineInReport("Vozilo u istovaruje.. ID:" + vehicle.getId(), true);
 
             }
         }
