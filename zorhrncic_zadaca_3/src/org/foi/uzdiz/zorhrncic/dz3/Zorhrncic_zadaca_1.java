@@ -55,6 +55,10 @@ public class Zorhrncic_zadaca_1 {
             CommonDataSingleton.getInstance().loadParametes(args[0]);
             //CommonDataSingleton.getInstance().printProp();
 
+//            for (int i = 0; i < 50; i++) {
+//                CommonDataSingleton.getInstance().getReportBuilderDirector().addTextLineInReport(i + ". redak", true);
+//            }
+
             LoadInitData load = new LoadInitData();
             load.loadData();
 

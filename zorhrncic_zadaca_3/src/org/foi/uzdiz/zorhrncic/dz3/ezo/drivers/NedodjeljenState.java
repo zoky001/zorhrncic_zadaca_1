@@ -11,13 +11,13 @@ import org.foi.uzdiz.zorhrncic.dz3.shared.TypeOfDriverState;
  *
  * @author Zoran
  */
-public class BolovanjeState extends IDriverState{
+public class NedodjeljenState extends IDriverState {
 
     @Override
     public void zauzmiVozilo(Driver driver) {
         //todo vidi malo uvjete
         driver.setState(driver.getZauzet());
-        this.builderDirectior.addTextLineInReport("Vozač " + driver.getName() + " zauzima vozilo!!", true);
+        this.builderDirectior.addTextLineInReport("Vozač " + driver.getName() + " zauzima vozilo "+driver.getVehicle().getName()+"!!", true);
     }
 
     @Override
@@ -41,18 +41,18 @@ public class BolovanjeState extends IDriverState{
 
     @Override
     public void idiNaBolovanje(Driver driver) {
-        this.builderDirectior.addTextLineInReport("Vozač je već na bolovanju!!", true);
-    }
-
-    @Override
-    public TypeOfDriverState getState() {
-        return TypeOfDriverState.BOLOVANJE;
+        driver.setState(driver.getBolovanje());
+        this.builderDirectior.addTextLineInReport("Vozač " + driver.getName() + " ide na bolovanje!!", true);
     }
 
     @Override
     public void postaniNedodjeljen(Driver driver) {
-        driver.setState(driver.getNedodjeljen());
-        this.builderDirectior.addTextLineInReport("Vozač " + driver.getName() + " je nedodjeljen!!", true);
+        this.builderDirectior.addTextLineInReport("Vozač je već nedodjeljen!!", true);
     }
-    
+
+    @Override
+    public TypeOfDriverState getState() {
+        return TypeOfDriverState.NEDODJELJEN;
+    }
+
 }

@@ -45,6 +45,7 @@ import org.foi.uzdiz.zorhrncic.dz3.iterator.CommandRepository;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.TypeOfCommand;
 import org.foi.uzdiz.zorhrncic.dz3.waste.BioWaste;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.IIterator;
+import org.foi.uzdiz.zorhrncic.dz3.shared.TypeOfDriverState;
 
 /**
  *
@@ -114,60 +115,44 @@ public class Dispecer {
                 Command command = iterator.next();
                 //System.out.println(command.getTypeOfCommand());
                 dispecerContext = commandExecutor.executeCommand(command, dispecerContext);
+                assignFreeDriversToVehicles();
             } catch (Exception ex) {
                 Logger.getLogger(Dispecer.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
-        /*
-         this.builderDirector.addTitleInReport("Početak sakupljanja otpada po ulicama", false);
+    }
 
-        if (((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.preuzimanje)).equalsIgnoreCase(Constants.VOZILA_NE_ODREDJUJE)) {
-            randomStreetArray = CommonDataSingleton.getInstance().getRandomArray(streets.size());
-            isVehicleSelectsStreet = false;
-        } else if (((String) CommonDataSingleton.getInstance().getParameterByKey(Constants.preuzimanje)).equalsIgnoreCase(Constants.VOZILO_ODREDJUJE)) {
-            isVehicleSelectsStreet = true;
-        } else {
-            builderDirector.addErrorInReport("Nedostaje parametar \"preuzimanje\" !!", false);
-            System.exit(0);
-        }
+    private void assignFreeDriversToVehicles() {
+        try {
+            for (Vehicle vehicle : dispecerContext.getAllVehicles()) {
+                if (!isExistMainDriver(vehicle)) {
+                    Driver d = findFreeDriver();
+                    if (d != null) {
+                        d.zauzmiVozilo(vehicle);
+                    } else {
+                        builderDirector.addTextLineInReport("DISPEČER: Nema nedodjenjenih vozača za vozilo " + vehicle.getName() + "!", true);
 
-        ArrayList<Integer> randomArray = CommonDataSingleton.getInstance().getRandomArray(allVehiclesInProcess.size());
-        while (!isAllWasteCollected || landfill.getAllVehiclesAtLandfill().size() > 0) {
-            isAllWasteCollected = true;
-            for (int i = 0; i < randomArray.size(); i++) {
-
-                vehicleInProcess = chooseVehicle(randomArray.get(i));
-                if (checkIsVehicleAtLandfill(vehicleInProcess)) {
-                    continue;
+                    }
                 }
 
-                pickUpWaste(vehicleInProcess);
-
             }
-            cycleNumber++;
+        } catch (Exception e) {
         }
+    }
 
-        driveAllVehiclesToTheLandfill();
+    private Driver findFreeDriver() {
+        try {
+            for (Driver driver : dispecerContext.getDriversList()) {
+                if (driver.getState() == TypeOfDriverState.NEDODJELJEN) {
+                    return driver;
+                }
+            }
 
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addTitleInReport("Završeno sakupljanje otpad!!!", false);
-        this.builderDirector.addTitleInReport("Završeno sakupljanje otpad!!!", false);
-        this.builderDirector.addTitleInReport("Završeno sakupljanje otpad!!!", false);
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addEmptyLineInReport(false);
+        } catch (Exception e) {
 
-        landfill.creteReport();
-
-        streets.forEach((k) -> {
-
-            //     k.print();
-            // Spremnik.printArray(k.getSpremnikList());
-        });
-         */
+        }
+        return null;
     }
 
     private void driveAllVehiclesToTheLandfill() {
@@ -365,6 +350,18 @@ public class Dispecer {
 
         return streetArray;
 
+    }
+
+    private boolean isExistMainDriver(Vehicle vehicle) {
+        try {
+            for (Driver driver : vehicle.getDrivers()) {
+                if (driver.getState() == TypeOfDriverState.VOZI_KAMION) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+        }
+        return false;
     }
 
 }

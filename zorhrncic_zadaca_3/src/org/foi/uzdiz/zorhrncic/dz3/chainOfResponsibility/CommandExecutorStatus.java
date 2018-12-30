@@ -5,11 +5,14 @@
  */
 package org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility;
 
+import java.util.List;
 import org.foi.uzdiz.zorhrncic.dz3.composite.CompositePlace;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.DispecerContext;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.drivers.Driver;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.Vehicle;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.Command;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.TypeOfCommand;
+import org.foi.uzdiz.zorhrncic.dz3.shared.TypeOfDriverState;
 
 /**
  *
@@ -25,7 +28,7 @@ public class CommandExecutorStatus extends CommandExecutor {
     protected DispecerContext executeCommandPrivate(Command command, DispecerContext dispecerContext) {
         this.command = command;
         this.context = dispecerContext;
-      //  System.out.println("JA SAM COMMAND EXECUTOR __ STATUS ___ : " + command.getTypeOfCommand().getCommand());
+        //  System.out.println("JA SAM COMMAND EXECUTOR __ STATUS ___ : " + command.getTypeOfCommand().getCommand());
         this.builderDirector.addTitleInReport("Izvršavam komandu \"STATUS\"..", true);
         printStatus();
         this.builderDirector.addTitleInReport("Završena komanda \"STATUS\"..", true);
@@ -34,19 +37,20 @@ public class CommandExecutorStatus extends CommandExecutor {
     }
 
     private void printStatus() {
+        String line;
         for (Vehicle vehicle : context.getAllVehicles()) {
             if (!context.getAllVehiclesInMalfunction().contains(vehicle)) {
 
                 this.builderDirector.addDividerLineInReport(true);
                 this.builderDirector.addTextLineInReport("------------------------------------------------", true);
-
+                line = "   ID VOZILA: " + vehicle.getId() + "  |  IME VOZILA: " + vehicle.getName() + " |  SATUS: " + getStatus(vehicle);
                 this.builderDirector.addTextLineInReport("------------------------------------------------", true);
-                this.builderDirector.addTextLineInReport("|          IME VOZILA: " + vehicle.getName() + "                 ", true);
+                this.builderDirector.addTextLineInReport("|" + line, true);
                 this.builderDirector.addTextLineInReport("------------------------------------------------", true);
-                this.builderDirector.addTextLineInReport("|          ID VOZILA: " + vehicle.getId() + "                 ", true);
-                this.builderDirector.addTextLineInReport("------------------------------------------------", true);
-                this.builderDirector.addTextLineInReport("|          Status vozila: " + getStatus(vehicle) + "                 ", true);
-                this.builderDirector.addTextLineInReport("------------------------------------------------", true);
+                //  this.builderDirector.addTextLineInReport("|          ID VOZILA: " + vehicle.getId() + "                 ", true);
+                //  this.builderDirector.addTextLineInReport("------------------------------------------------", true);
+                //  this.builderDirector.addTextLineInReport("|          Status vozila: " + getStatus(vehicle) + "                 ", true);
+                //  this.builderDirector.addTextLineInReport("------------------------------------------------", true);
                 this.builderDirector.addTextLineInReport("|   Količina u vozilu:            |  " + vehicle.getFilled(), true);
                 this.builderDirector.addTextLineInReport("------------------------------------------------", true);
                 this.builderDirector.addTextLineInReport("|   Količina do popunjavanja:     |  " + (vehicle.getCapacity() - vehicle.getFilled()), true);
@@ -61,7 +65,7 @@ public class CommandExecutorStatus extends CommandExecutor {
                 this.builderDirector.addTextLineInReport("------------------------------------------------", true);
                 this.builderDirector.addTextLineInReport("|   Tip motora:                   |  " + vehicle.getTypesOfVehicleEngine().name(), true);
                 this.builderDirector.addTextLineInReport("------------------------------------------------", true);
-                this.builderDirector.addTextLineInReport("|   Vozači:                       |  " + vehicle.getDrivers().toString(), true);
+                this.builderDirector.addTextLineInReport("|   Vozači:                       |  " + getDriversList(vehicle.getDrivers()), true);
                 this.builderDirector.addTextLineInReport("------------------------------------------------", true);
                 this.builderDirector.addDividerLineInReport(true);
 
@@ -96,6 +100,21 @@ public class CommandExecutorStatus extends CommandExecutor {
             }
 
         }
+    }
+
+    private String getDriversList(List<Driver> drivers) {
+        String line = "";
+        try {
+            for (Driver driver : drivers) {
+                if (driver.getState() == TypeOfDriverState.VOZI_KAMION) {
+                    line = line + " " + driver.getName().toUpperCase() + ", ";
+                } else {
+                    line = line + " " + driver.getName() + ", ";
+                }
+            }
+        } catch (Exception e) {
+        }
+        return line;
     }
 
     private String getStatus(Vehicle vehicle) {

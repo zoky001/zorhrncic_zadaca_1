@@ -9,12 +9,12 @@ package org.foi.uzdiz.zorhrncic.dz3.shared;
  *
  * @author Zoran
  */
-public enum TypeOfDriverState {
+public enum TypeOfVehicleState {
     //  0 - staklo, 1 - papir, 2 - metal, 3 - bio, 4 - mješano
-    RASPOLOZIV,
-    NEDODJELJEN,
-    VOZI_KAMION,
-    GO,
-    BOLOVANJE,
-    OTKAZ
+    READY,
+    CRASH,
+    PARKING,
+    LANDFILL,
+    CONTROL,
+    GAS_STATION
 }

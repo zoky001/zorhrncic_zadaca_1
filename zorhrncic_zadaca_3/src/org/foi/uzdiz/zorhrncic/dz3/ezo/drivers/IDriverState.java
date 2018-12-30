@@ -32,6 +32,8 @@ public abstract class IDriverState {
     public abstract void dajOtkaz(Driver driver);
 
     public abstract void idiNaBolovanje(Driver driver);
+    
+    public abstract void postaniNedodjeljen(Driver driver);
 
     public abstract TypeOfDriverState getState();
 }

@@ -34,10 +34,12 @@ public class VT100Controller {
                 System.exit(0); //todo 
             } else {
                 printInputLine("Nastavak...");
+
             }
 
             // clearInputTerminal();
             vT100View.clearOutputTerminal();
+            printOutputLine(text);
         }
     }
 

@@ -46,7 +46,7 @@ public class CommandExecutorVozaci extends CommandExecutor {
                 this.builderDirector.addTextLineInReport("------------------------------------------------", true);
                 this.builderDirector.addTextLineInReport("|          STATUS VOZAČA: " + driver.getState().toString() + "                 ", true);
                 this.builderDirector.addTextLineInReport("------------------------------------------------", true);
-                if (driver.getState() == TypeOfDriverState.VOZI_KAMION) {
+                if (driver.getState() == TypeOfDriverState.VOZI_KAMION || driver.getState() == TypeOfDriverState.RASPOLOZIV) {
                     this.builderDirector.addTextLineInReport("|          VOZI KAMION: " + driver.getVehicle().getName() + "                 ", true);
                     this.builderDirector.addTextLineInReport("------------------------------------------------", true);
                 }

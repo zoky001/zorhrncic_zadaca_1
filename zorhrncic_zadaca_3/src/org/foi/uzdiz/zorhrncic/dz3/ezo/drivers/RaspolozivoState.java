@@ -17,7 +17,7 @@ public class RaspolozivoState extends IDriverState {
     public void zauzmiVozilo(Driver driver) {
         //todo vidi malo uvjete
         driver.setState(driver.getZauzet());
-        this.builderDirectior.addTextLineInReport("Vozač " + driver.getName() + " zauzima vozilo "+ driver.getVehicle().getName()+ "!!", true);
+        this.builderDirectior.addTextLineInReport("Vozač " + driver.getName() + " zauzima vozilo " + driver.getVehicle().getName() + "!!", true);
     }
 
     @Override
@@ -49,6 +49,12 @@ public class RaspolozivoState extends IDriverState {
     @Override
     public TypeOfDriverState getState() {
         return TypeOfDriverState.RASPOLOZIV;
+    }
+
+    @Override
+    public void postaniNedodjeljen(Driver driver) {
+        driver.setState(driver.getNedodjeljen());
+        this.builderDirectior.addTextLineInReport("Vozač " + driver.getName() + " je nedodjeljen!!", true);
     }
 
 }

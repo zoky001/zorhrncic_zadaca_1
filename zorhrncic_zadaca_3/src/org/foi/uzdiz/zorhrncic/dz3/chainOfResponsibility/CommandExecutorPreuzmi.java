@@ -35,22 +35,26 @@ public class CommandExecutorPreuzmi extends CommandExecutor {
     }
 
     private void proccessing() {
+        Driver oldDriver = command.getDriversList().get(0);
+        Vehicle vehicle = command.getVehiclesList().get(0);
         try {
             if (command.getDriversList().size() > 0 && command.getVehiclesList().size() > 0) {
-                if (command.getDriversList().get(0).getState() == TypeOfDriverState.VOZI_KAMION) {
-                    Driver driver = findFreeDriver();
-                    if (driver != null) {
-                        driver.zauzmiVozilo(command.getDriversList().get(0).getVehicle());
-                        this.builderDirector.addTextLineInReport("Vozilo \"" + command.getDriversList().get(0).getVehicle().getName() + "\" "
-                                + "preuzima vozač \"" + driver.getName() + "\"", true);
-
-                    }
-                    command.getDriversList().get(0).postaniRaspoloziv();
+                if (oldDriver.getState() == TypeOfDriverState.VOZI_KAMION) {
+//                    Driver driver = findFreeDriver(oldDriver.getVehicle());
+//                    if (driver != null) {
+//                        driver.zauzmiVozilo(oldDriver.getVehicle());
+//                        this.builderDirector.addTextLineInReport("Vozilo \"" + oldDriver.getVehicle().getName() + "\" "
+//                                + "preuzima vozač \"" + driver.getName() + "\"", true);
+//
+//                    }
 
                 }
-                command.getDriversList().get(0).zauzmiVozilo(command.getVehiclesList().get(0));
-                this.builderDirector.addTextLineInReport("Vozač \"" + command.getDriversList().get(0).getName() + "\" "
-                        + "preuzima vozilo \"" + command.getVehiclesList().get(0).getName() + "\"", true);
+
+                if (oldDriver.getState() == TypeOfDriverState.VOZI_KAMION || oldDriver.getState() == TypeOfDriverState.RASPOLOZIV) {
+                    oldDriver.postaniNedodjeljen();
+                }
+                this.builderDirector.addTextLineInReport("Vozač \"" + oldDriver.getName() + "\" preuzima vozilo \"" + vehicle.getName() + "\"", true);
+                oldDriver.zauzmiVozilo(vehicle);
 
             }
         } catch (Exception e) {
@@ -58,18 +62,6 @@ public class CommandExecutorPreuzmi extends CommandExecutor {
         }
     }
 
-    private Driver findFreeDriver() {
-        try {
-            for (Driver driver : context.getDriversList()) {
-                if (driver.getState() == TypeOfDriverState.RASPOLOZIV) {
-                    return driver;
-                }
-            }
 
-        } catch (Exception e) {
-
-        }
-        return null;
-    }
 
 }

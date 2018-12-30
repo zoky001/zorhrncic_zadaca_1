@@ -38,6 +38,7 @@ public class CommandExecutorNovi extends CommandExecutor {
         try {
             for (Driver driver : command.getDriversList()) {
                 this.builderDirector.addTextLineInReport("Dodan novi vozač \"" + driver.getName() + "\"", true);
+                driver.postaniNedodjeljen();
                 this.context.getDriversList().add(driver);
             }
         } catch (Exception e) {

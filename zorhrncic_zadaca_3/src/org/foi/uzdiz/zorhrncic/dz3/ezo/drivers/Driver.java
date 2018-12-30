@@ -19,6 +19,7 @@ public class Driver {
     private IDriverState bolovanje;
     private IDriverState godisnji;
     private IDriverState otkaz;
+    private IDriverState nedodjeljen;
     private IDriverState state;
 
     private String name;
@@ -30,6 +31,7 @@ public class Driver {
         this.bolovanje = new BolovanjeState();
         this.godisnji = new GodisnjiState();
         this.otkaz = new OtkazState();
+        this.nedodjeljen = new NedodjeljenState();
 
         this.state = this.raspoloziv;
 
@@ -39,7 +41,52 @@ public class Driver {
     public void zauzmiVozilo(Vehicle vehicle) {
         //todo vidi malo uvjete
         this.vehicle = vehicle;
+        postaviStarogVozacaRaspolozivim(vehicle);
+        dodajNovogVozacaAkoNePostoji(vehicle);
         this.state.zauzmiVozilo(this);
+    }
+
+    private void dodajNovogVozacaAkoNePostoji(Vehicle vehicle) {
+        try {
+            if (!vehicle.getDrivers().contains(this)) {
+                vehicle.getDrivers().add(this);
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    private void postaviStarogVozacaRaspolozivim(Vehicle vehicle) {
+        try {
+            for (Driver driver : vehicle.getDrivers()) {
+                if (driver.getState() == TypeOfDriverState.VOZI_KAMION && driver != this) {
+                    driver.postaniRaspoloziv();
+                }
+            }
+        } catch (Exception e) {
+        }
+
+    }
+
+    public void postaniNedodjeljen() {
+        obrisiOvogVozacaSListeVozaca();
+        this.state.postaniNedodjeljen(this);
+        if (this.vehicle != null) {
+            Driver d = findFreeDriver(this.vehicle);
+            if (d != null) {
+                d.zauzmiVozilo(this.vehicle);
+            }
+        }
+        this.vehicle = null;
+    }
+
+    private void obrisiOvogVozacaSListeVozaca() {
+        try {
+            if (this.vehicle != null && this.vehicle.getDrivers().contains(this)) {
+                this.vehicle.getDrivers().remove(this);
+               // this.vehicle = null;
+            }
+        } catch (Exception e) {
+        }
     }
 
     public void postaniRaspoloziv() {
@@ -47,15 +94,54 @@ public class Driver {
     }
 
     public void idiNaGO() {
+        obrisiOvogVozacaSListeVozaca();
         this.state.idiNaGO(this);
+        if (this.vehicle != null) {
+            Driver d = findFreeDriver(this.vehicle);
+            if (d != null) {
+                d.zauzmiVozilo(this.vehicle);
+            }
+        }
+        this.vehicle = null;
     }
 
     public void dajOtkaz() {
+        obrisiOvogVozacaSListeVozaca();
         this.state.dajOtkaz(this);
+        if (this.vehicle != null) {
+            Driver d = findFreeDriver(this.vehicle);
+            if (d != null) {
+                d.zauzmiVozilo(this.vehicle);
+            }
+        }
+        this.vehicle = null;
+
     }
 
     public void idiNaBolovanje() {
+        obrisiOvogVozacaSListeVozaca();
         this.state.idiNaBolovanje(this);
+        if (this.vehicle != null) {
+            Driver d = findFreeDriver(this.vehicle);
+            if (d != null) {
+                d.zauzmiVozilo(this.vehicle);
+            }
+        }
+        this.vehicle = null;
+
+    }
+
+    private Driver findFreeDriver(Vehicle v) {
+        try {
+            for (Driver driver : vehicle.getDrivers()) {
+                if (driver.getState() == TypeOfDriverState.RASPOLOZIV && driver.getVehicle() == v) {
+                    return driver;
+                }
+            }
+        } catch (Exception e) {
+
+        }
+        return null;
     }
 
     public TypeOfDriverState getState() {
@@ -97,4 +183,9 @@ public class Driver {
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
     }
+
+    public IDriverState getNedodjeljen() {
+        return nedodjeljen;
+    }
+
 }

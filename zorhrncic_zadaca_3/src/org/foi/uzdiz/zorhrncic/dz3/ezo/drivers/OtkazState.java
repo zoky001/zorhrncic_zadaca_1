@@ -49,4 +49,10 @@ public class OtkazState extends IDriverState {
         return TypeOfDriverState.OTKAZ;
     }
 
+    @Override
+    public void postaniNedodjeljen(Driver driver) {
+        driver.setState(driver.getNedodjeljen());
+        this.builderDirectior.addTextLineInReport("Vozač " + driver.getName() + " je nedodjeljen!!", true);
+    }
+
 }

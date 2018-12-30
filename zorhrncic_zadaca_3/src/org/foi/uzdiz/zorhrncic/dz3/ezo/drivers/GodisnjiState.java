@@ -50,4 +50,10 @@ public class GodisnjiState extends IDriverState {
         return TypeOfDriverState.GO;
     }
 
+    @Override
+    public void postaniNedodjeljen(Driver driver) {
+        driver.setState(driver.getNedodjeljen());
+        this.builderDirectior.addTextLineInReport("Vozač " + driver.getName() + " je nedodjeljen!!", true);
+    }
+
 }

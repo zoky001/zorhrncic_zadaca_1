@@ -47,7 +47,13 @@ public class ZauzetoState extends IDriverState {
 
     @Override
     public TypeOfDriverState getState() {
-        return TypeOfDriverState.VOZI_KAMION ;
+        return TypeOfDriverState.VOZI_KAMION;
+    }
+
+    @Override
+    public void postaniNedodjeljen(Driver driver) {
+        driver.setState(driver.getNedodjeljen());
+        this.builderDirectior.addTextLineInReport("Vozač " + driver.getName() + " je nedodjeljen!!", true);
     }
 
 }

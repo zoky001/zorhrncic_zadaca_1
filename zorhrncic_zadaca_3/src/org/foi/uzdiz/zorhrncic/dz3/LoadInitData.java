@@ -377,6 +377,9 @@ public class LoadInitData {
                         List<Driver> drivers = laodNewDriversIfExist(data, 5);// Arrays.asList(data[5].split(","));
                         if (drivers.size() > 0) {
                             drivers.get(0).zauzmiVozilo(vehicle);
+                            for (Driver driver : drivers) {
+                                driver.setVehicle(vehicle);
+                            }
                         }
                         vehicle.setDrivers(drivers);
 
@@ -405,6 +408,9 @@ public class LoadInitData {
                         List<Driver> drivers = laodNewDriversIfExist(data, 5);// Arrays.asList(data[5].split(","));
                         if (drivers.size() > 0) {
                             drivers.get(0).zauzmiVozilo(vehicle);
+                            for (Driver driver : drivers) {
+                                driver.setVehicle(vehicle);
+                            }
                         }
                         vehicle.setDrivers(drivers);
 
@@ -433,6 +439,9 @@ public class LoadInitData {
                         List<Driver> drivers = laodNewDriversIfExist(data, 5);// Arrays.asList(data[5].split(","));
                         if (drivers.size() > 0) {
                             drivers.get(0).zauzmiVozilo(vehicle);
+                            for (Driver driver : drivers) {
+                                driver.setVehicle(vehicle);
+                            }
                         }
                         vehicle.setDrivers(drivers);
 
@@ -460,6 +469,9 @@ public class LoadInitData {
                         List<Driver> drivers = laodNewDriversIfExist(data, 5);// Arrays.asList(data[5].split(","));
                         if (drivers.size() > 0) {
                             drivers.get(0).zauzmiVozilo(vehicle);
+                            for (Driver driver : drivers) {
+                                driver.setVehicle(vehicle);
+                            }
                         }
                         vehicle.setDrivers(drivers);
 
@@ -488,6 +500,9 @@ public class LoadInitData {
                         List<Driver> drivers = laodNewDriversIfExist(data, 5);// Arrays.asList(data[5].split(","));
                         if (drivers.size() > 0) {
                             drivers.get(0).zauzmiVozilo(vehicle);
+                            for (Driver driver : drivers) {
+                                driver.setVehicle(vehicle);
+                            }
                         }
                         vehicle.setDrivers(drivers);
 
