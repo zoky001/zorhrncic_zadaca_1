@@ -18,6 +18,7 @@ import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.VehicleGlass;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.VehicleMetal;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.VehicleMixed;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.VehiclePaper;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.state.TypeOfVehicleState;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.Command;
 import org.foi.uzdiz.zorhrncic.dz3.shared.Constants;
 import org.foi.uzdiz.zorhrncic.dz3.shared.TypesOfWaste;
@@ -73,22 +74,30 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
 
         // ArrayList<Integer> randomArray = CommonDataSingleton.getInstance().getRandomArray(allVehiclesInProcess.size());
         int numberOfRequiredCycle = command.getValue();
-        while ((!context.isIsAllWasteCollected() || context.getAllVehiclesAtLandfill().size() > 0) && numberOfRequiredCycle > 0) {
+        while ((!context.isIsAllWasteCollected() || context.getAllVehiclesAtLandfill().size() > 0 || context.getAllVehiclesAtGasStation().size() > 0) && numberOfRequiredCycle > 0) {
             context.setIsAllWasteCollected(true);
-            for (int i = 0; i < context.getAllVehiclesInProcess().size(); i++) {
+            for (int i = 0; i < context.getAllVehicles().size(); i++) {
+                Vehicle v = context.getAllVehicles().get(i);
+                if (v.getState() == TypeOfVehicleState.READY || v.getState() == TypeOfVehicleState.LANDFILL || v.getState() == TypeOfVehicleState.GAS_STATION) {
+                    context.setVehicleInProcess(v);
+                    if (checkIsVehicleAtLandfill(context.getVehicleInProcess())) {
+                        continue;
+                    }
+                    if (context.getVehicleInProcess().checkIsFilledAtGasStation()) {
+                        continue;
+                    }
 
-                context.setVehicleInProcess(context.getAllVehiclesInProcess().get(i));
-                if (checkIsVehicleAtLandfill(context.getVehicleInProcess())) {
-                    continue;
+                    pickUpWaste(context.getVehicleInProcess());
+                    context.getVehicleInProcess().increaseNumberOfPerformedCycles();
+
+                    context.setCycleNumber(context.getCycleNumber() + 1);
+                    numberOfRequiredCycle--;
+
+                    if (numberOfRequiredCycle <= 0) {
+                        break;
+                    }
                 }
 
-                pickUpWaste(context.getVehicleInProcess());
-                context.setCycleNumber(context.getCycleNumber() + 1);
-                numberOfRequiredCycle--;
-
-                if (numberOfRequiredCycle <= 0) {
-                    break;
-                }
             }
 
         }
@@ -97,9 +106,9 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
         this.builderDirector.addEmptyLineInReport(true);
         this.builderDirector.addEmptyLineInReport(true);
         this.builderDirector.addEmptyLineInReport(true);
-        this.builderDirector.addTitleInReport("Završeno sakupljanje otpad!!!", true);
-        this.builderDirector.addTitleInReport("Završeno sakupljanje otpad!!!", true);
-        this.builderDirector.addTitleInReport("Završeno sakupljanje otpad!!!", true);
+        this.builderDirector.addTitleInReport("Završeno sakupljanje otpad u " + numberOfRequiredCycle + " ciklusa!!!", true);
+        this.builderDirector.addTitleInReport("Završeno sakupljanje otpad u  " + numberOfRequiredCycle + " ciklusa!!!", true);
+        this.builderDirector.addTitleInReport("Završeno sakupljanje otpad u  " + numberOfRequiredCycle + " ciklusa!!!", true);
         this.builderDirector.addEmptyLineInReport(true);
         this.builderDirector.addEmptyLineInReport(true);
         this.builderDirector.addEmptyLineInReport(true);
@@ -109,12 +118,17 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
 
     private void driveAllVehiclesToTheLandfill() {
         try {
-            for (int i = 0; i < context.getAllVehiclesInProcess().size(); i++) {
-                if (!context.getAllVehiclesAtLandfill().contains(context.getAllVehiclesInProcess().get(i))) {
-                    //landfill.vehicleComesToLandfill(allVehiclesInProcess.get(i));
-                    driveToLandfill(context.getAllVehiclesInProcess().get(i));
-                }
+            for (int i = 0; i < context.getAllVehicles().size(); i++) {
+
+                driveToLandfill(context.getAllVehicles().get(i));
+
             }
+//            for (int i = 0; i < context.getAllVehiclesInProcess().size(); i++) {
+//                if (!context.getAllVehiclesAtLandfill().contains(context.getAllVehiclesInProcess().get(i))) {
+//                    //landfill.vehicleComesToLandfill(allVehiclesInProcess.get(i));
+//                    driveToLandfill(context.getAllVehiclesInProcess().get(i));
+//                }
+//            }
 
         } catch (Exception e) {
 
@@ -155,17 +169,28 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
 
         for (int i = 0; i < streetArray.size(); i++) {
             context.setSelectedStreetIndex(i);
-            context.setSelectedStreet(context.getStreets().get(streetArray.get(i)));
-            if (vehicle.getLastStreet() > -1 && vehicle.getLastStreet() > i) {
-                continue;
-            } else if (vehicle.getLastStreet() > -1 && vehicle.getLastStreet() == i) {
-                vehicle.resetLastStreet();
+            Street street = context.getStreets().get(streetArray.get(i));
+            context.setSelectedStreet(street);
+            if (getStreetByVahicle(vehicle).contains(street)) {
+                if (vehicle.getLastStreet() > -1 && vehicle.getLastStreet() > i) {
+                    continue;
+                } else if (vehicle.getLastStreet() > -1 && vehicle.getLastStreet() == i) {
+                    vehicle.resetLastStreet();
+                }
+                if (pickUpWasteInStreet(vehicle, context.getSelectedStreet())) {
+                    return;
+                }
             }
-            if (pickUpWasteInStreet(vehicle, context.getSelectedStreet())) {
-                return;
-            }
-
         }
+
+    }
+
+    private ArrayList<Street> getStreetByVahicle(Vehicle vehicle) {
+        try {
+            return vehicle.getStreets();
+        } catch (Exception e) {
+        }
+        return vehicle.getStreets();
 
     }
 

@@ -35,8 +35,6 @@ public class ReportBuilderDirector {
         addEmptyLineInReport(isStatistic);
         String divider = Constants.ANSI_BLUE + "*****************************************************************************************" + Constants.ANSI_RESET;
 
-
-
         addTextLineInReport(divider, isStatistic);
         divider = Constants.ANSI_BLUE + "                    " + line.toUpperCase() + Constants.ANSI_RESET;
         OneLine oneLine = new OneLine(new Date(), divider, id++, isStatistic);
@@ -111,13 +109,15 @@ public class ReportBuilderDirector {
         if (isStatistic) {
 
             if (line.isIsStatistic()) {
-                // System.out.println(line.toString());
-                vt100.printOutputLine(line.getData());
+                System.out.println(line.toString());
+                //   vt100.printOutputLine(line.getData());
 
             }
 
         } else {
-            vt100.printOutputLine(line.getData());
+            //  vt100.printOutputLine(line.getData());
+            System.out.println(line.toString());
+
         }
 
     }

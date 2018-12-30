@@ -29,32 +29,28 @@ import org.foi.uzdiz.zorhrncic.dz3.waste.Waste;
  */
 public class Landfill {
 
-    private List<Vehicle> allVehiclesAtLandfill;
-
     private Waste bioWaste;
     private Waste glassWaste;
     private Waste metalWaste;
     private Waste mixedWaste;
     private Waste paperWaste;
     private final ReportBuilderDirector builderDirector;
+    private final DispecerContext dispecerContext;
 
-    public Landfill() {
-        this.allVehiclesAtLandfill = new ArrayList<Vehicle>();
+    public Landfill(DispecerContext dispecerContext) {
         this.bioWaste = new BioWaste(0);
         this.glassWaste = new GlassWaste(0);
         this.metalWaste = new MetalWaste(0);
         this.mixedWaste = new MixedWaste(0);
         this.paperWaste = new PaperWaste(0);
 
+        this.dispecerContext = dispecerContext;
+
         builderDirector = CommonDataSingleton.getInstance().getReportBuilderDirector();
     }
 
     public List<Vehicle> getAllVehiclesAtLandfill() {
-        return allVehiclesAtLandfill;
-    }
-
-    public void setAllVehiclesAtLandfill(List<Vehicle> allVehiclesAtLandfill) {
-        this.allVehiclesAtLandfill = allVehiclesAtLandfill;
+        return dispecerContext.getAllVehiclesAtLandfill();
     }
 
     public void vehicleComesToLandfill(Vehicle vehicle) {
@@ -90,6 +86,7 @@ public class Landfill {
         }
 
         getAllVehiclesAtLandfill().add(vehicle);
+        vehicle.goToLandFill();
 
     }
 
@@ -118,8 +115,8 @@ public class Landfill {
         this.builderDirector.addDividerLineInReport(true);
         float total = 0;
         Vehicle v;
-        for (int i = 0; i < allVehiclesAtLandfill.size(); i++) {
-            v = allVehiclesAtLandfill.get(i);
+        for (int i = 0; i < getAllVehiclesAtLandfill().size(); i++) {
+            v = getAllVehiclesAtLandfill().get(i);
             total = total + v.getNumberOfProcessedContainers();
             this.builderDirector.addTextLineInReport(v.getName() + "                       " + (int) v.getNumberOfProcessedContainers(), true);
 
@@ -134,9 +131,9 @@ public class Landfill {
         this.builderDirector.addDividerLineInReport(true);
         Spremnik spremnik;
 
-        for (int i = 0; i < allVehiclesAtLandfill.size(); i++) {
+        for (int i = 0; i < getAllVehiclesAtLandfill().size(); i++) {
             total = 0;
-            v = allVehiclesAtLandfill.get(i);
+            v = getAllVehiclesAtLandfill().get(i);
             for (int j = 0; j < v.getSpremnikList().size(); j++) {
                 spremnik = v.getSpremnikList().get(j);
 
@@ -154,9 +151,9 @@ public class Landfill {
         this.builderDirector.addDividerLineInReport(true);
 
         total = 0;
-        for (int i = 0; i < allVehiclesAtLandfill.size(); i++) {
+        for (int i = 0; i < getAllVehiclesAtLandfill().size(); i++) {
 
-            v = allVehiclesAtLandfill.get(i);
+            v = getAllVehiclesAtLandfill().get(i);
             total = total + v.getTotal();
             this.builderDirector.addTextLineInReport(v.getName() + "                       " + v.getTotal(), true);
 
@@ -172,9 +169,9 @@ public class Landfill {
         this.builderDirector.addDividerLineInReport(true);
 
         total = 0;
-        for (int i = 0; i < allVehiclesAtLandfill.size(); i++) {
+        for (int i = 0; i < getAllVehiclesAtLandfill().size(); i++) {
 
-            v = allVehiclesAtLandfill.get(i);
+            v = getAllVehiclesAtLandfill().get(i);
             total = total + v.getNumberOfDepartures();
             this.builderDirector.addTextLineInReport(v.getName() + "                       " + v.getNumberOfDepartures(), true);
 
@@ -186,6 +183,6 @@ public class Landfill {
     }
 
     public void vehicleLeavesLandfill(Vehicle vehicle) {
-        getAllVehiclesAtLandfill().remove(vehicle);
+        vehicle.prepareVehicle();
     }
 }

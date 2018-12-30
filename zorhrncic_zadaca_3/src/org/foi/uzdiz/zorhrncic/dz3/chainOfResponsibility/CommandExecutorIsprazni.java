@@ -35,16 +35,18 @@ public class CommandExecutorIsprazni extends CommandExecutor {
 
     private void emptyVehicles() {
         for (Vehicle vehicle : command.getVehiclesList()) {
-            if (context.getAllVehiclesInProcess().contains(vehicle) && !context.getAllVehiclesAtLandfill().contains(vehicle)) {
-                driveToLandfill(vehicle);
-                //  this.builderDirector.addTextLineInReport("Vozilo u istovaruje.. ID:" + vehicle.getId(), true);
+            driveToLandfill(vehicle);
+//            if (context.getAllVehiclesInProcess().contains(vehicle) && !context.getAllVehiclesAtLandfill().contains(vehicle)) {
+//                driveToLandfill(vehicle);
+//                //  this.builderDirector.addTextLineInReport("Vozilo u istovaruje.. ID:" + vehicle.getId(), true);
+//
+//            }
+//            if (context.getAllVehiclesInMalfunction().contains(vehicle) && !context.getAllVehiclesAtLandfill().contains(vehicle)) {
+//                driveToLandfill(vehicle);
+//                //  this.builderDirector.addTextLineInReport("Vozilo u istovaruje.. ID:" + vehicle.getId(), true);
+//
+//            }
 
-            }
-            if (context.getAllVehiclesInMalfunction().contains(vehicle) && !context.getAllVehiclesAtLandfill().contains(vehicle)) {
-                driveToLandfill(vehicle);
-                //  this.builderDirector.addTextLineInReport("Vozilo u istovaruje.. ID:" + vehicle.getId(), true);
-
-            }
         }
     }
 

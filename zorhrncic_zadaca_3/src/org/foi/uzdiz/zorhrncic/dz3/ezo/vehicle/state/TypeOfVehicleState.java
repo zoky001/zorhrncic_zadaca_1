@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.foi.uzdiz.zorhrncic.dz3.shared;
+package org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.state;
 
 /**
  *
@@ -11,9 +11,9 @@ package org.foi.uzdiz.zorhrncic.dz3.shared;
  */
 public enum TypeOfVehicleState {
     //  0 - staklo, 1 - papir, 2 - metal, 3 - bio, 4 - mješano
+    PARKING,
     READY,
     CRASH,
-    PARKING,
     LANDFILL,
     CONTROL,
     GAS_STATION

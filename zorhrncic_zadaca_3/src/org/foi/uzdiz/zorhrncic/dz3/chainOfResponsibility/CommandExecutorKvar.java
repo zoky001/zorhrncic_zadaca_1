@@ -36,6 +36,10 @@ public class CommandExecutorKvar extends CommandExecutor {
 
     private void moveVehicleInMalfunctionList() {
         for (Vehicle vehicle : command.getVehiclesList()) {
+            
+            vehicle.crashVehicle();
+            
+            //todo delete this code below
             if (context.getAllVehiclesInProcess().contains(vehicle) && !context.getAllVehiclesInMalfunction().contains(vehicle)) {
                 context.getAllVehiclesInProcess().remove(vehicle);
                 context.getAllVehiclesInMalfunction().add(vehicle);

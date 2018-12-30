@@ -12,6 +12,7 @@ import org.foi.uzdiz.zorhrncic.dz3.composite.CompositePlace;
 import org.foi.uzdiz.zorhrncic.dz3.composite.Street;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.drivers.Driver;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.Vehicle;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.state.TypeOfVehicleState;
 
 /**
  *
@@ -20,11 +21,6 @@ import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.Vehicle;
 public class DispecerContext {
 
     private List<Vehicle> allVehicles;// = new ArrayList<>();
-    private List<Vehicle> allVehiclesAtParking;// = new ArrayList<>();
-    private List<Vehicle> allVehiclesInProcess;// = new ArrayList<>();
-    private List<Vehicle> allVehiclesInMalfunction;/// = new ArrayList<>();
-    private List<Vehicle> allVehiclesAtLandfill;// = new ArrayList<>();
-    private List<Vehicle> allVehiclesOnControll;// = new ArrayList<>();
     private List<Street> streets;
     private boolean isVehicleSelectsStreet = false;
     private boolean isAllWasteCollected = false;
@@ -40,12 +36,8 @@ public class DispecerContext {
 
     public DispecerContext(List<Vehicle> allVehicles, List<Street> allStreets, List<CompositePlace> areaRootElement) {
         this.allVehicles = new ArrayList<Vehicle>(allVehicles);
-        this.allVehiclesAtParking = allVehicles;
-        this.allVehiclesInProcess = new ArrayList<Vehicle>();
-        this.allVehiclesInMalfunction = new ArrayList<Vehicle>();
-        this.allVehiclesAtLandfill = new ArrayList<Vehicle>();
-        this.allVehiclesOnControll = new ArrayList<Vehicle>();
-        this.landfill = new Landfill();
+
+        this.landfill = new Landfill(this);
 
         this.streets = allStreets;
         this.areaRootElement = areaRootElement;
@@ -61,36 +53,74 @@ public class DispecerContext {
     }
 
     public List<Vehicle> getAllVehiclesAtParking() {
-        return allVehiclesAtParking;
-    }
+        List<Vehicle> allVehiclesInProcess = new ArrayList<>();
+        try {
+            for (Vehicle vehicle : allVehicles) {
+                if (vehicle.getState() == TypeOfVehicleState.PARKING) {
+                    allVehiclesInProcess.add(vehicle);
+                }
+            }
+        } catch (Exception e) {
+        }
 
-    public void setAllVehiclesAtParking(List<Vehicle> allVehiclesAtParking) {
-        this.allVehiclesAtParking = allVehiclesAtParking;
-    }
-
-    public List<Vehicle> getAllVehiclesInProcess() {
         return allVehiclesInProcess;
     }
 
-    public void setAllVehiclesInProcess(List<Vehicle> allVehiclesInProcess) {
-        this.allVehiclesInProcess = allVehiclesInProcess;
+    public List<Vehicle> getAllVehiclesInProcess() {
+
+        List<Vehicle> allVehiclesInProcess = new ArrayList<>();
+        try {
+            for (Vehicle vehicle : allVehicles) {
+                if (vehicle.getState() == TypeOfVehicleState.READY) {
+                    allVehiclesInProcess.add(vehicle);
+                }
+            }
+        } catch (Exception e) {
+        }
+
+        return allVehiclesInProcess;
     }
 
     public List<Vehicle> getAllVehiclesInMalfunction() {
-        return allVehiclesInMalfunction;
-    }
+        List<Vehicle> allVehiclesInProcess = new ArrayList<>();
+        try {
+            for (Vehicle vehicle : allVehicles) {
+                if (vehicle.getState() == TypeOfVehicleState.CRASH) {
+                    allVehiclesInProcess.add(vehicle);
+                }
+            }
+        } catch (Exception e) {
+        }
 
-    public void setAllVehiclesInMalfunction(List<Vehicle> allVehiclesInMalfunction) {
-        this.allVehiclesInMalfunction = allVehiclesInMalfunction;
+        return allVehiclesInProcess;
     }
 
     public List<Vehicle> getAllVehiclesAtLandfill() {
-        this.allVehiclesAtLandfill = landfill.getAllVehiclesAtLandfill();
+        List<Vehicle> allVehiclesAtLandfill = new ArrayList<>();
+        try {
+            for (Vehicle vehicle : allVehicles) {
+                if (vehicle.getState() == TypeOfVehicleState.LANDFILL) {
+                    allVehiclesAtLandfill.add(vehicle);
+                }
+            }
+        } catch (Exception e) {
+        }
+
         return allVehiclesAtLandfill;
     }
+    
+    public List<Vehicle> getAllVehiclesAtGasStation() {
+        List<Vehicle> allVehiclesAtLandfill = new ArrayList<>();
+        try {
+            for (Vehicle vehicle : allVehicles) {
+                if (vehicle.getState() == TypeOfVehicleState.GAS_STATION) {
+                    allVehiclesAtLandfill.add(vehicle);
+                }
+            }
+        } catch (Exception e) {
+        }
 
-    public void setAllVehiclesAtLandfill(List<Vehicle> allVehiclesAtLandfill) {
-        this.allVehiclesAtLandfill = allVehiclesAtLandfill;
+        return allVehiclesAtLandfill;
     }
 
     public boolean isIsVehicleSelectsStreet() {
@@ -170,7 +200,17 @@ public class DispecerContext {
     }
 
     public List<Vehicle> getAllVehiclesOnControll() {
-        return allVehiclesOnControll;
+        List<Vehicle> allVehiclesInProcess = new ArrayList<>();
+        try {
+            for (Vehicle vehicle : allVehicles) {
+                if (vehicle.getState() == TypeOfVehicleState.CONTROL) {
+                    allVehiclesInProcess.add(vehicle);
+                }
+            }
+        } catch (Exception e) {
+        }
+
+        return allVehiclesInProcess;
     }
 
     public List<CompositePlace> getAreaRootElement() {

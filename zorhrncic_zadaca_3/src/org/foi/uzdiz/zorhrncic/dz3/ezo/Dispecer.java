@@ -67,7 +67,6 @@ public class Dispecer {
     private Street selectedStreet;
     private int selectedStreetIndex;
     private final ReportBuilderDirector builderDirector;
-    private final Landfill landfill;
     private final CommandRepository commandRepository;
     private final CommandExecutor commandExecutor;
 
@@ -94,9 +93,6 @@ public class Dispecer {
 
         this.allVehiclesInProcess = allVehicles;
         this.streets = streets;
-
-//        this.allVehiclesAtLandfill = new ArrayList<Vehicle>();
-        this.landfill = new Landfill();
 
         builderDirector = CommonDataSingleton.getInstance().getReportBuilderDirector();
         try {
@@ -155,203 +151,6 @@ public class Dispecer {
         return null;
     }
 
-    private void driveAllVehiclesToTheLandfill() {
-        try {
-            for (int i = 0; i < allVehiclesInProcess.size(); i++) {
-                if (!landfill.getAllVehiclesAtLandfill().contains(allVehiclesInProcess.get(i))) {
-                    //landfill.vehicleComesToLandfill(allVehiclesInProcess.get(i));
-                    driveToLandfill(allVehiclesInProcess.get(i));
-                }
-            }
-
-        } catch (Exception e) {
-
-            builderDirector.addErrorInReport("driveAllVehiclesToTheLandfill error " + e, false);
-
-        }
-
-    }
-
-    private boolean checkIsVehicleAtLandfill(Vehicle vehicle) {
-        if (landfill.getAllVehiclesAtLandfill().contains(vehicle)) {
-
-            if (vehicle.increaseAndCheckNumberOfCyclesAtLandfill(numberOfCyclesAtLandfill)) {
-                landfill.vehicleLeavesLandfill(vehicle);//getAllVehiclesAtLandfill().remove(vehicle);
-                int index = allVehiclesInProcess.indexOf(vehicle);
-                allVehiclesInProcess.remove(vehicle);
-                allVehiclesInProcess.add(vehicle);
-
-                return false;
-            } else {
-                return true;
-            }
-
-        }
-
-        return false;
-    }
-
-    private void pickUpWaste(Vehicle vehicle) {
-        ArrayList<Integer> streetArray;//= getStreetRandomArray();
-
-        if (vehicle.getRandomStreetArray() == null) {
-            vehicle.setRandomStreetArray(getStreetRandomArray());
-            streetArray = vehicle.getRandomStreetArray();
-        } else {
-            streetArray = vehicle.getRandomStreetArray();
-        }
-
-        for (int i = 0; i < streetArray.size(); i++) {
-            selectedStreetIndex = i;
-            selectedStreet = streets.get(streetArray.get(i));
-            if (vehicle.getLastStreet() > -1 && vehicle.getLastStreet() > i) {
-                continue;
-            } else if (vehicle.getLastStreet() > -1 && vehicle.getLastStreet() == i) {
-                vehicle.resetLastStreet();
-            }
-            if (pickUpWasteInStreet(vehicle, selectedStreet)) {
-                return;
-            }
-
-        }
-
-    }
-
-    private boolean pickUpWasteInStreet(Vehicle vehicle, Street street) {
-        TypesOfWaste typesOfWaste = null;
-
-        if (vehicle instanceof VehicleBio) {
-            typesOfWaste = TypesOfWaste.BIO;
-        } else if (vehicle instanceof VehicleGlass) {
-            typesOfWaste = TypesOfWaste.STAKLO;
-        } else if (vehicle instanceof VehicleMetal) {
-            typesOfWaste = TypesOfWaste.METAL;
-        } else if (vehicle instanceof VehicleMixed) {
-            typesOfWaste = TypesOfWaste.MJESANO;
-        } else if (vehicle instanceof VehiclePaper) {
-            typesOfWaste = TypesOfWaste.PAPIR;
-        }
-
-        for (int i = 0; i < street.getSpremnikList().size(); i++) {
-
-            if (street.getSpremnikList().get(i).kindOfWaste.equals(typesOfWaste)) {
-
-                if (isprazniSpremnik(street.getSpremnikList().get(i), vehicle)) {
-                    return true;
-                }
-
-            }
-
-        }
-        return false;
-    }
-
-    private boolean isprazniSpremnik(Spremnik spremnik, Vehicle vehicle) {
-        boolean success = false;
-
-        if (spremnik.getFilled() > 0) {
-            float mjestaUVozilu = vehicle.getCapacity() - vehicle.getFilled();
-
-            if (spremnik.getFilled() <= mjestaUVozilu) {
-                vehicle.addWaste(spremnik.getFilled());
-                spremnik.empty(spremnik.getFilled());
-                success = true;
-                vehicle.increaseNumberOfProcessedContainers();
-                vehicle.addProcessedContainers(spremnik);
-
-                this.builderDirector.addDividerLineInReport(false);
-                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "                     Ciklus: " + cycleNumber + ". ", false);
-                this.builderDirector.addDividerLineInReport(false);
-
-                this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), false);
-                this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), false);
-                this.builderDirector.addTextLineInReport("Kapacitet:                    " + vehicle.getCapacity(), false);
-
-                this.builderDirector.addDividerLineInReport(false);
-                this.builderDirector.addEmptyLineInReport(false);
-
-                isAllWasteCollected = false; //todo check if filled
-                if (vehicle.getCapacity() == vehicle.getFilled()) {
-                    driveToLandfill(vehicle);
-                }
-            } else {
-                vehicle.addWaste(mjestaUVozilu);
-                spremnik.empty(mjestaUVozilu);
-                success = true;
-                //vehicle.increaseNumberOfProcessedContainers();
-                this.builderDirector.addDividerLineInReport(false);
-                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "                     Ciklus: " + cycleNumber + ". ", false);
-                this.builderDirector.addDividerLineInReport(false);
-
-                this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), false);
-                this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), false);
-                this.builderDirector.addTextLineInReport("Kapacitet:                    " + vehicle.getCapacity(), false);
-
-                this.builderDirector.addDividerLineInReport(false);
-                this.builderDirector.addEmptyLineInReport(false);
-
-                driveToLandfill(vehicle);
-                isAllWasteCollected = false;
-
-            }
-
-        } else {
-            success = false;
-        }
-
-        return success;
-
-    }
-
-    private void driveToLandfill(Vehicle vehicle) {
-
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addTitleInReport("Vožnja kamiona na odlagalište", false);
-
-        this.builderDirector.addDividerLineInReport(false);
-        this.builderDirector.addTextLineInReport("Na odlagalište ide vozilo:                    " + vehicle.getName(), false);
-        this.builderDirector.addDividerLineInReport(false);
-
-        this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), false);
-        this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), false);
-        this.builderDirector.addTextLineInReport("Kapacitet:                    " + vehicle.getCapacity(), false);
-
-        this.builderDirector.addDividerLineInReport(false);
-
-        this.builderDirector.addTextLineInReport("Broj vozila na odlagalištu:   " + (landfill.getAllVehiclesAtLandfill().size() + 1), false);
-
-        this.builderDirector.addTitleInReport("Vožnja kamiona na odlagalište", false);
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addEmptyLineInReport(false);
-        this.builderDirector.addEmptyLineInReport(false);
-
-        vehicle.setLastStreet(selectedStreetIndex);
-
-        landfill.vehicleComesToLandfill(vehicle);//getAllVehiclesAtLandfill().add(vehicle);
-    }
-
-    private Vehicle chooseVehicle(int chosenIndex) {
-        /* int from = 0;
-        int to = allVehiclesInProcess.size() - 1;
-        int chosenIndex = CommonDataSingleton.getInstance().getRandomInt(from, to);*/
-        return allVehiclesInProcess.get(chosenIndex);
-    }
-
-    private ArrayList<Integer> getStreetRandomArray() {
-        ArrayList<Integer> streetArray;
-
-        if (isVehicleSelectsStreet) {
-            streetArray = CommonDataSingleton.getInstance().getRandomArray(streets.size());
-        } else {
-            streetArray = randomStreetArray;
-        }
-
-        return streetArray;
-
-    }
-
     private boolean isExistMainDriver(Vehicle vehicle) {
         try {
             for (Driver driver : vehicle.getDrivers()) {
@@ -364,4 +163,199 @@ public class Dispecer {
         return false;
     }
 
+//    private void driveAllVehiclesToTheLandfill() {
+//        try {
+//            for (int i = 0; i < allVehiclesInProcess.size(); i++) {
+//                if (!landfill.getAllVehiclesAtLandfill().contains(allVehiclesInProcess.get(i))) {
+//                    //landfill.vehicleComesToLandfill(allVehiclesInProcess.get(i));
+//                    driveToLandfill(allVehiclesInProcess.get(i));
+//                }
+//            }
+//
+//        } catch (Exception e) {
+//
+//            builderDirector.addErrorInReport("driveAllVehiclesToTheLandfill error " + e, false);
+//
+//        }
+//
+//    }
+//
+//    private boolean checkIsVehicleAtLandfill(Vehicle vehicle) {
+//        if (landfill.getAllVehiclesAtLandfill().contains(vehicle)) {
+//
+//            if (vehicle.increaseAndCheckNumberOfCyclesAtLandfill(numberOfCyclesAtLandfill)) {
+//                landfill.vehicleLeavesLandfill(vehicle);//getAllVehiclesAtLandfill().remove(vehicle);
+//                int index = allVehiclesInProcess.indexOf(vehicle);
+//                allVehiclesInProcess.remove(vehicle);
+//                allVehiclesInProcess.add(vehicle);
+//
+//                return false;
+//            } else {
+//                return true;
+//            }
+//
+//        }
+//
+//        return false;
+//    }
+//    private void pickUpWaste(Vehicle vehicle) {
+//        ArrayList<Integer> streetArray;//= getStreetRandomArray();
+//
+//        if (vehicle.getRandomStreetArray() == null) {
+//            vehicle.setRandomStreetArray(getStreetRandomArray());
+//            streetArray = vehicle.getRandomStreetArray();
+//        } else {
+//            streetArray = vehicle.getRandomStreetArray();
+//        }
+//
+//        for (int i = 0; i < streetArray.size(); i++) {
+//            selectedStreetIndex = i;
+//            selectedStreet = streets.get(streetArray.get(i));
+//            if (vehicle.getLastStreet() > -1 && vehicle.getLastStreet() > i) {
+//                continue;
+//            } else if (vehicle.getLastStreet() > -1 && vehicle.getLastStreet() == i) {
+//                vehicle.resetLastStreet();
+//            }
+//            if (pickUpWasteInStreet(vehicle, selectedStreet)) {
+//                return;
+//            }
+//
+//        }
+//
+//    }
+//
+//    private boolean pickUpWasteInStreet(Vehicle vehicle, Street street) {
+//        TypesOfWaste typesOfWaste = null;
+//
+//        if (vehicle instanceof VehicleBio) {
+//            typesOfWaste = TypesOfWaste.BIO;
+//        } else if (vehicle instanceof VehicleGlass) {
+//            typesOfWaste = TypesOfWaste.STAKLO;
+//        } else if (vehicle instanceof VehicleMetal) {
+//            typesOfWaste = TypesOfWaste.METAL;
+//        } else if (vehicle instanceof VehicleMixed) {
+//            typesOfWaste = TypesOfWaste.MJESANO;
+//        } else if (vehicle instanceof VehiclePaper) {
+//            typesOfWaste = TypesOfWaste.PAPIR;
+//        }
+//
+//        for (int i = 0; i < street.getSpremnikList().size(); i++) {
+//
+//            if (street.getSpremnikList().get(i).kindOfWaste.equals(typesOfWaste)) {
+//
+//                if (isprazniSpremnik(street.getSpremnikList().get(i), vehicle)) {
+//                    return true;
+//                }
+//
+//            }
+//
+//        }
+//        return false;
+//    }
+//
+//    private boolean isprazniSpremnik(Spremnik spremnik, Vehicle vehicle) {
+//        boolean success = false;
+//
+//        if (spremnik.getFilled() > 0) {
+//            float mjestaUVozilu = vehicle.getCapacity() - vehicle.getFilled();
+//
+//            if (spremnik.getFilled() <= mjestaUVozilu) {
+//                vehicle.addWaste(spremnik.getFilled());
+//                spremnik.empty(spremnik.getFilled());
+//                success = true;
+//                vehicle.increaseNumberOfProcessedContainers();
+//                vehicle.addProcessedContainers(spremnik);
+//
+//                this.builderDirector.addDividerLineInReport(false);
+//                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "                     Ciklus: " + cycleNumber + ". ", false);
+//                this.builderDirector.addDividerLineInReport(false);
+//
+//                this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), false);
+//                this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), false);
+//                this.builderDirector.addTextLineInReport("Kapacitet:                    " + vehicle.getCapacity(), false);
+//
+//                this.builderDirector.addDividerLineInReport(false);
+//                this.builderDirector.addEmptyLineInReport(false);
+//
+//                isAllWasteCollected = false; //todo check if filled
+//                if (vehicle.getCapacity() == vehicle.getFilled()) {
+//                    driveToLandfill(vehicle);
+//                }
+//            } else {
+//                vehicle.addWaste(mjestaUVozilu);
+//                spremnik.empty(mjestaUVozilu);
+//                success = true;
+//                //vehicle.increaseNumberOfProcessedContainers();
+//                this.builderDirector.addDividerLineInReport(false);
+//                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "                     Ciklus: " + cycleNumber + ". ", false);
+//                this.builderDirector.addDividerLineInReport(false);
+//
+//                this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), false);
+//                this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), false);
+//                this.builderDirector.addTextLineInReport("Kapacitet:                    " + vehicle.getCapacity(), false);
+//
+//                this.builderDirector.addDividerLineInReport(false);
+//                this.builderDirector.addEmptyLineInReport(false);
+//
+//                driveToLandfill(vehicle);
+//                isAllWasteCollected = false;
+//
+//            }
+//
+//        } else {
+//            success = false;
+//        }
+//
+//        return success;
+//
+//    }
+//
+//    private void driveToLandfill(Vehicle vehicle) {
+//
+//        this.builderDirector.addEmptyLineInReport(false);
+//        this.builderDirector.addEmptyLineInReport(false);
+//        this.builderDirector.addEmptyLineInReport(false);
+//        this.builderDirector.addTitleInReport("Vožnja kamiona na odlagalište", false);
+//
+//        this.builderDirector.addDividerLineInReport(false);
+//        this.builderDirector.addTextLineInReport("Na odlagalište ide vozilo:                    " + vehicle.getName(), false);
+//        this.builderDirector.addDividerLineInReport(false);
+//
+//        this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), false);
+//        this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), false);
+//        this.builderDirector.addTextLineInReport("Kapacitet:                    " + vehicle.getCapacity(), false);
+//
+//        this.builderDirector.addDividerLineInReport(false);
+//
+//        this.builderDirector.addTextLineInReport("Broj vozila na odlagalištu:   " + (landfill.getAllVehiclesAtLandfill().size() + 1), false);
+//
+//        this.builderDirector.addTitleInReport("Vožnja kamiona na odlagalište", false);
+//        this.builderDirector.addEmptyLineInReport(false);
+//        this.builderDirector.addEmptyLineInReport(false);
+//        this.builderDirector.addEmptyLineInReport(false);
+//
+//        vehicle.setLastStreet(selectedStreetIndex);
+//
+//        landfill.vehicleComesToLandfill(vehicle);//getAllVehiclesAtLandfill().add(vehicle);
+//    }
+//
+//    private Vehicle chooseVehicle(int chosenIndex) {
+//        /* int from = 0;
+//        int to = allVehiclesInProcess.size() - 1;
+//        int chosenIndex = CommonDataSingleton.getInstance().getRandomInt(from, to);*/
+//        return allVehiclesInProcess.get(chosenIndex);
+//    }
+//
+//    private ArrayList<Integer> getStreetRandomArray() {
+//        ArrayList<Integer> streetArray;
+//
+//        if (isVehicleSelectsStreet) {
+//            streetArray = CommonDataSingleton.getInstance().getRandomArray(streets.size());
+//        } else {
+//            streetArray = randomStreetArray;
+//        }
+//
+//        return streetArray;
+//
+//    }
 }

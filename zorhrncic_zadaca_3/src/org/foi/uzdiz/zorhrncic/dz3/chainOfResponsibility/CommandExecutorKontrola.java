@@ -35,6 +35,8 @@ public class CommandExecutorKontrola extends CommandExecutor {
 
     private void moveVehicleToControllList() {
         for (Vehicle vehicle : command.getVehiclesList()) {
+            vehicle.goToControll();
+            // todo delete this code below
             if (context.getAllVehiclesInProcess().contains(vehicle) && !context.getAllVehiclesOnControll().contains(vehicle)) {
                 context.getAllVehiclesInProcess().remove(vehicle);
                 context.getAllVehiclesOnControll().add(vehicle);

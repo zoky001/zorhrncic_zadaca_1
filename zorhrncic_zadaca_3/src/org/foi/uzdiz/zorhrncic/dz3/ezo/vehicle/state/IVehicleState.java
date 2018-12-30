@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle;
+package org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.state;
 
 import org.foi.uzdiz.zorhrncic.dz3.ezo.drivers.*;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.Vehicle;
 import org.foi.uzdiz.zorhrncic.dz3.log.ReportBuilderDirector;
 import org.foi.uzdiz.zorhrncic.dz3.shared.TypeOfDriverState;
-import org.foi.uzdiz.zorhrncic.dz3.shared.TypeOfVehicleState;
 import org.foi.uzdiz.zorhrncic.dz3.singleton.CommonDataSingleton;
 
 /**

@@ -10,6 +10,7 @@ import org.foi.uzdiz.zorhrncic.dz3.composite.CompositePlace;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.DispecerContext;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.drivers.Driver;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.Vehicle;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.state.TypeOfVehicleState;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.Command;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.TypeOfCommand;
 import org.foi.uzdiz.zorhrncic.dz3.shared.TypeOfDriverState;
@@ -39,7 +40,8 @@ public class CommandExecutorStatus extends CommandExecutor {
     private void printStatus() {
         String line;
         for (Vehicle vehicle : context.getAllVehicles()) {
-            if (!context.getAllVehiclesInMalfunction().contains(vehicle)) {
+            // if (!context.getAllVehiclesInMalfunction().contains(vehicle)) {
+            if (vehicle.getState() != TypeOfVehicleState.CRASH) {
 
                 this.builderDirector.addDividerLineInReport(true);
                 this.builderDirector.addTextLineInReport("------------------------------------------------", true);
@@ -118,19 +120,34 @@ public class CommandExecutorStatus extends CommandExecutor {
     }
 
     private String getStatus(Vehicle vehicle) {
-
-        if (context.getAllVehiclesAtParking().contains(vehicle) && !context.getAllVehiclesInMalfunction().contains(vehicle)) {
-            return "Na parkiralištu";
-        } else if (context.getAllVehiclesInProcess().contains(vehicle) && !context.getAllVehiclesAtLandfill().contains(vehicle) && !context.getAllVehiclesInMalfunction().contains(vehicle)) {
-            return "U procesu sakupljanja";
-        } else if (context.getAllVehiclesOnControll().contains(vehicle) && !context.getAllVehiclesAtLandfill().contains(vehicle) && !context.getAllVehiclesInMalfunction().contains(vehicle)) {
-            return "U kontroli";
-        } else if (context.getAllVehiclesAtLandfill().contains(vehicle)) {
-            return "Na odlagalištu";
-        } else {
-            return "-";
+        switch (vehicle.getState()) {
+            case PARKING:
+                return "Na parkiralištu";
+            case READY:
+                return "U procesu sakupljanja";
+            case CONTROL:
+                return "U kontroli";
+            case CRASH:
+                return "-";
+            case GAS_STATION:
+                return "Na benzinskoj";
+            case LANDFILL:
+                return "Na odlagalištu";
+            default:
+                return "-";
         }
 
+//        if (context.getAllVehiclesAtParking().contains(vehicle) && !context.getAllVehiclesInMalfunction().contains(vehicle)) {
+//            return "Na parkiralištu";
+//        } else if (context.getAllVehiclesInProcess().contains(vehicle) && !context.getAllVehiclesAtLandfill().contains(vehicle) && !context.getAllVehiclesInMalfunction().contains(vehicle)) {
+//            return "U procesu sakupljanja";
+//        } else if (context.getAllVehiclesOnControll().contains(vehicle) && !context.getAllVehiclesAtLandfill().contains(vehicle) && !context.getAllVehiclesInMalfunction().contains(vehicle)) {
+//            return "U kontroli";
+//        } else if (context.getAllVehiclesAtLandfill().contains(vehicle)) {
+//            return "Na odlagalištu";
+//        } else {
+//            return "-";
+//        }
     }
 
 }

@@ -49,6 +49,8 @@ public class Constants {
     public final static String punjenjeDizelVozila = "punjenjeDizelVozila";
     public final static String kapacitetElektroVozila = "kapacitetElektroVozila";
     public final static String punjenjeElektroVozila = "punjenjeElektroVozila";
+   
+    
 
     public final static String KANTA = "0";
     public final static String KONTEJNER = "1";

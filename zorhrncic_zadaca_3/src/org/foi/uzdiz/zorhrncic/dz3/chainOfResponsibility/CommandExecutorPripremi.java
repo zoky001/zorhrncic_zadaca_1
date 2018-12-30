@@ -7,6 +7,7 @@ package org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility;
 
 import org.foi.uzdiz.zorhrncic.dz3.ezo.DispecerContext;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.Vehicle;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.state.TypeOfVehicleState;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.Command;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.TypeOfCommand;
 
@@ -34,6 +35,17 @@ public class CommandExecutorPripremi extends CommandExecutor {
 
     private void prepareVehicles() {
         for (Vehicle vehicle : command.getVehiclesList()) {
+
+            // vozila na parkingu
+            if (vehicle.getState() == TypeOfVehicleState.PARKING) {
+                vehicle.prepareVehicle();
+                this.builderDirector.addDividerLineInReport(true);
+                this.builderDirector.addTextLineInReport("Palim vozilo: " + vehicle.getId(), true);
+                //this.builderDirector.addDividerLineInReport(true);
+                vehicle.getVehicleEquipment().turnOn();
+                // this.builderDirector.addDividerLineInReport(true);
+                this.builderDirector.addTextLineInReport("Pripremljeno vozilo " + vehicle.getId(), true);
+            }
             if (context.getAllVehiclesAtParking().contains(vehicle) && !context.getAllVehiclesInProcess().contains(vehicle)) {
                 context.getAllVehiclesAtParking().remove(vehicle);
                 context.getAllVehiclesInProcess().add(vehicle);
@@ -46,6 +58,17 @@ public class CommandExecutorPripremi extends CommandExecutor {
                 this.builderDirector.addTextLineInReport("Pripremljeno vozilo " + vehicle.getId(), true);
 
             }
+
+            // vozila na kontroli
+            if (vehicle.getState() == TypeOfVehicleState.CONTROL) {
+                vehicle.prepareVehicle();
+                this.builderDirector.addDividerLineInReport(true);
+                this.builderDirector.addTextLineInReport("Palim vozilo: " + vehicle.getId(), true);
+                //this.builderDirector.addDividerLineInReport(true);
+                vehicle.getVehicleEquipment().turnOn();
+                // this.builderDirector.addDividerLineInReport(true);
+                this.builderDirector.addTextLineInReport("Pripremljeno vozilo " + vehicle.getId(), true);
+            }
             if (context.getAllVehiclesOnControll().contains(vehicle) && !context.getAllVehiclesInProcess().contains(vehicle)) {
                 context.getAllVehiclesOnControll().remove(vehicle);
                 context.getAllVehiclesInProcess().add(vehicle);
@@ -57,6 +80,17 @@ public class CommandExecutorPripremi extends CommandExecutor {
                 //   this.builderDirector.addDividerLineInReport(true);
                 this.builderDirector.addTextLineInReport("Pripremljeno vozilo " + vehicle.getId(), true);
             }
+
+            // todo  vozila na smetlištu nakon kvara
+//            if (vehicle.getState() == TypeOfVehicleState.CONTROL) {
+//                vehicle.prepareVehicle();
+//                this.builderDirector.addDividerLineInReport(true);
+//                this.builderDirector.addTextLineInReport("Palim vozilo: " + vehicle.getId(), true);
+//                //this.builderDirector.addDividerLineInReport(true);
+//                vehicle.getVehicleEquipment().turnOn();
+//                // this.builderDirector.addDividerLineInReport(true);
+//                this.builderDirector.addTextLineInReport("Pripremljeno vozilo " + vehicle.getId(), true);
+//            }
             if (context.getAllVehiclesInMalfunction().contains(vehicle) && context.getAllVehiclesAtLandfill().contains(vehicle) && !context.getAllVehiclesInProcess().contains(vehicle)) {
                 context.getAllVehiclesInMalfunction().remove(vehicle);
                 context.getAllVehiclesInProcess().add(vehicle);
