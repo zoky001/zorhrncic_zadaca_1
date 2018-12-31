@@ -7,8 +7,11 @@ package org.foi.uzdiz.zorhrncic.dz3.composite;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.ChoosePickupDirection;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.Kontejner;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.PickUpDirection;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.Spremnik;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.Vehicle;
 import org.foi.uzdiz.zorhrncic.dz3.log.ReportBuilderDirector;
 import org.foi.uzdiz.zorhrncic.dz3.singleton.CommonDataSingleton;
 import org.foi.uzdiz.zorhrncic.dz3.users.BigUser;
@@ -20,7 +23,7 @@ import org.foi.uzdiz.zorhrncic.dz3.users.User;
  *
  * @author Zoran
  */
-public class Street implements IPlace {
+public class Street extends ChoosePickupDirection implements IPlace {
 
     private IPlace area;
     private String id;
@@ -310,6 +313,79 @@ public class Street implements IPlace {
     @Override
     public void setParrent(IPlace area) {
         this.area = area;
+    }
+
+    @Override
+    protected boolean isExistAscendingVehicle() {
+        try {
+            if (getAscendingVehicle() != null) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return true;
+        }
+    }
+
+    @Override
+    protected boolean isExistDescendingVehicle() {
+        try {
+            if (getDescendingVehicle() != null) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return true;
+        }
+    }
+
+    @Override
+    protected boolean deleteFromWaitingList(Vehicle vehicle) {
+        try {
+            if (getWaitingWehicleList().contains(vehicle)) {
+                getWaitingWehicleList().remove(vehicle);
+                return true;
+            }
+        } catch (Exception e) {
+        }
+        return false;
+    }
+
+    @Override
+    protected boolean isThisVehicleInStreet(Vehicle vehicle) {
+
+        try {
+            if (getAscendingVehicle() != null && getAscendingVehicle() == vehicle) {
+                return true;
+            } else if (getDescendingVehicle() != null && getDescendingVehicle() == vehicle) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    protected PickUpDirection getVehicleDirection(Vehicle vehicle) {
+        try {
+            if (isThisVehicleInStreet(vehicle)) {
+                if (getAscendingVehicle() == vehicle) {
+                    return PickUpDirection.ASCENDING;
+                } else if (getDescendingVehicle() == vehicle) {
+                    return PickUpDirection.DESCENDING;
+                } else {
+                    return null;
+                }
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+
     }
 
 }

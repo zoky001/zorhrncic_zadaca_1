@@ -11,7 +11,11 @@ import java.util.logging.Logger;
 import org.foi.uzdiz.zorhrncic.dz3.composite.Street;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.Dispecer;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.DispecerContext;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.PickUpDirection;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.Spremnik;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.strategy.AscendingPickUpStrategy;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.strategy.DescendingPickUpStrategy;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.strategy.PickUpStrategy;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.Vehicle;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.VehicleBio;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.VehicleGlass;
@@ -99,6 +103,7 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
                 }
 
             }
+         //   context.setCycleNumber(context.getCycleNumber() + 1);
 
         }
 
@@ -123,12 +128,6 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
                 driveToLandfill(context.getAllVehicles().get(i));
 
             }
-//            for (int i = 0; i < context.getAllVehiclesInProcess().size(); i++) {
-//                if (!context.getAllVehiclesAtLandfill().contains(context.getAllVehiclesInProcess().get(i))) {
-//                    //landfill.vehicleComesToLandfill(allVehiclesInProcess.get(i));
-//                    driveToLandfill(context.getAllVehiclesInProcess().get(i));
-//                }
-//            }
 
         } catch (Exception e) {
 
@@ -195,8 +194,71 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
     }
 
     private boolean pickUpWasteInStreet(Vehicle vehicle, Street street) {
-        TypesOfWaste typesOfWaste = null;
+        TypesOfWaste typesOfWaste = getTypeOfWaste(context.getVehicleInProcess());
 
+        PickUpDirection direction = street.chooseDirection(vehicle, street);
+        int location = street.getVehicleLocation(vehicle);
+        if (direction == PickUpDirection.ASCENDING) {
+//            for (int i = location; i < street.getSpremnikList().size(); i++) {
+//                street.setLastVehicleLocation(vehicle, i);
+//                if (street.getSpremnikList().get(i).kindOfWaste.equals(typesOfWaste)) {
+//
+//                    if (isprazniSpremnik(street.getSpremnikList().get(i), vehicle, street)) {
+//                        return true;
+//                    }
+//
+//                }
+//
+//            }
+
+            if (pickUpWasteInStreet(new AscendingPickUpStrategy(street, vehicle, context))) {
+                return true;
+            }
+        } else if (direction == PickUpDirection.DESCENDING) {
+//            for (int i = location; i > 0; i--) {
+//                street.setLastVehicleLocation(vehicle, i - 1);
+//                if (street.getSpremnikList().get(i - 1).kindOfWaste.equals(typesOfWaste)) {
+//
+//                    if (isprazniSpremnik(street.getSpremnikList().get(i - 1), vehicle, street)) {
+//                        return true;
+//                    }
+//
+//                }
+//
+//            }
+            if (pickUpWasteInStreet(new DescendingPickUpStrategy(street, vehicle, context))) {
+                return true;
+            }
+        } else {
+            this.builderDirector.addTextLineInReport("Vozilo " + vehicle.getName() + " čeka u ulici " + street.getName() + "!!", true);
+            context.setIsAllWasteCollected(false);
+            return true;
+        }
+
+//        for (int i = 0; i < street.getSpremnikList().size(); i++) {
+//
+//            if (street.getSpremnikList().get(i).kindOfWaste.equals(typesOfWaste)) {
+//
+//                if (isprazniSpremnik(street.getSpremnikList().get(i), vehicle)) {
+//                    return true;
+//                }
+//
+//            }
+//
+//        }
+        street.vehicleLeaveTheStreet(vehicle);
+        this.builderDirector.addTextLineInReport("Vozilo " + vehicle.getName() + " napušta ulicu " + street.getName() + "!!", true);
+
+        return false;
+    }
+
+    public boolean pickUpWasteInStreet(PickUpStrategy pickUpMethod) {
+        TypesOfWaste typesOfWaste = getTypeOfWaste(context.getVehicleInProcess());
+        return pickUpMethod.pickUpInStreet(typesOfWaste);
+    }
+
+    private TypesOfWaste getTypeOfWaste(Vehicle vehicle) {
+        TypesOfWaste typesOfWaste = null;
         if (vehicle instanceof VehicleBio) {
             typesOfWaste = TypesOfWaste.BIO;
         } else if (vehicle instanceof VehicleGlass) {
@@ -208,22 +270,10 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
         } else if (vehicle instanceof VehiclePaper) {
             typesOfWaste = TypesOfWaste.PAPIR;
         }
-
-        for (int i = 0; i < street.getSpremnikList().size(); i++) {
-
-            if (street.getSpremnikList().get(i).kindOfWaste.equals(typesOfWaste)) {
-
-                if (isprazniSpremnik(street.getSpremnikList().get(i), vehicle)) {
-                    return true;
-                }
-
-            }
-
-        }
-        return false;
+        return typesOfWaste;
     }
 
-    private boolean isprazniSpremnik(Spremnik spremnik, Vehicle vehicle) {
+    private boolean isprazniSpremnik(Spremnik spremnik, Vehicle vehicle, Street street) {
         boolean success = false;
 
         if (spremnik.getFilled() > 0) {
@@ -243,6 +293,11 @@ public class CommandExecutorKreniWithParameters extends CommandExecutor {
                 this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), true);
                 this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), true);
                 this.builderDirector.addTextLineInReport("Kapacitet:                    " + vehicle.getCapacity(), true);
+
+                this.builderDirector.addDividerLineInReport(true);
+
+                this.builderDirector.addTextLineInReport("Ulica:            " + street.getName(), true);
+                this.builderDirector.addTextLineInReport("Spremnik:         " + street.getVehicleLocation(vehicle), true);
 
                 this.builderDirector.addDividerLineInReport(true);
                 this.builderDirector.addEmptyLineInReport(true);

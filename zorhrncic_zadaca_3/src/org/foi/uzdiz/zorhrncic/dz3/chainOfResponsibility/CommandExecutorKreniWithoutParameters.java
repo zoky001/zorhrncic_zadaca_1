@@ -8,13 +8,18 @@ package org.foi.uzdiz.zorhrncic.dz3.chainOfResponsibility;
 import java.util.ArrayList;
 import org.foi.uzdiz.zorhrncic.dz3.composite.Street;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.DispecerContext;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.PickUpDirection;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.Spremnik;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.strategy.AscendingPickUpStrategy;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.strategy.DescendingPickUpStrategy;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.strategy.PickUpStrategy;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.Vehicle;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.VehicleBio;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.VehicleGlass;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.VehicleMetal;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.VehicleMixed;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.VehiclePaper;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.state.TypeOfVehicleState;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.Command;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.TypeOfCommand;
 import org.foi.uzdiz.zorhrncic.dz3.shared.Constants;
@@ -69,19 +74,46 @@ public class CommandExecutorKreniWithoutParameters extends CommandExecutor {
         }
 
         // ArrayList<Integer> randomArray = CommonDataSingleton.getInstance().getRandomArray(allVehiclesInProcess.size());
-        while (!context.isIsAllWasteCollected() || context.getAllVehiclesAtLandfill().size() > 0) {
+//        while (!context.isIsAllWasteCollected() || context.getAllVehiclesAtLandfill().size() > 0) {
+//            context.setIsAllWasteCollected(true);
+//            for (int i = 0; i < context.getAllVehiclesInProcess().size(); i++) {
+//
+//                context.setVehicleInProcess(context.getAllVehiclesInProcess().get(i));
+//                if (checkIsVehicleAtLandfill(context.getVehicleInProcess())) {
+//                    continue;
+//                }
+//
+//                pickUpWaste(context.getVehicleInProcess());
+//                context.setCycleNumber(context.getCycleNumber() + 1);
+//
+//            }
+//
+//        }
+        while ((!context.isIsAllWasteCollected() || context.getAllVehiclesAtLandfill().size() > 0 || context.getAllVehiclesAtGasStation().size() > 0)) {
             context.setIsAllWasteCollected(true);
-            for (int i = 0; i < context.getAllVehiclesInProcess().size(); i++) {
+            for (int i = 0; i < context.getAllVehicles().size(); i++) {
+                Vehicle v = context.getAllVehicles().get(i);
+                if (v.getState() == TypeOfVehicleState.READY || v.getState() == TypeOfVehicleState.LANDFILL || v.getState() == TypeOfVehicleState.GAS_STATION) {
 
-                context.setVehicleInProcess(context.getAllVehiclesInProcess().get(i));
-                if (checkIsVehicleAtLandfill(context.getVehicleInProcess())) {
-                    continue;
+                    context.setVehicleInProcess(v);
+
+                    if (checkIsVehicleAtLandfill(context.getVehicleInProcess())) {
+                        continue;
+                    }
+
+                    if (context.getVehicleInProcess().checkIsFilledAtGasStation()) {
+                        continue;
+                    }
+
+                    pickUpWaste(context.getVehicleInProcess());
+
+                    context.getVehicleInProcess().increaseNumberOfPerformedCycles();
+
+                    context.setCycleNumber(context.getCycleNumber() + 1);
+
                 }
-
-                pickUpWaste(context.getVehicleInProcess());
-                context.setCycleNumber(context.getCycleNumber() + 1);
-
             }
+           // context.setCycleNumber(context.getCycleNumber() + 1);
 
         }
 
@@ -102,11 +134,10 @@ public class CommandExecutorKreniWithoutParameters extends CommandExecutor {
 
     private void driveAllVehiclesToTheLandfill() {
         try {
-            for (int i = 0; i < context.getAllVehiclesInProcess().size(); i++) {
-                if (!context.getAllVehiclesAtLandfill().contains(context.getAllVehiclesInProcess().get(i))) {
-                    //landfill.vehicleComesToLandfill(allVehiclesInProcess.get(i));
-                    driveToLandfill(context.getAllVehiclesInProcess().get(i));
-                }
+            for (int i = 0; i < context.getAllVehicles().size(); i++) {
+
+                driveToLandfill(context.getAllVehicles().get(i));
+
             }
 
         } catch (Exception e) {
@@ -148,23 +179,97 @@ public class CommandExecutorKreniWithoutParameters extends CommandExecutor {
 
         for (int i = 0; i < streetArray.size(); i++) {
             context.setSelectedStreetIndex(i);
-            context.setSelectedStreet(context.getStreets().get(streetArray.get(i)));
-            if (vehicle.getLastStreet() > -1 && vehicle.getLastStreet() > i) {
-                continue;
-            } else if (vehicle.getLastStreet() > -1 && vehicle.getLastStreet() == i) {
-                vehicle.resetLastStreet();
+            Street street = context.getStreets().get(streetArray.get(i));
+            context.setSelectedStreet(street);
+            if (getStreetByVahicle(vehicle).contains(street)) {
+                if (vehicle.getLastStreet() > -1 && vehicle.getLastStreet() > i) {
+                    continue;
+                } else if (vehicle.getLastStreet() > -1 && vehicle.getLastStreet() == i) {
+                    vehicle.resetLastStreet();
+                }
+                if (pickUpWasteInStreet(vehicle, context.getSelectedStreet())) {
+                    return;
+                }
             }
-            if (pickUpWasteInStreet(vehicle, context.getSelectedStreet())) {
-                return;
-            }
-
         }
 
     }
 
-    private boolean pickUpWasteInStreet(Vehicle vehicle, Street street) {
-        TypesOfWaste typesOfWaste = null;
+    private ArrayList<Street> getStreetByVahicle(Vehicle vehicle) {
+        try {
+            return vehicle.getStreets();
+        } catch (Exception e) {
+        }
+        return vehicle.getStreets();
 
+    }
+
+    private boolean pickUpWasteInStreet(Vehicle vehicle, Street street) {
+        TypesOfWaste typesOfWaste = getTypeOfWaste(context.getVehicleInProcess());
+
+        PickUpDirection direction = street.chooseDirection(vehicle, street);
+        int location = street.getVehicleLocation(vehicle);
+        if (direction == PickUpDirection.ASCENDING) {
+//            for (int i = location; i < street.getSpremnikList().size(); i++) {
+//                street.setLastVehicleLocation(vehicle, i);
+//                if (street.getSpremnikList().get(i).kindOfWaste.equals(typesOfWaste)) {
+//
+//                    if (isprazniSpremnik(street.getSpremnikList().get(i), vehicle, street)) {
+//                        return true;
+//                    }
+//
+//                }
+//
+//            }
+
+            if (pickUpWasteInStreet(new AscendingPickUpStrategy(street, vehicle, context))) {
+                return true;
+            }
+        } else if (direction == PickUpDirection.DESCENDING) {
+//            for (int i = location; i > 0; i--) {
+//                street.setLastVehicleLocation(vehicle, i - 1);
+//                if (street.getSpremnikList().get(i - 1).kindOfWaste.equals(typesOfWaste)) {
+//
+//                    if (isprazniSpremnik(street.getSpremnikList().get(i - 1), vehicle, street)) {
+//                        return true;
+//                    }
+//
+//                }
+//
+//            }
+            if (pickUpWasteInStreet(new DescendingPickUpStrategy(street, vehicle, context))) {
+                return true;
+            }
+        } else {
+            this.builderDirector.addTextLineInReport("Vozilo " + vehicle.getName() + " čeka u ulici " + street.getName() + "!!", true);
+            context.setIsAllWasteCollected(false);
+            return true;
+        }
+
+//        for (int i = 0; i < street.getSpremnikList().size(); i++) {
+//
+//            if (street.getSpremnikList().get(i).kindOfWaste.equals(typesOfWaste)) {
+//
+//                if (isprazniSpremnik(street.getSpremnikList().get(i), vehicle)) {
+//                    return true;
+//                }
+//
+//            }
+//
+//        }
+        street.vehicleLeaveTheStreet(vehicle);
+        this.builderDirector.addTextLineInReport("Vozilo " + vehicle.getName() + " napušta ulicu " + street.getName() + "!!", true);
+
+        return false;
+    }
+
+    public boolean pickUpWasteInStreet(PickUpStrategy pickUpMethod) {
+        TypesOfWaste typesOfWaste = getTypeOfWaste(context.getVehicleInProcess());
+        return pickUpMethod.pickUpInStreet(typesOfWaste);
+    }
+
+    private TypesOfWaste getTypeOfWaste(Vehicle vehicle) {
+        TypesOfWaste typesOfWaste = null;
         if (vehicle instanceof VehicleBio) {
             typesOfWaste = TypesOfWaste.BIO;
         } else if (vehicle instanceof VehicleGlass) {
@@ -176,22 +281,10 @@ public class CommandExecutorKreniWithoutParameters extends CommandExecutor {
         } else if (vehicle instanceof VehiclePaper) {
             typesOfWaste = TypesOfWaste.PAPIR;
         }
-
-        for (int i = 0; i < street.getSpremnikList().size(); i++) {
-
-            if (street.getSpremnikList().get(i).kindOfWaste.equals(typesOfWaste)) {
-
-                if (isprazniSpremnik(street.getSpremnikList().get(i), vehicle)) {
-                    return true;
-                }
-
-            }
-
-        }
-        return false;
+        return typesOfWaste;
     }
 
-    private boolean isprazniSpremnik(Spremnik spremnik, Vehicle vehicle) {
+    private boolean isprazniSpremnik(Spremnik spremnik, Vehicle vehicle, Street street) {
         boolean success = false;
 
         if (spremnik.getFilled() > 0) {
@@ -205,12 +298,17 @@ public class CommandExecutorKreniWithoutParameters extends CommandExecutor {
                 vehicle.addProcessedContainers(spremnik);
 
                 this.builderDirector.addDividerLineInReport(true);
-                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "                     Ciklus: " + context.getCycleNumber() + ". ", true);
+                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "              Ciklus: " + context.getCycleNumber() + ". ", true);
                 this.builderDirector.addDividerLineInReport(true);
 
                 this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), true);
                 this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), true);
                 this.builderDirector.addTextLineInReport("Kapacitet:                    " + vehicle.getCapacity(), true);
+
+                this.builderDirector.addDividerLineInReport(true);
+
+                this.builderDirector.addTextLineInReport("Ulica:            " + street.getName(), true);
+                this.builderDirector.addTextLineInReport("Spremnik:         " + street.getVehicleLocation(vehicle), true);
 
                 this.builderDirector.addDividerLineInReport(true);
                 this.builderDirector.addEmptyLineInReport(true);
@@ -225,7 +323,7 @@ public class CommandExecutorKreniWithoutParameters extends CommandExecutor {
                 success = true;
                 //vehicle.increaseNumberOfProcessedContainers();
                 this.builderDirector.addDividerLineInReport(true);
-                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "                     Ciklus: " + context.getCycleNumber() + ". ", true);
+                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "              Ciklus: " + context.getCycleNumber() + ". ", true);
                 this.builderDirector.addDividerLineInReport(true);
 
                 this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), true);
