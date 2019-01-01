@@ -350,6 +350,9 @@ public class LoadInitData {
             while ((line = br.readLine()) != null) {
                 if (lineNo++ != 0) {
                     // use comma as separator
+                    if (line.equalsIgnoreCase("")) {
+                        continue;
+                    }
                     String[] data = line.split(cvsSplitBy);
 
                     if (data.length != 6) {
@@ -1006,6 +1009,9 @@ public class LoadInitData {
             int lineNo = 0;
             while ((line = br.readLine()) != null) {
                 if (lineNo++ != 0) {
+                    if (line.equalsIgnoreCase("")) {
+                        continue;
+                    }
                     // use comma as separator
                     String[] data = line.split(cvsSplitBy);
 
@@ -1181,6 +1187,9 @@ public class LoadInitData {
             while ((line = br.readLine()) != null) {
                 if (lineNo++ != 0) {
                     // use comma as separator
+                    if (line.equalsIgnoreCase("")) {
+                        continue;
+                    }
                     String[] data = line.split(cvsSplitBy);
                     if (data.length == 6) {
                         street = new Street(data[0], data[1], Integer.valueOf(data[2]), Integer.valueOf(data[3]), Integer.valueOf(data[4]), Integer.valueOf(data[5]));
@@ -1231,6 +1240,9 @@ public class LoadInitData {
             int lineNo = 0;
             while ((line = br.readLine()) != null) {
                 if (lineNo++ != 0) {
+                    if (line.equalsIgnoreCase("")) {
+                        continue;
+                    }
                     // use comma as separator
                     String[] data = line.split(cvsSplitBy);
                     if (data.length == 3) {

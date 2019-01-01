@@ -54,21 +54,21 @@ public class Street extends ChoosePickupDirection implements IPlace {
     @Override
     public void printDataAboutGeneratedWaste() {
         this.builderDirector.addTextLineInReport("------------------------------------------------------------------------------------------------------------", false);
-        this.builderDirector.addTextLineInReport("                                                            ------------------------------------------------", false);
-        this.builderDirector.addTextLineInReport("                                                            |   IME NAD-PODRUČJA: " + ((CompositePlace) getParrent()).getName() + "          ", false);
-        this.builderDirector.addTextLineInReport("                                                            ------------------------------------------------", false);
-        this.builderDirector.addTextLineInReport("                                                            |          IME ULICE: " + name + "                 ", false);
-        this.builderDirector.addTextLineInReport("                                                            ------------------------------------------------", false);
-        this.builderDirector.addTextLineInReport("                                                            |   Količina otpada staklo:     |  " + getTotalAmountOfGlassWaste(), false);
-        this.builderDirector.addTextLineInReport("                                                            ------------------------------------------------", false);
-        this.builderDirector.addTextLineInReport("                                                            |   Količina otpada papir:      |  " + getTotalAmountOfPaperWaste(), false);
-        this.builderDirector.addTextLineInReport("                                                            ------------------------------------------------", false);
-        this.builderDirector.addTextLineInReport("                                                            |   Količina otpada metal:      |  " + getTotalAmountOfMetalWaste(), false);
-        this.builderDirector.addTextLineInReport("                                                            ------------------------------------------------", false);
-        this.builderDirector.addTextLineInReport("                                                            |   Količina otpada bio:        |  " + getTotalAmountOfBioWaste(), false);
-        this.builderDirector.addTextLineInReport("                                                            ------------------------------------------------", false);
-        this.builderDirector.addTextLineInReport("                                                            |   Količina otpada mixed:      |  " + getTotalAmountOfMixedWaste(), false);
-        this.builderDirector.addTextLineInReport("                                                            ------------------------------------------------", false);
+        this.builderDirector.addTextLineInReport("           ------------------------------------------------", false);
+        this.builderDirector.addTextLineInReport("           |   IME NAD-PODRUČJA: " + ((CompositePlace) getParrent()).getName() + "          ", false);
+        this.builderDirector.addTextLineInReport("           ------------------------------------------------", false);
+        this.builderDirector.addTextLineInReport("           |          IME ULICE: " + name + "                 ", false);
+        this.builderDirector.addTextLineInReport("           ------------------------------------------------", false);
+        this.builderDirector.addTextLineInReport("           |   Količina otpada staklo:     |  " + getTotalAmountOfGlassWaste(), false);
+        this.builderDirector.addTextLineInReport("           ------------------------------------------------", false);
+        this.builderDirector.addTextLineInReport("           |   Količina otpada papir:      |  " + getTotalAmountOfPaperWaste(), false);
+        this.builderDirector.addTextLineInReport("           ------------------------------------------------", false);
+        this.builderDirector.addTextLineInReport("           |   Količina otpada metal:      |  " + getTotalAmountOfMetalWaste(), false);
+        this.builderDirector.addTextLineInReport("           ------------------------------------------------", false);
+        this.builderDirector.addTextLineInReport("           |   Količina otpada bio:        |  " + getTotalAmountOfBioWaste(), false);
+        this.builderDirector.addTextLineInReport("           ------------------------------------------------", false);
+        this.builderDirector.addTextLineInReport("           |   Količina otpada mixed:      |  " + getTotalAmountOfMixedWaste(), false);
+        this.builderDirector.addTextLineInReport("           ------------------------------------------------", false);
         this.builderDirector.addTextLineInReport("------------------------------------------------------------------------------------------------------------", false);
     }
 

@@ -109,6 +109,18 @@ public class VT100View {
 
     }
 
+    public boolean printOutputLineInColor(String text, VT100Color color) {
+        if (currentOutputLine <= lastOutputLine) {
+            prikazi(currentOutputLine, firstOutputColumn, color.getColor(), text);
+            currentOutputLine++;
+            return true;
+        } else {
+            return false;
+
+        }
+
+    }
+
     public void clearOutputTerminal() {
 
         for (int i = firstOutputLine; i <= lastOutputLine; i++) {
@@ -164,6 +176,19 @@ public class VT100View {
 
     static void prikazi(int x, int y, int boja, String tekst) {
         postavi(x, y);
+        System.out.print(ANSI_ESC + boja + "m");
+        if (tekst.length() > 78) {
+            System.out.print(tekst.substring(0, 78));
+        } else {
+            System.out.print(tekst);
+
+        }
+
+    }
+
+    static void pozadina(int x, int y, int boja, String tekst) {
+        postavi(x, y);
+        System.out.print(ANSI_ESC+"48;5;" + 15 + "m");
         System.out.print(ANSI_ESC + boja + "m");
         if (tekst.length() > 78) {
             System.out.print(tekst.substring(0, 78));

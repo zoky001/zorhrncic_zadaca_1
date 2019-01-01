@@ -34,12 +34,12 @@ public class CompositePlace implements IPlace {
     @Override
     public void printDataAboutGeneratedWaste() {
 
-        this.builderDirector.addTextLineInReport("############################################################################################################", false);
-        this.builderDirector.addTextLineInReport("============================================================================================================", false);
+      //  this.builderDirector.addTextLineInReport("############################################################################################################", false);
+     //   this.builderDirector.addTextLineInReport("============================================================================================================", false);
 
         if (getParrent() != null) {
             this.builderDirector.addTextLineInReport("############################################################################################################", false);
-            this.builderDirector.addTextLineInReport("|                               IME NAD-PODRUČJA: " + ((CompositePlace) getParrent()).getName() + "         ", false);
+            this.builderDirector.addTextLineInReport("|                            IME NAD-PODRUČJA: " + ((CompositePlace) getParrent()).getName() + "         ", false);
 
         }
 
@@ -56,7 +56,7 @@ public class CompositePlace implements IPlace {
         this.builderDirector.addTextLineInReport("------------------------------------------------------------------------------------------------------------", false);
         this.builderDirector.addTextLineInReport("|                   Količina otpada mixed:      |  " + getTotalAmountOfMixedWaste(), false);
         this.builderDirector.addTextLineInReport("------------------------------------------------------------------------------------------------------------", false);
-        this.builderDirector.addTextLineInReport("############################################################################################################", false);
+    //    this.builderDirector.addTextLineInReport("############################################################################################################", false);
 
         for (IPlace child : mChildPlaces) {
             child.printDataAboutGeneratedWaste();

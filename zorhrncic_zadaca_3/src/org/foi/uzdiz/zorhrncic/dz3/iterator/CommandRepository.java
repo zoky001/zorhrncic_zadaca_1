@@ -65,6 +65,9 @@ public class CommandRepository implements Container {
             while ((line = br.readLine()) != null) {
                 if (lineNo++ != 0) {
                     // use comma as separator
+                    if (line.equalsIgnoreCase("")) {
+                        continue;
+                    }
                     String[] data = line.split(cvsSplitBy);
 
                     if (data.length < 1 || data.length > 3) {

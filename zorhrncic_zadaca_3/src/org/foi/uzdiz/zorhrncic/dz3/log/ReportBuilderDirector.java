@@ -8,6 +8,7 @@ package org.foi.uzdiz.zorhrncic.dz3.log;
 import java.util.Date;
 import org.foi.uzdiz.zorhrncic.dz3.shared.Constants;
 import org.foi.uzdiz.zorhrncic.dz3.singleton.CommonDataSingleton;
+import org.foi.uzdiz.zorhrncic.dz3.vt100.VT100Color;
 import org.foi.uzdiz.zorhrncic.dz3.vt100.VT100Controller;
 import org.foi.uzdiz.zorhrncic.dz3.vt100.VT100Model;
 import org.foi.uzdiz.zorhrncic.dz3.vt100.VT100View;
@@ -22,6 +23,7 @@ public class ReportBuilderDirector {
 
     private long id;
     private final VT100Controller vt100;
+    private VT100Color defaultColor = VT100Color.DEFAULT;
 
     public ReportBuilderDirector(ReportBuilder builder, VT100Controller controller) {
         this.builder = builder;
@@ -33,16 +35,16 @@ public class ReportBuilderDirector {
     public Report addTitleInReport(String line, boolean isStatistic) {
 
         addEmptyLineInReport(isStatistic);
-        String divider = Constants.ANSI_BLUE + "*****************************************************************************************" + Constants.ANSI_RESET;
+        String divider = "*****************************************************************************************";
 
         addTextLineInReport(divider, isStatistic);
-        divider = Constants.ANSI_BLUE + "                    " + line.toUpperCase() + Constants.ANSI_RESET;
+        divider = "   " + line.toUpperCase();
         OneLine oneLine = new OneLine(new Date(), divider, id++, isStatistic);
-        printLine(oneLine);
+        printLine(oneLine, VT100Color.BLUE);
 
         builder.addLine(oneLine).build();
 
-        divider = Constants.ANSI_BLUE + "*****************************************************************************************" + Constants.ANSI_RESET;
+        divider = "*****************************************************************************************";
         return addTextLineInReport(divider, isStatistic);
         //  addDividerLineInReport();
 
@@ -50,20 +52,20 @@ public class ReportBuilderDirector {
 
     public Report addErrorInReport(String line, boolean isStatistic) {
         addEmptyLineInReport(isStatistic);
-        String divider = Constants.ANSI_BLUE + "##########################################################################################" + Constants.ANSI_RESET;
+        String divider = "#####################################################################################################";
 
         addTextLineInReport(divider, isStatistic);
-        addTextLineInReport(divider, isStatistic);
-        addTextLineInReport(divider, isStatistic);
+        //addTextLineInReport(divider, isStatistic);
+        //addTextLineInReport(divider, isStatistic);
 
-        divider = Constants.ANSI_BLUE + "                    " + line.toUpperCase() + Constants.ANSI_RESET;
+        divider = "   " + line.toUpperCase();
         OneLine oneLine = new OneLine(new Date(), divider, id++, isStatistic);
-        printLine(oneLine);
+        printLine(oneLine, VT100Color.RED);
         builder.addLine(oneLine).build();
 
-        divider = Constants.ANSI_BLUE + "##########################################################################################" + Constants.ANSI_RESET;
-        addTextLineInReport(divider, isStatistic);
-        addTextLineInReport(divider, isStatistic);
+        divider = "#####################################################################################################";
+        //  addTextLineInReport(divider, isStatistic);
+        // addTextLineInReport(divider, isStatistic);
         return addTextLineInReport(divider, isStatistic);
         //  addDividerLineInReport();
 
@@ -72,7 +74,7 @@ public class ReportBuilderDirector {
     public Report addTextLineInReport(String line, boolean isStatistic) {
 
         OneLine oneLine = new OneLine(new Date(), line, id++, isStatistic);
-        printLine(oneLine);
+        printLine(oneLine, this.defaultColor);
 
         return builder.addLine(oneLine).build();
 
@@ -80,7 +82,7 @@ public class ReportBuilderDirector {
 
     public Report addEmptyLineInReport(boolean isStatistic) {
         OneLine oneLine = new OneLine(new Date(), " ", id++, isStatistic);
-        printLine(oneLine);
+        printLine(oneLine, VT100Color.DEFAULT);
 
         return builder.addLine(oneLine).build();
 
@@ -90,13 +92,17 @@ public class ReportBuilderDirector {
         String divider = "-----------------------------------------------------------------------------------------";
 
         OneLine oneLine = new OneLine(new Date(), divider, id++, isStatistic);
-        printLine(oneLine);
+        printLine(oneLine, this.defaultColor);
 
         return builder.addLine(oneLine).build();
 
     }
 
-    public void printLine(OneLine line) {
+    public void setColor(VT100Color color, boolean isStatistic) {
+        this.defaultColor = color;
+    }
+
+    public void printLine(OneLine line, VT100Color color) {
 
         boolean isStatistic = false;
 
@@ -109,14 +115,16 @@ public class ReportBuilderDirector {
         if (isStatistic) {
 
             if (line.isIsStatistic()) {
-               // System.out.println(line.toString());
-                  vt100.printOutputLine(line.getData());
+                // System.out.println(line.toString());
+                // vt100.printOutputLine(line.getData());
+                vt100.printOutputLineInColor(line.getData(), color);
 
             }
 
         } else {
-             vt100.printOutputLine(line.getData());
-           // System.out.println(line.toString());
+            //vt100.printOutputLine(line.getData());
+            vt100.printOutputLineInColor(line.getData(), color);
+            // System.out.println(line.toString());
 
         }
 

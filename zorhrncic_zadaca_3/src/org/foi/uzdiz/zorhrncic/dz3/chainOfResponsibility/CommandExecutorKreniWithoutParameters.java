@@ -94,11 +94,11 @@ public class CommandExecutorKreniWithoutParameters extends CommandExecutor {
 
                     context.getVehicleInProcess().increaseNumberOfPerformedCycles();
 
-                    context.setCycleNumber(context.getCycleNumber() + 1);
+                  //  context.setCycleNumber(context.getCycleNumber() + 1);
 
                 }
             }
-            // context.setCycleNumber(context.getCycleNumber() + 1);
+             context.setCycleNumber(context.getCycleNumber() + 1);
 
         }
 
@@ -210,7 +210,7 @@ public class CommandExecutorKreniWithoutParameters extends CommandExecutor {
             return true;
         }
         street.vehicleLeaveTheStreet(vehicle);
-        this.builderDirector.addTextLineInReport("Vozilo " + vehicle.getName() + " napušta ulicu " + street.getName() + "!!", true);
+      //  this.builderDirector.addTextLineInReport("Vozilo " + vehicle.getName() + " napušta ulicu " + street.getName() + "!!", true);
 
         return false;
     }

@@ -32,6 +32,11 @@ public class VT100Controller {
             if (!vT100View.printOutputLine(text)) {
                 printInputLine("za nastavak treba pritisnuti tipka n/N");
                 String response = readInputLine();
+                while (response.equalsIgnoreCase("") || !response.equalsIgnoreCase("n")) {
+                    printInputLine("za nastavak treba pritisnuti tipka n/N");
+                    response = readInputLine();
+                }
+
                 if (!response.equalsIgnoreCase("N")) {
                     printInputLine("Izlazak...");
                     prepareTerminalForExit();
@@ -44,6 +49,39 @@ public class VT100Controller {
                 // clearInputTerminal();
                 vT100View.clearOutputTerminal();
                 printOutputLine(text);
+            }
+        } catch (Exception e) {
+            printInputLine("Izlazak...");
+            prepareTerminalForExit();
+            System.exit(0); //todo 
+        }
+
+    }
+
+    public void printOutputLineInColor(String text, VT100Color color) {
+
+        this.vT100Model.addUpperTerminaOutputLine(text);
+        try {
+            if (!vT100View.printOutputLineInColor(text, color)) {
+                printInputLine("za nastavak treba pritisnuti tipka n/N");
+                String response = readInputLine();
+                while (response.equalsIgnoreCase("") || !response.equalsIgnoreCase("n")) {
+                    printInputLine("za nastavak treba pritisnuti tipka n/N");
+                    response = readInputLine();
+                }
+
+                if (!response.equalsIgnoreCase("N")) {
+                    printInputLine("Izlazak...");
+                    prepareTerminalForExit();
+                    System.exit(0); //todo 
+                } else {
+                    printInputLine("Nastavak...");
+
+                }
+
+                // clearInputTerminal();
+                vT100View.clearOutputTerminal();
+                printOutputLineInColor(text, color);
             }
         } catch (Exception e) {
             printInputLine("Izlazak...");
@@ -71,7 +109,9 @@ public class VT100Controller {
             return reader.readLine();
 
         } catch (Exception e) {
-
+            printInputLine("Izlazak...");
+            prepareTerminalForExit();
+            System.exit(0); //todo 
             return "";
 
         }

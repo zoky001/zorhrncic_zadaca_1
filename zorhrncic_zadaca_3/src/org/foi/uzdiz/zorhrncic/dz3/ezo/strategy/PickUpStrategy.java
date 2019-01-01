@@ -7,12 +7,14 @@ package org.foi.uzdiz.zorhrncic.dz3.ezo.strategy;
 
 import org.foi.uzdiz.zorhrncic.dz3.composite.Street;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.DispecerContext;
+import org.foi.uzdiz.zorhrncic.dz3.ezo.PickUpDirection;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.Spremnik;
 import org.foi.uzdiz.zorhrncic.dz3.ezo.vehicle.Vehicle;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.Command;
 import org.foi.uzdiz.zorhrncic.dz3.log.ReportBuilderDirector;
 import org.foi.uzdiz.zorhrncic.dz3.shared.TypesOfWaste;
 import org.foi.uzdiz.zorhrncic.dz3.singleton.CommonDataSingleton;
+import org.foi.uzdiz.zorhrncic.dz3.vt100.VT100Color;
 
 /**
  *
@@ -25,6 +27,7 @@ public abstract class PickUpStrategy {
     protected final int location;
     private final ReportBuilderDirector builderDirector;
     private final DispecerContext context;
+    private static VT100Color lastColor = VT100Color.YELLOW;
 
     public PickUpStrategy(Street street, Vehicle vehicle, DispecerContext context) {
         this.street = street;
@@ -43,6 +46,7 @@ public abstract class PickUpStrategy {
             float mjestaUVozilu = vehicle.getCapacity() - vehicle.getFilled();
 
             if (spremnik.getFilled() <= mjestaUVozilu) {
+                this.builderDirector.setColor(getColor(), true);
                 this.builderDirector.addDividerLineInReport(true);
                 this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "              Ciklus: " + context.getCycleNumber() + ". ", true);
                 this.builderDirector.addDividerLineInReport(true);
@@ -62,17 +66,21 @@ public abstract class PickUpStrategy {
                 this.builderDirector.addDividerLineInReport(true);
 
                 this.builderDirector.addTextLineInReport("Ulica:            " + street.getName(), true);
-                this.builderDirector.addTextLineInReport("Smjer:            " + street.chooseDirection(vehicle, street).name(), true);
+                this.builderDirector.addTextLineInReport("Smjer:            " + getSmijer(street.chooseDirection(vehicle, street)), true);
                 this.builderDirector.addTextLineInReport("Spremnik:         " + street.getVehicleLocation(vehicle), true);
 
                 this.builderDirector.addDividerLineInReport(true);
                 this.builderDirector.addEmptyLineInReport(true);
+
+                this.builderDirector.setColor(VT100Color.DEFAULT, true);
 
                 context.setIsAllWasteCollected(false);//isAllWasteCollected = false; //todo check if filled
                 if (vehicle.getCapacity() == vehicle.getFilled()) {
                     driveToLandfill(vehicle);
                 }
             } else {
+                this.builderDirector.setColor(getColor(), true);
+
                 this.builderDirector.addDividerLineInReport(true);
                 this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "              Ciklus: " + context.getCycleNumber() + ". ", true);
                 this.builderDirector.addDividerLineInReport(true);
@@ -93,6 +101,7 @@ public abstract class PickUpStrategy {
 
                 this.builderDirector.addDividerLineInReport(true);
                 this.builderDirector.addEmptyLineInReport(true);
+                this.builderDirector.setColor(VT100Color.DEFAULT, true);
 
                 driveToLandfill(vehicle);
                 //  isAllWasteCollected = false;
@@ -135,6 +144,40 @@ public abstract class PickUpStrategy {
         vehicle.setLastStreet(context.getSelectedStreetIndex());
 
         context.getLandfill().vehicleComesToLandfill(vehicle);//getAllVehiclesAtLandfill().add(vehicle);
+    }
+
+    private VT100Color getColor() {
+        try {
+            if (this.lastColor == VT100Color.YELLOW) {
+                this.lastColor = VT100Color.MAGENTA;
+                return this.lastColor;
+            } else {
+                this.lastColor = VT100Color.YELLOW;
+                return this.lastColor;
+            }
+
+        } catch (Exception e) {
+        }
+        return this.lastColor;
+    }
+
+    private String getSmijer(PickUpDirection chooseDirection) {
+        try {
+            if (chooseDirection.equals(PickUpDirection.ASCENDING)) {
+                return "Uzlazno";
+
+            } else if (chooseDirection.equals(PickUpDirection.DESCENDING)) {
+                return "Silazno";
+
+            } else if (chooseDirection.equals(PickUpDirection.WAIT)) {
+                return "Čeka";
+            }
+
+        } catch (Exception e) {
+            //
+        }
+        return "";
+
     }
 
 }
