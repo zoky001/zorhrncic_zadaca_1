@@ -2,15 +2,5 @@ komanda;lista vozila;
 OBRADI;p4;v1,v2,v5,v6;
 OBRADI;p5;v3,v4,v7;
 PRIPREMI;v1,v2,v3,v4;
-PREUZMI;pero;v7;
-VOZAČI;
-KRENI 15;
-STATUS;
-ISPRAZNI;v1,v2,v3;
-STATUS;
-KRENI 50;
-PRIPREMI;v5,v6,v7;
-KRENI 33;
-STATUS;
-VOZAČI;
-IZLAZ;
+
+

@@ -75,24 +75,24 @@ public class VT100View {
 
             if (i == firstTerminalLine) {
                 for (int j = firstTerminalColumn; j <= lastTerminalColumn; j++) {
-                    prikazi(i, j, 37, "-");
+                    prikazi(i, j, 92, "-");
                 }
             }
 
             if (i == middleDivider) {
                 for (int j = firstTerminalColumn; j <= lastTerminalColumn; j++) {
-                    prikazi(i, j, 37, "-");
+                    prikazi(i, j, 92, "-");
                 }
             }
 
             if (i == lastTerminalLine) {
                 for (int j = firstTerminalColumn; j <= lastTerminalColumn; j++) {
-                    prikazi(i, j, 37, "_");
+                    prikazi(i, j, 92, "_");
                 }
             }
 
-            prikazi(i, firstTerminalColumn, 37, "|");
-            prikazi(i, lastTerminalColumn, 37, "|");
+            prikazi(i, firstTerminalColumn, 92, "|");
+            prikazi(i, lastTerminalColumn, 92, "|");
 
         }
     }
@@ -104,20 +104,7 @@ public class VT100View {
             return true;
         } else {
             return false;
-//            printInputLine("za nastavak treba pritisnuti tipka n/N");
-//            Scanner scanner = new Scanner(System.in);
-//            String next = scanner.next();
-//
-//            if (!next.equalsIgnoreCase("N")) {
-//                printInputLine("Izlazak...");
-//                this.exit();
-//                System.exit(0); //todo 
-//            } else {
-//                printInputLine("Nastavak...");
-//            }
-//
-//            // clearInputTerminal();
-//            clearOutputTerminal();
+
         }
 
     }
@@ -125,10 +112,6 @@ public class VT100View {
     public void clearOutputTerminal() {
 
         for (int i = firstOutputLine; i <= lastOutputLine; i++) {
-//            for (int j = firstOutputColumn; j <= lastOutputColumn; j++) {
-//                prikazi(i, j, 37, " ");
-//
-//            }
             deleteLine(i);
             currentOutputLine = firstOutputLine;
 
@@ -156,8 +139,10 @@ public class VT100View {
         if (currentInputLine > lastInputLine) {
             clearInputTerminal();
         }
-        prikazi(currentInputLine, firstInputColumn, 37, text);
+        prikazi(currentInputLine, firstInputColumn, 91, text);
         postavi(currentInputLine, firstInputColumn + text.length() + 1);
+        prikazi(currentInputLine, firstInputColumn + text.length() + 1, 37, "");
+
         currentInputLine++;
 // todo 
     }
@@ -173,7 +158,7 @@ public class VT100View {
     static void deleteLine(int x) {
         postavi(x, 79);
         System.out.print(ANSI_ESC + "1K");
-        prikazi(x, 1, 37, "|");
+        prikazi(x, 1, 92, "|");
 
     }
 

@@ -58,7 +58,6 @@ public class Zorhrncic_zadaca_1 {
 //            for (int i = 0; i < 50; i++) {
 //                CommonDataSingleton.getInstance().getReportBuilderDirector().addTextLineInReport(i + ". redak", true);
 //            }
-
             LoadInitData load = new LoadInitData();
             load.loadData();
 
@@ -66,24 +65,9 @@ public class Zorhrncic_zadaca_1 {
             dispecer.startCollecting();;
 
             //    CommonDataSingleton.getInstance().getReportBuilderDirector().addEmptyLineInReport(false).print();
-            //   CommonDataSingleton.getInstance().getReportBuilderDirector().addEmptyLineInReport(false).generateFile();
+            CommonDataSingleton.getInstance().getReportBuilderDirector().addEmptyLineInReport(false).generateFile();
             CommonDataSingleton.getInstance().getVt100Controller().prepareTerminalForExit();
 
-//            // System.out.print(ANSI_ESC + "2J");
-//            VT100View vt100view = new VT100View(15, 3);
-//            VT100Model vt100model = new VT100Model();
-//            VT100Controller vt100 = new VT100Controller(vt100model, vt100view);
-//
-//            for (int i = 0; i < 100; i++) {
-//                vt100.printOutputLine(i + ". redak je ispisan");
-//                try {
-//                    Thread.sleep(100);
-//                } catch (InterruptedException ex) {
-//                    Logger.getLogger(VT100View.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//            }
-//            //    vt100.clearTerminal();
-//            vt100.prepareTerminalForExit();
         } else {
             System.out.println("Nije upisani parametri!!");
         }

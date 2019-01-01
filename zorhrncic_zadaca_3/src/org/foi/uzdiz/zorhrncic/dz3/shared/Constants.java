@@ -49,6 +49,12 @@ public class Constants {
     public final static String punjenjeDizelVozila = "punjenjeDizelVozila";
     public final static String kapacitetElektroVozila = "kapacitetElektroVozila";
     public final static String punjenjeElektroVozila = "punjenjeElektroVozila";
+    
+    
+    public final static String vozaciUTF8 = "voza?i";
+    public final static String vozaciUTF8_cisto = "vozači";
+    public final static String godisnjiUTF8 = "godi?nji odmor";
+    public final static String godisnjiUTF8_cisto = "godišnji odmor";
    
     
 

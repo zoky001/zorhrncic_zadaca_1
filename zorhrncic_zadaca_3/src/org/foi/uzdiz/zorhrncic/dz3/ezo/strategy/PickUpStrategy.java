@@ -43,16 +43,18 @@ public abstract class PickUpStrategy {
             float mjestaUVozilu = vehicle.getCapacity() - vehicle.getFilled();
 
             if (spremnik.getFilled() <= mjestaUVozilu) {
+                this.builderDirector.addDividerLineInReport(true);
+                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "              Ciklus: " + context.getCycleNumber() + ". ", true);
+                this.builderDirector.addDividerLineInReport(true);
+                this.builderDirector.addTextLineInReport("Količina u spremniku:         " + spremnik.getFilled(), true);
+
                 vehicle.addWaste(spremnik.getFilled());
                 spremnik.empty(spremnik.getFilled());
                 success = true;
                 vehicle.increaseNumberOfProcessedContainers();
                 vehicle.addProcessedContainers(spremnik);
 
-                this.builderDirector.addDividerLineInReport(true);
-                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "              Ciklus: " + context.getCycleNumber() + ". ", true);
-                this.builderDirector.addDividerLineInReport(true);
-
+                this.builderDirector.addTextLineInReport("U spremniku ostaje:           " + spremnik.getFilled(), true);
                 this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), true);
                 this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), true);
                 this.builderDirector.addTextLineInReport("Kapacitet:                    " + vehicle.getCapacity(), true);
@@ -71,13 +73,19 @@ public abstract class PickUpStrategy {
                     driveToLandfill(vehicle);
                 }
             } else {
+                this.builderDirector.addDividerLineInReport(true);
+                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "              Ciklus: " + context.getCycleNumber() + ". ", true);
+                this.builderDirector.addDividerLineInReport(true);
+                this.builderDirector.addTextLineInReport("Količina u spremniku:         " + spremnik.getFilled(), true);
+
                 vehicle.addWaste(mjestaUVozilu);
                 spremnik.empty(mjestaUVozilu);
                 success = true;
                 //vehicle.increaseNumberOfProcessedContainers();
-                this.builderDirector.addDividerLineInReport(true);
-                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "              Ciklus: " + context.getCycleNumber() + ". ", true);
-                this.builderDirector.addDividerLineInReport(true);
+//                this.builderDirector.addDividerLineInReport(true);
+//                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "              Ciklus: " + context.getCycleNumber() + ". ", true);
+//                this.builderDirector.addDividerLineInReport(true);
+                this.builderDirector.addTextLineInReport("U spremniku ostaje:           " + spremnik.getFilled(), true);
 
                 this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), true);
                 this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), true);

@@ -46,6 +46,7 @@ import org.foi.uzdiz.zorhrncic.dz3.iterator.TypeOfCommand;
 import org.foi.uzdiz.zorhrncic.dz3.waste.BioWaste;
 import org.foi.uzdiz.zorhrncic.dz3.iterator.IIterator;
 import org.foi.uzdiz.zorhrncic.dz3.shared.TypeOfDriverState;
+import org.foi.uzdiz.zorhrncic.dz3.vt100.VT100Controller;
 
 /**
  *
@@ -69,10 +70,11 @@ public class Dispecer {
     private final ReportBuilderDirector builderDirector;
     private final CommandRepository commandRepository;
     private final CommandExecutor commandExecutor;
+    private final VT100Controller vt100;
 
     public Dispecer(List<Vehicle> allVehicles, List<Street> streets, List<CompositePlace> areaRoot) {
         this.dispecerContext = new DispecerContext(allVehicles, streets, areaRoot);
-
+        vt100 = CommonDataSingleton.getInstance().getVt100Controller();
         this.commandRepository = new CommandRepository(this.dispecerContext);
 
         this.commandExecutor = new CommandExecutorPripremi()
@@ -117,6 +119,120 @@ public class Dispecer {
             }
 
         }
+        readCommandsFromConsole();
+    }
+
+    private void readCommandsFromConsole() {
+        try {
+            vt100.printInputLine("Unos komande:");
+            String line = vt100.readInputLine();
+            if (line == null) {
+                throw new Exception();
+            }
+            vt100.printInputLine("Izvršavam: " + line);
+
+            Command command = parseLineToCommand(line);
+            if (command != null) {
+                dispecerContext = commandExecutor.executeCommand(command, dispecerContext);
+                assignFreeDriversToVehicles();
+                readCommandsFromConsole();
+            } else {
+                vt100.printInputLine("Pogrešna komanda!!");
+                readCommandsFromConsole();
+            }
+
+        } catch (Exception e) {
+            vt100.printInputLine("Izlazak...");
+            CommonDataSingleton.getInstance().exitFromProgram();
+        }
+    }
+
+    private Command parseLineToCommand(String line) {
+        Command newCommand = null;
+        try {
+            String cvsSplitBy = ";";
+            // use comma as separator
+            String[] data = line.split(cvsSplitBy);
+
+            if (data.length < 1 || data.length > 3) {
+                throw new Exception("Pogrešna komanda!! Unos: \"" + line.toString() + "\"");
+            }
+
+            String dataCommand = (String) ((data[0]).toUpperCase());
+
+            if (dataCommand.equalsIgnoreCase(TypeOfCommand.IZLAZ.getCommand())) {
+
+                newCommand = new Command(TypeOfCommand.IZLAZ, null, -1, null, null);
+            } else if (dataCommand.equalsIgnoreCase(TypeOfCommand.VOZACI.getCommand()) || dataCommand.startsWith(TypeOfCommand.VOZACI1.getCommand())) {
+
+                newCommand = new Command(TypeOfCommand.VOZACI, null, -1, null, null);
+
+            } else if (dataCommand.equalsIgnoreCase(TypeOfCommand.NOVI.getCommand())) {
+
+                newCommand = new Command(TypeOfCommand.NOVI, null, -1, null, laodNewDriversIfExist(data, 1));
+
+            } else if (dataCommand.equalsIgnoreCase(TypeOfCommand.PREUZMI.getCommand())) {
+
+                newCommand = new Command(TypeOfCommand.PREUZMI, laodVehiclesIfExist(data, 2), -1, null, laodDriversIfExist(data, 1));
+
+            } else if (dataCommand.equalsIgnoreCase(TypeOfCommand.OTKAZ.getCommand())) {
+
+                newCommand = new Command(TypeOfCommand.OTKAZ, null, -1, null, laodDriversIfExist(data, 1));
+
+            } else if (dataCommand.equalsIgnoreCase(TypeOfCommand.BOLOVANJE.getCommand())) {
+
+                newCommand = new Command(TypeOfCommand.BOLOVANJE, null, -1, null, laodDriversIfExist(data, 1));
+
+            } else if (dataCommand.equalsIgnoreCase(TypeOfCommand.GODISNJI_ODMOR.getCommand()) || dataCommand.contains(TypeOfCommand.ODMOR.getCommand())) {
+
+                newCommand = new Command(TypeOfCommand.GODISNJI_ODMOR, null, -1, null, laodDriversIfExist(data, 1));
+
+            } else if (dataCommand.equalsIgnoreCase(TypeOfCommand.OBRADI.getCommand())) {
+
+                newCommand = new Command(TypeOfCommand.OBRADI, laodVehiclesIfExist(data, 2), -1, laodRootAreaIfExist(data, 1), null);
+
+            } else if (dataCommand.equalsIgnoreCase(TypeOfCommand.PRIPREMI.getCommand())) {
+
+                newCommand = new Command(TypeOfCommand.PRIPREMI, laodVehiclesIfExist(data, 1), -1, null, null);
+
+            } else if (dataCommand.equalsIgnoreCase(TypeOfCommand.KRENI_BEZ_PARAMETRA.getCommand())) {
+
+                newCommand = new Command(TypeOfCommand.KRENI_BEZ_PARAMETRA, new ArrayList<Vehicle>(), -1, null, null);
+
+            } else if (dataCommand.equalsIgnoreCase(TypeOfCommand.KVAR.getCommand())) {
+
+                newCommand = new Command(TypeOfCommand.KVAR, laodVehiclesIfExist(data, 1), -1, null, null);
+
+            } else if (dataCommand.equalsIgnoreCase(TypeOfCommand.STATUS.getCommand())) {
+
+                newCommand = new Command(TypeOfCommand.STATUS, new ArrayList<Vehicle>(), -1, null, null);
+
+            } else if (dataCommand.equalsIgnoreCase(TypeOfCommand.ISPRAZNI.getCommand())) {
+
+                newCommand = new Command(TypeOfCommand.ISPRAZNI, laodVehiclesIfExist(data, 1), -1, null, null);
+
+            } else if (dataCommand.equalsIgnoreCase(TypeOfCommand.KONTROLA.getCommand())) {
+
+                newCommand = new Command(TypeOfCommand.KONTROLA, laodVehiclesIfExist(data, 1), -1, null, null);
+
+            } else if (dataCommand.startsWith(TypeOfCommand.KRENI_S_PARAMETRIMA.getCommand())) {
+                String[] kreniData = dataCommand.split(" ");
+                if (kreniData.length == 2 && kreniData[0].equalsIgnoreCase(TypeOfCommand.KRENI_BEZ_PARAMETRA.getCommand())) {
+
+                    newCommand = new Command(TypeOfCommand.KRENI_S_PARAMETRIMA, new ArrayList<Vehicle>(), Integer.valueOf(kreniData[1]), null, null);
+
+                }
+
+            } else {
+
+                throw new Exception("Nepoznata komanda!! Zapis: " + dataCommand);
+
+            }
+        } catch (Exception e) {
+            vt100.printInputLine(e.getMessage());
+        }
+
+        return newCommand;
     }
 
     private void assignFreeDriversToVehicles() {
@@ -163,199 +279,132 @@ public class Dispecer {
         return false;
     }
 
-//    private void driveAllVehiclesToTheLandfill() {
-//        try {
-//            for (int i = 0; i < allVehiclesInProcess.size(); i++) {
-//                if (!landfill.getAllVehiclesAtLandfill().contains(allVehiclesInProcess.get(i))) {
-//                    //landfill.vehicleComesToLandfill(allVehiclesInProcess.get(i));
-//                    driveToLandfill(allVehiclesInProcess.get(i));
-//                }
-//            }
-//
-//        } catch (Exception e) {
-//
-//            builderDirector.addErrorInReport("driveAllVehiclesToTheLandfill error " + e, false);
-//
-//        }
-//
-//    }
-//
-//    private boolean checkIsVehicleAtLandfill(Vehicle vehicle) {
-//        if (landfill.getAllVehiclesAtLandfill().contains(vehicle)) {
-//
-//            if (vehicle.increaseAndCheckNumberOfCyclesAtLandfill(numberOfCyclesAtLandfill)) {
-//                landfill.vehicleLeavesLandfill(vehicle);//getAllVehiclesAtLandfill().remove(vehicle);
-//                int index = allVehiclesInProcess.indexOf(vehicle);
-//                allVehiclesInProcess.remove(vehicle);
-//                allVehiclesInProcess.add(vehicle);
-//
-//                return false;
-//            } else {
-//                return true;
-//            }
-//
-//        }
-//
-//        return false;
-//    }
-//    private void pickUpWaste(Vehicle vehicle) {
-//        ArrayList<Integer> streetArray;//= getStreetRandomArray();
-//
-//        if (vehicle.getRandomStreetArray() == null) {
-//            vehicle.setRandomStreetArray(getStreetRandomArray());
-//            streetArray = vehicle.getRandomStreetArray();
-//        } else {
-//            streetArray = vehicle.getRandomStreetArray();
-//        }
-//
-//        for (int i = 0; i < streetArray.size(); i++) {
-//            selectedStreetIndex = i;
-//            selectedStreet = streets.get(streetArray.get(i));
-//            if (vehicle.getLastStreet() > -1 && vehicle.getLastStreet() > i) {
-//                continue;
-//            } else if (vehicle.getLastStreet() > -1 && vehicle.getLastStreet() == i) {
-//                vehicle.resetLastStreet();
-//            }
-//            if (pickUpWasteInStreet(vehicle, selectedStreet)) {
-//                return;
-//            }
-//
-//        }
-//
-//    }
-//
-//    private boolean pickUpWasteInStreet(Vehicle vehicle, Street street) {
-//        TypesOfWaste typesOfWaste = null;
-//
-//        if (vehicle instanceof VehicleBio) {
-//            typesOfWaste = TypesOfWaste.BIO;
-//        } else if (vehicle instanceof VehicleGlass) {
-//            typesOfWaste = TypesOfWaste.STAKLO;
-//        } else if (vehicle instanceof VehicleMetal) {
-//            typesOfWaste = TypesOfWaste.METAL;
-//        } else if (vehicle instanceof VehicleMixed) {
-//            typesOfWaste = TypesOfWaste.MJESANO;
-//        } else if (vehicle instanceof VehiclePaper) {
-//            typesOfWaste = TypesOfWaste.PAPIR;
-//        }
-//
-//        for (int i = 0; i < street.getSpremnikList().size(); i++) {
-//
-//            if (street.getSpremnikList().get(i).kindOfWaste.equals(typesOfWaste)) {
-//
-//                if (isprazniSpremnik(street.getSpremnikList().get(i), vehicle)) {
-//                    return true;
-//                }
-//
-//            }
-//
-//        }
-//        return false;
-//    }
-//
-//    private boolean isprazniSpremnik(Spremnik spremnik, Vehicle vehicle) {
-//        boolean success = false;
-//
-//        if (spremnik.getFilled() > 0) {
-//            float mjestaUVozilu = vehicle.getCapacity() - vehicle.getFilled();
-//
-//            if (spremnik.getFilled() <= mjestaUVozilu) {
-//                vehicle.addWaste(spremnik.getFilled());
-//                spremnik.empty(spremnik.getFilled());
-//                success = true;
-//                vehicle.increaseNumberOfProcessedContainers();
-//                vehicle.addProcessedContainers(spremnik);
-//
-//                this.builderDirector.addDividerLineInReport(false);
-//                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "                     Ciklus: " + cycleNumber + ". ", false);
-//                this.builderDirector.addDividerLineInReport(false);
-//
-//                this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), false);
-//                this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), false);
-//                this.builderDirector.addTextLineInReport("Kapacitet:                    " + vehicle.getCapacity(), false);
-//
-//                this.builderDirector.addDividerLineInReport(false);
-//                this.builderDirector.addEmptyLineInReport(false);
-//
-//                isAllWasteCollected = false; //todo check if filled
-//                if (vehicle.getCapacity() == vehicle.getFilled()) {
-//                    driveToLandfill(vehicle);
-//                }
-//            } else {
-//                vehicle.addWaste(mjestaUVozilu);
-//                spremnik.empty(mjestaUVozilu);
-//                success = true;
-//                //vehicle.increaseNumberOfProcessedContainers();
-//                this.builderDirector.addDividerLineInReport(false);
-//                this.builderDirector.addTextLineInReport("Otpad preuzima vozilo:                " + vehicle.getName() + "                     Ciklus: " + cycleNumber + ". ", false);
-//                this.builderDirector.addDividerLineInReport(false);
-//
-//                this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), false);
-//                this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), false);
-//                this.builderDirector.addTextLineInReport("Kapacitet:                    " + vehicle.getCapacity(), false);
-//
-//                this.builderDirector.addDividerLineInReport(false);
-//                this.builderDirector.addEmptyLineInReport(false);
-//
-//                driveToLandfill(vehicle);
-//                isAllWasteCollected = false;
-//
-//            }
-//
-//        } else {
-//            success = false;
-//        }
-//
-//        return success;
-//
-//    }
-//
-//    private void driveToLandfill(Vehicle vehicle) {
-//
-//        this.builderDirector.addEmptyLineInReport(false);
-//        this.builderDirector.addEmptyLineInReport(false);
-//        this.builderDirector.addEmptyLineInReport(false);
-//        this.builderDirector.addTitleInReport("Vožnja kamiona na odlagalište", false);
-//
-//        this.builderDirector.addDividerLineInReport(false);
-//        this.builderDirector.addTextLineInReport("Na odlagalište ide vozilo:                    " + vehicle.getName(), false);
-//        this.builderDirector.addDividerLineInReport(false);
-//
-//        this.builderDirector.addTextLineInReport("Količina u vozilu:            " + vehicle.getFilled(), false);
-//        this.builderDirector.addTextLineInReport("Količina do popunjavanja:     " + (vehicle.getCapacity() - vehicle.getFilled()), false);
-//        this.builderDirector.addTextLineInReport("Kapacitet:                    " + vehicle.getCapacity(), false);
-//
-//        this.builderDirector.addDividerLineInReport(false);
-//
-//        this.builderDirector.addTextLineInReport("Broj vozila na odlagalištu:   " + (landfill.getAllVehiclesAtLandfill().size() + 1), false);
-//
-//        this.builderDirector.addTitleInReport("Vožnja kamiona na odlagalište", false);
-//        this.builderDirector.addEmptyLineInReport(false);
-//        this.builderDirector.addEmptyLineInReport(false);
-//        this.builderDirector.addEmptyLineInReport(false);
-//
-//        vehicle.setLastStreet(selectedStreetIndex);
-//
-//        landfill.vehicleComesToLandfill(vehicle);//getAllVehiclesAtLandfill().add(vehicle);
-//    }
-//
-//    private Vehicle chooseVehicle(int chosenIndex) {
-//        /* int from = 0;
-//        int to = allVehiclesInProcess.size() - 1;
-//        int chosenIndex = CommonDataSingleton.getInstance().getRandomInt(from, to);*/
-//        return allVehiclesInProcess.get(chosenIndex);
-//    }
-//
-//    private ArrayList<Integer> getStreetRandomArray() {
-//        ArrayList<Integer> streetArray;
-//
-//        if (isVehicleSelectsStreet) {
-//            streetArray = CommonDataSingleton.getInstance().getRandomArray(streets.size());
-//        } else {
-//            streetArray = randomStreetArray;
-//        }
-//
-//        return streetArray;
-//
-//    }
+    //new 
+    private CompositePlace laodRootAreaIfExist(String[] data, int i) {
+        CompositePlace place = null;
+
+        try {
+            if (data[i] != null) {
+                String areaID = data[i];
+                place = fetchRootAreaByID(areaID);
+                if (place == null) {
+                    throw new Exception();
+                }
+            } else {
+                throw new Exception();
+            }
+        } catch (Exception e) {
+            builderDirector.addErrorInReport("Pogreška kod učitavanja područja komande " + data, false);
+        }
+
+        return place;
+    }
+
+    private List<Driver> laodNewDriversIfExist(String[] data, int i) {
+        List<Driver> driverList = new ArrayList<>();
+
+        try {
+            if (data[i] != null) {
+                List<String> names = Arrays.asList(data[i].split(","));
+                driverList = createDriversByName(names);
+                if (driverList == null) {
+                    throw new Exception();
+                }
+            } else {
+                throw new Exception();
+            }
+        } catch (Exception e) {
+            builderDirector.addErrorInReport("Pogreška kod učitavanja vozača komande " + data, false);
+        }
+
+        return driverList;
+    }
+
+    private List<Driver> createDriversByName(List<String> names) {
+        List<Driver> driversList = new ArrayList<Driver>();
+
+        for (String name : names) {
+            driversList.add(new Driver(name.trim()));
+        }
+        return driversList;
+    }
+
+    private List<Driver> laodDriversIfExist(String[] data, int i) {
+        List<Driver> driverList = new ArrayList<>();
+
+        try {
+            if (data[i] != null) {
+                List<String> names = Arrays.asList(data[i].split(","));
+                driverList = fetchDriversByName(names);
+                if (driverList == null) {
+                    throw new Exception();
+                }
+            } else {
+                throw new Exception();
+            }
+        } catch (Exception e) {
+            builderDirector.addErrorInReport("Pogreška kod učitavanja vozača komande " + data, false);
+        }
+
+        return driverList;
+    }
+
+    private List<Vehicle> laodVehiclesIfExist(String[] data, int position) {
+        List<Vehicle> vehicles = new ArrayList<>();
+        List<String> vehiclesListOfID;// = Arrays.asList(data[1].split(","));
+        try {
+            if (data[position] != null) {
+                vehiclesListOfID = Arrays.asList(data[position].split(","));
+                vehicles = fetchVehiclesById(vehiclesListOfID);
+            } else {
+                throw new Exception();
+            }
+        } catch (Exception e) {
+            builderDirector.addErrorInReport("Pogreška kod učitavanja vozila komande " + data, false);
+        }
+
+        return vehicles;
+    }
+
+    private CompositePlace fetchRootAreaByID(String ID) {
+        CompositePlace place = null;
+
+        for (CompositePlace root : this.dispecerContext.getAreaRootElement()) {
+            if (root.getId().equalsIgnoreCase(ID)) {
+                return root;
+            }
+        }
+
+        return place;
+
+    }
+
+    private List<Driver> fetchDriversByName(List<String> names) {
+        List<Driver> driversList = new ArrayList<Driver>();
+
+        for (String name : names) {
+            for (Driver driver : this.dispecerContext.getDriversList()) {
+                if (driver.getName().equalsIgnoreCase(name)) {
+                    driversList.add(driver);
+                }
+            }
+
+        }
+        return driversList;
+    }
+
+    private List<Vehicle> fetchVehiclesById(List<String> vehiclesListOfID) {
+        List<Vehicle> vehicles = new ArrayList<>();
+        for (String id : vehiclesListOfID) {
+            for (Vehicle vehicle : this.dispecerContext.getAllVehicles()) {
+                if (vehicle.getId().equalsIgnoreCase(id)) {
+                    vehicles.add(vehicle);
+                }
+            }
+
+        }
+        return vehicles;
+
+    }
+
 }

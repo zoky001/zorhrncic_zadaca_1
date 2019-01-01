@@ -192,6 +192,57 @@ public abstract class Vehicle implements IVehicleEquipment {
         return streets;
     }
 
+    public ArrayList<Spremnik> getOdgovarajuceSpremnike() {
+        ArrayList<Spremnik> spremnikList = new ArrayList<Spremnik>();
+
+        try {
+            for (Spremnik spremnik : loadSpremnikeFromArea(area)) {
+                if (spremnik.getKindOfWaste() == getTypeOfWaste(this)) {
+                    spremnikList.add(spremnik);
+                }
+            }
+        } catch (Exception e) {
+        }
+
+        return spremnikList;
+    }
+
+    private ArrayList<Spremnik> loadSpremnikeFromArea(CompositePlace area) {
+        ArrayList<Spremnik> spremnikList = new ArrayList<Spremnik>();
+
+        try {
+
+            for (IPlace subArea : loadStreetsFromArea(area)) {
+                if (subArea instanceof Street) {
+                    spremnikList.addAll(((Street) subArea).getSpremnikList());
+                }
+            }
+
+            return spremnikList;
+        } catch (Exception e) {
+            //
+
+        }
+        return spremnikList;
+
+    }
+
+    private TypesOfWaste getTypeOfWaste(Vehicle vehicle) {
+        TypesOfWaste typesOfWaste = null;
+        if (vehicle instanceof VehicleBio) {
+            typesOfWaste = TypesOfWaste.BIO;
+        } else if (vehicle instanceof VehicleGlass) {
+            typesOfWaste = TypesOfWaste.STAKLO;
+        } else if (vehicle instanceof VehicleMetal) {
+            typesOfWaste = TypesOfWaste.METAL;
+        } else if (vehicle instanceof VehicleMixed) {
+            typesOfWaste = TypesOfWaste.MJESANO;
+        } else if (vehicle instanceof VehiclePaper) {
+            typesOfWaste = TypesOfWaste.PAPIR;
+        }
+        return typesOfWaste;
+    }
+
     public String getName() {
         return name;
     }

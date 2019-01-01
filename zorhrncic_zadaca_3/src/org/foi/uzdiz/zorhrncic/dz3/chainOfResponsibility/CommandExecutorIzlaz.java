@@ -27,14 +27,16 @@ public class CommandExecutorIzlaz extends CommandExecutor {
         this.context = dispecerContext;
         // System.out.println("JA SAM COMMAND EXECUTOR __PRIPREMI__ : " + command.getTypeOfCommand().getCommand());
         this.builderDirector.addTitleInReport("Izvršavam komandu \"IZLAZ\"..", true);
-        vehicleProccessing();
+        proccessing();
         this.builderDirector.addEmptyLineInReport(true);
         this.builderDirector.addTitleInReport("Završena komanda \"IZLAZ\"..", true);
         this.builderDirector.addDividerLineInReport(true);
         return this.context;
     }
 
-    private void vehicleProccessing() {
+    private void proccessing() {
+        context.getLandfill().creteReport();
+        CommonDataSingleton.getInstance().getReportBuilderDirector().addEmptyLineInReport(false).generateFile();
         CommonDataSingleton.getInstance().exitFromProgram();
     }
 

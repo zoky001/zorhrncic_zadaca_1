@@ -5,6 +5,10 @@
  */
 package org.foi.uzdiz.zorhrncic.dz3.vt100;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -24,23 +28,29 @@ public class VT100Controller {
     public void printOutputLine(String text) {
 
         this.vT100Model.addUpperTerminaOutputLine(text);
+        try {
+            if (!vT100View.printOutputLine(text)) {
+                printInputLine("za nastavak treba pritisnuti tipka n/N");
+                String response = readInputLine();
+                if (!response.equalsIgnoreCase("N")) {
+                    printInputLine("Izlazak...");
+                    prepareTerminalForExit();
+                    System.exit(0); //todo 
+                } else {
+                    printInputLine("Nastavak...");
 
-        if (!vT100View.printOutputLine(text)) {
-            printInputLine("za nastavak treba pritisnuti tipka n/N");
-            String response = readInputLine();
-            if (!response.equalsIgnoreCase("N")) {
-                printInputLine("Izlazak...");
-                prepareTerminalForExit();
-                System.exit(0); //todo 
-            } else {
-                printInputLine("Nastavak...");
+                }
 
+                // clearInputTerminal();
+                vT100View.clearOutputTerminal();
+                printOutputLine(text);
             }
-
-            // clearInputTerminal();
-            vT100View.clearOutputTerminal();
-            printOutputLine(text);
+        } catch (Exception e) {
+            printInputLine("Izlazak...");
+            prepareTerminalForExit();
+            System.exit(0); //todo 
         }
+
     }
 
     public void printInputLine(String text) {
@@ -51,8 +61,15 @@ public class VT100Controller {
 
     public String readInputLine() {
         try {
-            Scanner scanner = new Scanner(System.in);
-            return scanner.next();
+            //     Scanner sc = new Scanner(System.in, "UTF8");
+
+            //     return sc.nextLine();
+            //Enter data using BufferReader 
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in, "UTF8"));
+
+            // Reading data using readLine 
+            return reader.readLine();
+
         } catch (Exception e) {
 
             return "";

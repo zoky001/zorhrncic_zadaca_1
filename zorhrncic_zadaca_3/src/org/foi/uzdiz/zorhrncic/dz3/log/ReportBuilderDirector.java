@@ -109,14 +109,14 @@ public class ReportBuilderDirector {
         if (isStatistic) {
 
             if (line.isIsStatistic()) {
-                System.out.println(line.toString());
-                //   vt100.printOutputLine(line.getData());
+               // System.out.println(line.toString());
+                  vt100.printOutputLine(line.getData());
 
             }
 
         } else {
-            //  vt100.printOutputLine(line.getData());
-            System.out.println(line.toString());
+             vt100.printOutputLine(line.getData());
+           // System.out.println(line.toString());
 
         }
 
